@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   ArrowUpRight,
-  Target,
   Flame,
   TrendingUp,
   Clock,
@@ -9,6 +8,8 @@ import {
   Circle,
   Sparkles,
 } from "lucide-react";
+import { analyze } from "@/brain/engine";
+import { RecommendedActionCard } from "@/components/recommended-action";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -34,6 +35,7 @@ const kpis = [
 ];
 
 function Index() {
+  const brain = analyze();
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
       {/* En-tête */}
@@ -43,8 +45,8 @@ function Index() {
             {today}
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-            Bonjour. Voici votre priorité{" "}
-            <span className="text-gold">absolue</span>.
+            Bonjour. Voici la meilleure action{" "}
+            <span className="text-gold">à exécuter maintenant</span>.
           </h1>
         </div>
         <button className="group inline-flex items-center gap-2 rounded-md border border-border bg-elevated px-3.5 py-2 text-sm font-medium transition-colors hover:border-gold/40 hover:text-gold">
@@ -53,31 +55,8 @@ function Index() {
         </button>
       </div>
 
-      {/* Bloc priorité #1 */}
-      <section className="mt-8 overflow-hidden rounded-2xl border border-border bg-elevated shadow-[var(--shadow-elegant)]">
-        <div className="relative border-b border-border/60 bg-gradient-to-b from-gold/[0.06] to-transparent p-8">
-          <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.24em] text-gold">
-            <Target className="h-3 w-3" strokeWidth={2} />
-            Priorité #1
-          </div>
-          <h2 className="mt-4 max-w-2xl text-2xl font-medium leading-snug tracking-tight md:text-3xl">
-            Structurer l'offre premium de conseil et signer le premier client
-            avant la fin de la semaine.
-          </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-            Objectif à fort levier — impact direct sur le chiffre d'affaires
-            et la validation du positionnement.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <button className="inline-flex items-center gap-2 rounded-md bg-gold px-4 py-2 text-sm font-medium text-gold-foreground shadow-[var(--shadow-gold)] transition-transform hover:-translate-y-0.5">
-              Passer à l'action
-            </button>
-            <button className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground">
-              Voir le protocole
-            </button>
-          </div>
-        </div>
-      </section>
+      {/* Le Cerveau — Action recommandée */}
+      <RecommendedActionCard state={brain} />
 
       {/* KPIs */}
       <section className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
