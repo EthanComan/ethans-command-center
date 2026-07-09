@@ -9,8 +9,134 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VisionRouteImport } from './routes/vision'
+import { Route as SportRouteImport } from './routes/sport'
+import { Route as SanteRouteImport } from './routes/sante'
+import { Route as ProtocolesRouteImport } from './routes/protocoles'
+import { Route as ProspectionRouteImport } from './routes/prospection'
+import { Route as PipelineRouteImport } from './routes/pipeline'
+import { Route as PatrimoineRouteImport } from './routes/patrimoine'
+import { Route as PartenairesRouteImport } from './routes/partenaires'
+import { Route as ParametresRouteImport } from './routes/parametres'
+import { Route as ObjectifsRouteImport } from './routes/objectifs'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as MentalRouteImport } from './routes/mental'
+import { Route as KpiRouteImport } from './routes/kpi'
+import { Route as JournalRouteImport } from './routes/journal'
+import { Route as InvestissementsRouteImport } from './routes/investissements'
+import { Route as IaRouteImport } from './routes/ia'
+import { Route as HabitudesRouteImport } from './routes/habitudes'
+import { Route as FinancesRouteImport } from './routes/finances'
+import { Route as CrmRouteImport } from './routes/crm'
+import { Route as BusinessRouteImport } from './routes/business'
+import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VisionRoute = VisionRouteImport.update({
+  id: '/vision',
+  path: '/vision',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SportRoute = SportRouteImport.update({
+  id: '/sport',
+  path: '/sport',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SanteRoute = SanteRouteImport.update({
+  id: '/sante',
+  path: '/sante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtocolesRoute = ProtocolesRouteImport.update({
+  id: '/protocoles',
+  path: '/protocoles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProspectionRoute = ProspectionRouteImport.update({
+  id: '/prospection',
+  path: '/prospection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PipelineRoute = PipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatrimoineRoute = PatrimoineRouteImport.update({
+  id: '/patrimoine',
+  path: '/patrimoine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartenairesRoute = PartenairesRouteImport.update({
+  id: '/partenaires',
+  path: '/partenaires',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParametresRoute = ParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObjectifsRoute = ObjectifsRouteImport.update({
+  id: '/objectifs',
+  path: '/objectifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentalRoute = MentalRouteImport.update({
+  id: '/mental',
+  path: '/mental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KpiRoute = KpiRouteImport.update({
+  id: '/kpi',
+  path: '/kpi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestissementsRoute = InvestissementsRouteImport.update({
+  id: '/investissements',
+  path: '/investissements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IaRoute = IaRouteImport.update({
+  id: '/ia',
+  path: '/ia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabitudesRoute = HabitudesRouteImport.update({
+  id: '/habitudes',
+  path: '/habitudes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinancesRoute = FinancesRouteImport.update({
+  id: '/finances',
+  path: '/finances',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmRoute = CrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusinessRoute = BusinessRouteImport.update({
+  id: '/business',
+  path: '/business',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliothequeRoute = BibliothequeRouteImport.update({
+  id: '/bibliotheque',
+  path: '/bibliotheque',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +145,326 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bibliotheque': typeof BibliothequeRoute
+  '/business': typeof BusinessRoute
+  '/crm': typeof CrmRoute
+  '/finances': typeof FinancesRoute
+  '/habitudes': typeof HabitudesRoute
+  '/ia': typeof IaRoute
+  '/investissements': typeof InvestissementsRoute
+  '/journal': typeof JournalRoute
+  '/kpi': typeof KpiRoute
+  '/mental': typeof MentalRoute
+  '/notifications': typeof NotificationsRoute
+  '/objectifs': typeof ObjectifsRoute
+  '/parametres': typeof ParametresRoute
+  '/partenaires': typeof PartenairesRoute
+  '/patrimoine': typeof PatrimoineRoute
+  '/pipeline': typeof PipelineRoute
+  '/prospection': typeof ProspectionRoute
+  '/protocoles': typeof ProtocolesRoute
+  '/sante': typeof SanteRoute
+  '/sport': typeof SportRoute
+  '/vision': typeof VisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bibliotheque': typeof BibliothequeRoute
+  '/business': typeof BusinessRoute
+  '/crm': typeof CrmRoute
+  '/finances': typeof FinancesRoute
+  '/habitudes': typeof HabitudesRoute
+  '/ia': typeof IaRoute
+  '/investissements': typeof InvestissementsRoute
+  '/journal': typeof JournalRoute
+  '/kpi': typeof KpiRoute
+  '/mental': typeof MentalRoute
+  '/notifications': typeof NotificationsRoute
+  '/objectifs': typeof ObjectifsRoute
+  '/parametres': typeof ParametresRoute
+  '/partenaires': typeof PartenairesRoute
+  '/patrimoine': typeof PatrimoineRoute
+  '/pipeline': typeof PipelineRoute
+  '/prospection': typeof ProspectionRoute
+  '/protocoles': typeof ProtocolesRoute
+  '/sante': typeof SanteRoute
+  '/sport': typeof SportRoute
+  '/vision': typeof VisionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bibliotheque': typeof BibliothequeRoute
+  '/business': typeof BusinessRoute
+  '/crm': typeof CrmRoute
+  '/finances': typeof FinancesRoute
+  '/habitudes': typeof HabitudesRoute
+  '/ia': typeof IaRoute
+  '/investissements': typeof InvestissementsRoute
+  '/journal': typeof JournalRoute
+  '/kpi': typeof KpiRoute
+  '/mental': typeof MentalRoute
+  '/notifications': typeof NotificationsRoute
+  '/objectifs': typeof ObjectifsRoute
+  '/parametres': typeof ParametresRoute
+  '/partenaires': typeof PartenairesRoute
+  '/patrimoine': typeof PatrimoineRoute
+  '/pipeline': typeof PipelineRoute
+  '/prospection': typeof ProspectionRoute
+  '/protocoles': typeof ProtocolesRoute
+  '/sante': typeof SanteRoute
+  '/sport': typeof SportRoute
+  '/vision': typeof VisionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/bibliotheque'
+    | '/business'
+    | '/crm'
+    | '/finances'
+    | '/habitudes'
+    | '/ia'
+    | '/investissements'
+    | '/journal'
+    | '/kpi'
+    | '/mental'
+    | '/notifications'
+    | '/objectifs'
+    | '/parametres'
+    | '/partenaires'
+    | '/patrimoine'
+    | '/pipeline'
+    | '/prospection'
+    | '/protocoles'
+    | '/sante'
+    | '/sport'
+    | '/vision'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/bibliotheque'
+    | '/business'
+    | '/crm'
+    | '/finances'
+    | '/habitudes'
+    | '/ia'
+    | '/investissements'
+    | '/journal'
+    | '/kpi'
+    | '/mental'
+    | '/notifications'
+    | '/objectifs'
+    | '/parametres'
+    | '/partenaires'
+    | '/patrimoine'
+    | '/pipeline'
+    | '/prospection'
+    | '/protocoles'
+    | '/sante'
+    | '/sport'
+    | '/vision'
+  id:
+    | '__root__'
+    | '/'
+    | '/bibliotheque'
+    | '/business'
+    | '/crm'
+    | '/finances'
+    | '/habitudes'
+    | '/ia'
+    | '/investissements'
+    | '/journal'
+    | '/kpi'
+    | '/mental'
+    | '/notifications'
+    | '/objectifs'
+    | '/parametres'
+    | '/partenaires'
+    | '/patrimoine'
+    | '/pipeline'
+    | '/prospection'
+    | '/protocoles'
+    | '/sante'
+    | '/sport'
+    | '/vision'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BibliothequeRoute: typeof BibliothequeRoute
+  BusinessRoute: typeof BusinessRoute
+  CrmRoute: typeof CrmRoute
+  FinancesRoute: typeof FinancesRoute
+  HabitudesRoute: typeof HabitudesRoute
+  IaRoute: typeof IaRoute
+  InvestissementsRoute: typeof InvestissementsRoute
+  JournalRoute: typeof JournalRoute
+  KpiRoute: typeof KpiRoute
+  MentalRoute: typeof MentalRoute
+  NotificationsRoute: typeof NotificationsRoute
+  ObjectifsRoute: typeof ObjectifsRoute
+  ParametresRoute: typeof ParametresRoute
+  PartenairesRoute: typeof PartenairesRoute
+  PatrimoineRoute: typeof PatrimoineRoute
+  PipelineRoute: typeof PipelineRoute
+  ProspectionRoute: typeof ProspectionRoute
+  ProtocolesRoute: typeof ProtocolesRoute
+  SanteRoute: typeof SanteRoute
+  SportRoute: typeof SportRoute
+  VisionRoute: typeof VisionRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vision': {
+      id: '/vision'
+      path: '/vision'
+      fullPath: '/vision'
+      preLoaderRoute: typeof VisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sport': {
+      id: '/sport'
+      path: '/sport'
+      fullPath: '/sport'
+      preLoaderRoute: typeof SportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sante': {
+      id: '/sante'
+      path: '/sante'
+      fullPath: '/sante'
+      preLoaderRoute: typeof SanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/protocoles': {
+      id: '/protocoles'
+      path: '/protocoles'
+      fullPath: '/protocoles'
+      preLoaderRoute: typeof ProtocolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prospection': {
+      id: '/prospection'
+      path: '/prospection'
+      fullPath: '/prospection'
+      preLoaderRoute: typeof ProspectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pipeline': {
+      id: '/pipeline'
+      path: '/pipeline'
+      fullPath: '/pipeline'
+      preLoaderRoute: typeof PipelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patrimoine': {
+      id: '/patrimoine'
+      path: '/patrimoine'
+      fullPath: '/patrimoine'
+      preLoaderRoute: typeof PatrimoineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partenaires': {
+      id: '/partenaires'
+      path: '/partenaires'
+      fullPath: '/partenaires'
+      preLoaderRoute: typeof PartenairesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parametres': {
+      id: '/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/objectifs': {
+      id: '/objectifs'
+      path: '/objectifs'
+      fullPath: '/objectifs'
+      preLoaderRoute: typeof ObjectifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mental': {
+      id: '/mental'
+      path: '/mental'
+      fullPath: '/mental'
+      preLoaderRoute: typeof MentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kpi': {
+      id: '/kpi'
+      path: '/kpi'
+      fullPath: '/kpi'
+      preLoaderRoute: typeof KpiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investissements': {
+      id: '/investissements'
+      path: '/investissements'
+      fullPath: '/investissements'
+      preLoaderRoute: typeof InvestissementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ia': {
+      id: '/ia'
+      path: '/ia'
+      fullPath: '/ia'
+      preLoaderRoute: typeof IaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habitudes': {
+      id: '/habitudes'
+      path: '/habitudes'
+      fullPath: '/habitudes'
+      preLoaderRoute: typeof HabitudesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finances': {
+      id: '/finances'
+      path: '/finances'
+      fullPath: '/finances'
+      preLoaderRoute: typeof FinancesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm': {
+      id: '/crm'
+      path: '/crm'
+      fullPath: '/crm'
+      preLoaderRoute: typeof CrmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business': {
+      id: '/business'
+      path: '/business'
+      fullPath: '/business'
+      preLoaderRoute: typeof BusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bibliotheque': {
+      id: '/bibliotheque'
+      path: '/bibliotheque'
+      fullPath: '/bibliotheque'
+      preLoaderRoute: typeof BibliothequeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +477,27 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BibliothequeRoute: BibliothequeRoute,
+  BusinessRoute: BusinessRoute,
+  CrmRoute: CrmRoute,
+  FinancesRoute: FinancesRoute,
+  HabitudesRoute: HabitudesRoute,
+  IaRoute: IaRoute,
+  InvestissementsRoute: InvestissementsRoute,
+  JournalRoute: JournalRoute,
+  KpiRoute: KpiRoute,
+  MentalRoute: MentalRoute,
+  NotificationsRoute: NotificationsRoute,
+  ObjectifsRoute: ObjectifsRoute,
+  ParametresRoute: ParametresRoute,
+  PartenairesRoute: PartenairesRoute,
+  PatrimoineRoute: PatrimoineRoute,
+  PipelineRoute: PipelineRoute,
+  ProspectionRoute: ProspectionRoute,
+  ProtocolesRoute: ProtocolesRoute,
+  SanteRoute: SanteRoute,
+  SportRoute: SportRoute,
+  VisionRoute: VisionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
