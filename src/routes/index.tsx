@@ -10,6 +10,9 @@ import {
 } from "lucide-react";
 import { analyze } from "@/brain/engine";
 import { RecommendedActionCard } from "@/components/recommended-action";
+import { Link } from "@tanstack/react-router";
+import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
+import { HORIZON_LABEL } from "@/modules/objectifs/types";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -21,12 +24,6 @@ const today = new Date().toLocaleDateString("fr-FR", {
   month: "long",
 });
 
-const priorities = [
-  { id: 1, label: "Finaliser la proposition Alpha Ventures", done: false, tag: "Business" },
-  { id: 2, label: "Session Deadlift — 5x5", done: false, tag: "Sport" },
-  { id: 3, label: "Journal du soir + revue de la journée", done: false, tag: "Personnel" },
-];
-
 const kpis = [
   { label: "Focus", value: "4h 20", delta: "+18%", icon: Clock },
   { label: "Deals actifs", value: "12", delta: "+2", icon: TrendingUp },
@@ -36,6 +33,7 @@ const kpis = [
 
 function Index() {
   const brain = analyze();
+  const todays = todayObjectives();
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
       {/* En-tête */}
@@ -87,22 +85,45 @@ function Index() {
         <div className="lg:col-span-2 rounded-2xl border border-border bg-elevated p-6">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium tracking-tight">Objectifs du jour</h3>
-            <span className="text-[11px] text-muted-foreground">3 tâches</span>
+            <Link
+              to="/objectifs"
+              className="text-[11px] text-muted-foreground transition-colors hover:text-gold"
+            >
+              Voir la hiérarchie →
+            </Link>
           </div>
           <ul className="mt-4 divide-y divide-border/60">
-            {priorities.map((p) => (
-              <li key={p.id} className="flex items-center gap-3 py-3">
-                {p.done ? (
-                  <CheckCircle2 className="h-4 w-4 text-gold" />
-                ) : (
-                  <Circle className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
-                )}
-                <span className="flex-1 text-sm">{p.label}</span>
-                <span className="rounded-sm border border-border/60 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {p.tag}
-                </span>
-              </li>
-            ))}
+            {todays.map((o) => {
+              const chain = ancestorsOf(o.id);
+              const parent = chain[chain.length - 1];
+              return (
+                <li key={o.id} className="py-3">
+                  <Link
+                    to="/objectifs"
+                    className="group flex items-start gap-3"
+                  >
+                    {o.progress >= 100 ? (
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 text-gold" />
+                    ) : (
+                      <Circle className="mt-0.5 h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
+                    )}
+                    <div className="flex-1">
+                      <div className="text-sm transition-colors group-hover:text-gold">
+                        {o.title}
+                      </div>
+                      {parent && (
+                        <div className="mt-0.5 text-[11px] text-muted-foreground">
+                          ← {HORIZON_LABEL[parent.horizon]} · {parent.title}
+                        </div>
+                      )}
+                    </div>
+                    <span className="rounded-sm border border-border/60 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                      {o.linkedModules[0] ?? "personnel"}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
 

@@ -12,6 +12,13 @@
 import type { EthanModule } from "@/core/contracts";
 import type { Signal } from "@/brain/types";
 import { publish } from "@/core/bus";
+import {
+  readAll as readObjectives,
+  byHorizon as objectivesByHorizon,
+  todayObjectives,
+  weeklyFocus,
+} from "@/modules/objectifs/data";
+import type { Objective } from "@/modules/objectifs/types";
 
 const HOUR = 60 * 60 * 1000;
 const now = () => Date.now();
@@ -133,23 +140,39 @@ export const crmModule: EthanModule<Deal[]> = {
 };
 
 // ─────────────────────────────────────────────────────────────
-// OBJECTIFS — écart avec les cibles hebdo. Lit CRM/Prospection.
+// OBJECTIFS — arbre hiérarchique complet (mission → jour).
+// Source de vérité pour le Dashboard, le Planning et Le Cerveau.
 // ─────────────────────────────────────────────────────────────
-export const objectifsModule: EthanModule = {
+interface ObjectifsSnapshot {
+  all: ReadonlyArray<Objective>;
+  today: Objective[];
+  week: Objective[];
+  focus: Objective | undefined;
+}
+
+export const objectifsModule: EthanModule<ObjectifsSnapshot> = {
   id: "objectifs",
-  snapshot: () => ({ weekly: { revenue: { progress: 42, target: 100 } } }),
-  getSignals: (ctx) => {
-    // Écart calculé à partir de l'avancée prospection réelle.
-    const p = ctx.get<ProspectionState>("prospection");
-    const progress = p ? Math.round((p.weeklyDone / p.weeklyTarget) * 100) : 42;
-    return [{
-      id: "goal-weekly-revenue",
-      source: "objectifs",
-      kind: "goal_gap",
-      intensity: Math.max(0, (100 - progress) / 100),
-      updatedAt: now() - 6 * HOUR,
-      context: { objective: "CA hebdomadaire", progress, target: 100 },
-    }];
+  snapshot: () => ({
+    all: readObjectives(),
+    today: todayObjectives(),
+    week: objectivesByHorizon("week"),
+    focus: weeklyFocus(),
+  }),
+  getSignals: () => {
+    // Un signal `goal_gap` par objectif hebdo en retard.
+    // Le Cerveau agrège et compose l'action.
+    return objectivesByHorizon("week").flatMap<Signal>((w) => {
+      const gap = Math.max(0, (100 - w.progress) / 100);
+      if (gap < 0.15) return [];
+      return [{
+        id: `goal-week-${w.id}`,
+        source: "objectifs",
+        kind: "goal_gap",
+        intensity: gap,
+        updatedAt: now() - 6 * HOUR,
+        context: { objective: w.title, progress: w.progress, target: 100 },
+      }];
+    });
   },
 };
 
