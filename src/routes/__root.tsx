@@ -15,6 +15,11 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppTopbar } from "@/components/app-topbar";
 import { Toaster } from "@/components/ui/sonner";
+import { bootEthan } from "@/core/bootstrap";
+
+// Amorce le système d'exploitation ETHAN : enregistre tous les modules
+// et déclenche les câblages initiaux (CRM → Planning, etc.).
+bootEthan();
 
 function NotFoundComponent() {
   return (
