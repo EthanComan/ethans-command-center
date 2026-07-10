@@ -1,4 +1,5 @@
 import type { Signal } from "./types";
+import { collectSignals } from "@/core/registry";
 
 /**
  * Collecteur de signaux.
@@ -80,10 +81,15 @@ const mockSignals: Signal[] = [
   },
 ];
 
-let signalStore: Signal[] = [...mockSignals];
+let signalStore: Signal[] = [];
 
 export function getSignals(): Signal[] {
-  return signalStore;
+  // Source de vérité : signaux collectés depuis les modules enregistrés
+  // dans le registre du core. Fallback sur les mocks tant qu'aucun
+  // module n'est enregistré (utile pour les tests unitaires isolés).
+  const fromModules = collectSignals();
+  if (fromModules.length > 0) return [...fromModules, ...signalStore];
+  return [...mockSignals, ...signalStore];
 }
 
 /** API prête pour la V2 — chaque module pousse ses signaux ici. */
