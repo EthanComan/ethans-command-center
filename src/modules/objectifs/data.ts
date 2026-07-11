@@ -27,9 +27,9 @@ const tree: Objective[] = [
     id: "mission",
     horizon: "mission",
     parentId: null,
-    title: "Renaître — devenir la version irréductible de moi-même",
+    title: "Renaître — reconstruire des femmes brisées par la violence",
     description:
-      "Construire une vie de puissance calme : liberté financière, corps performant, esprit clair, transmission durable.",
+      "Projet humanitaire et de reconstruction : aider des femmes ayant subi des violences, des agressions ou des traumatismes à se reconstruire, retrouver confiance en elles et retrouver goût à la vie.",
     progress: 12,
     targetDate: null,
     priority: "critique",
