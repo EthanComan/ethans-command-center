@@ -21,6 +21,8 @@ import {
   Settings,
   Sparkles,
   Bell,
+  Dna,
+  Heart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -47,6 +49,14 @@ export interface ModuleCategory {
  * et les pages "Coming soon" s'alimentent depuis ce registre.
  */
 export const MODULE_CATEGORIES: ModuleCategory[] = [
+  {
+    id: "fondations",
+    label: "Fondations",
+    modules: [
+      { id: "adn", label: "ADN", to: "/adn", icon: Dna, status: "live", description: "Mission, valeurs, code d'honneur, principes" },
+      { id: "renaitre", label: "Renaître", to: "/renaitre", icon: Heart, status: "live", description: "Mission de vie — projet humanitaire" },
+    ],
+  },
   {
     id: "business",
     label: "Business",
