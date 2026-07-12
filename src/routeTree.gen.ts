@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as VisionRouteImport } from './routes/vision'
 import { Route as SportRouteImport } from './routes/sport'
 import { Route as SanteRouteImport } from './routes/sante'
+import { Route as RenaitreRouteImport } from './routes/renaitre'
 import { Route as ProtocolesRouteImport } from './routes/protocoles'
 import { Route as ProspectionRouteImport } from './routes/prospection'
 import { Route as PipelineRouteImport } from './routes/pipeline'
@@ -30,6 +31,7 @@ import { Route as FinancesRouteImport } from './routes/finances'
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as BusinessRouteImport } from './routes/business'
 import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
+import { Route as AdnRouteImport } from './routes/adn'
 import { Route as IndexRouteImport } from './routes/index'
 
 const VisionRoute = VisionRouteImport.update({
@@ -45,6 +47,11 @@ const SportRoute = SportRouteImport.update({
 const SanteRoute = SanteRouteImport.update({
   id: '/sante',
   path: '/sante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RenaitreRoute = RenaitreRouteImport.update({
+  id: '/renaitre',
+  path: '/renaitre',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProtocolesRoute = ProtocolesRouteImport.update({
@@ -137,6 +144,11 @@ const BibliothequeRoute = BibliothequeRouteImport.update({
   path: '/bibliotheque',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdnRoute = AdnRouteImport.update({
+  id: '/adn',
+  path: '/adn',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -145,6 +157,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adn': typeof AdnRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
@@ -163,12 +176,14 @@ export interface FileRoutesByFullPath {
   '/pipeline': typeof PipelineRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
+  '/renaitre': typeof RenaitreRoute
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adn': typeof AdnRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
@@ -187,6 +202,7 @@ export interface FileRoutesByTo {
   '/pipeline': typeof PipelineRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
+  '/renaitre': typeof RenaitreRoute
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
@@ -194,6 +210,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/adn': typeof AdnRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
@@ -212,6 +229,7 @@ export interface FileRoutesById {
   '/pipeline': typeof PipelineRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
+  '/renaitre': typeof RenaitreRoute
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
@@ -220,6 +238,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/adn'
     | '/bibliotheque'
     | '/business'
     | '/crm'
@@ -238,12 +257,14 @@ export interface FileRouteTypes {
     | '/pipeline'
     | '/prospection'
     | '/protocoles'
+    | '/renaitre'
     | '/sante'
     | '/sport'
     | '/vision'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/adn'
     | '/bibliotheque'
     | '/business'
     | '/crm'
@@ -262,12 +283,14 @@ export interface FileRouteTypes {
     | '/pipeline'
     | '/prospection'
     | '/protocoles'
+    | '/renaitre'
     | '/sante'
     | '/sport'
     | '/vision'
   id:
     | '__root__'
     | '/'
+    | '/adn'
     | '/bibliotheque'
     | '/business'
     | '/crm'
@@ -286,6 +309,7 @@ export interface FileRouteTypes {
     | '/pipeline'
     | '/prospection'
     | '/protocoles'
+    | '/renaitre'
     | '/sante'
     | '/sport'
     | '/vision'
@@ -293,6 +317,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdnRoute: typeof AdnRoute
   BibliothequeRoute: typeof BibliothequeRoute
   BusinessRoute: typeof BusinessRoute
   CrmRoute: typeof CrmRoute
@@ -311,6 +336,7 @@ export interface RootRouteChildren {
   PipelineRoute: typeof PipelineRoute
   ProspectionRoute: typeof ProspectionRoute
   ProtocolesRoute: typeof ProtocolesRoute
+  RenaitreRoute: typeof RenaitreRoute
   SanteRoute: typeof SanteRoute
   SportRoute: typeof SportRoute
   VisionRoute: typeof VisionRoute
@@ -337,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/sante'
       fullPath: '/sante'
       preLoaderRoute: typeof SanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/renaitre': {
+      id: '/renaitre'
+      path: '/renaitre'
+      fullPath: '/renaitre'
+      preLoaderRoute: typeof RenaitreRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/protocoles': {
@@ -465,6 +498,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BibliothequeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/adn': {
+      id: '/adn'
+      path: '/adn'
+      fullPath: '/adn'
+      preLoaderRoute: typeof AdnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -477,6 +517,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdnRoute: AdnRoute,
   BibliothequeRoute: BibliothequeRoute,
   BusinessRoute: BusinessRoute,
   CrmRoute: CrmRoute,
@@ -495,6 +536,7 @@ const rootRouteChildren: RootRouteChildren = {
   PipelineRoute: PipelineRoute,
   ProspectionRoute: ProspectionRoute,
   ProtocolesRoute: ProtocolesRoute,
+  RenaitreRoute: RenaitreRoute,
   SanteRoute: SanteRoute,
   SportRoute: SportRoute,
   VisionRoute: VisionRoute,
