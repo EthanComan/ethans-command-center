@@ -14,6 +14,8 @@ import {
 import { useEffect, useState } from "react";
 import { analyze } from "@/brain/engine";
 import { computeAlignment, type DomainState } from "@/brain/alignment";
+import { computeNextBestAction } from "@/brain/nba";
+import { NextBestActionHero } from "@/components/next-best-action";
 import { readAdn } from "@/modules/adn/data";
 import { readRenaitre } from "@/modules/renaitre/data";
 import { RecommendedActionCard } from "@/components/recommended-action";
@@ -42,6 +44,7 @@ const STATUS_DOT: Record<DomainState["status"], string> = {
 function Index() {
   const brain = analyze();
   const align = computeAlignment();
+  const nba = computeNextBestAction();
   const adn = readAdn();
   const renaitre = readRenaitre();
   const todays = todayObjectives();
@@ -82,6 +85,9 @@ function Index() {
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </Link>
       </div>
+
+      {/* NBA — La question fondatrice d'ETHAN */}
+      <NextBestActionHero nba={nba} />
 
       {/* Bandeau philosophie + lancement Mode Execution */}
       <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gold/25 bg-gradient-to-r from-gold/[0.06] via-transparent to-transparent px-5 py-4">
