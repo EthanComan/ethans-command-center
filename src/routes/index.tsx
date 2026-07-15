@@ -8,6 +8,8 @@ import {
   Heart,
   Activity,
   Brain,
+  Zap,
+  TrendingUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { analyze } from "@/brain/engine";
@@ -18,6 +20,7 @@ import { RecommendedActionCard } from "@/components/recommended-action";
 import { Link } from "@tanstack/react-router";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
 import { HORIZON_LABEL } from "@/modules/objectifs/types";
+import { globalManScore } from "@/modules/progression/data";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -42,6 +45,7 @@ function Index() {
   const adn = readAdn();
   const renaitre = readRenaitre();
   const todays = todayObjectives();
+  const manScore = globalManScore();
 
   // Rendu date côté client uniquement — évite le hydration mismatch.
   const [today, setToday] = useState("");
@@ -78,6 +82,28 @@ function Index() {
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </Link>
       </div>
+
+      {/* Bandeau philosophie + lancement Mode Execution */}
+      <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gold/25 bg-gradient-to-r from-gold/[0.06] via-transparent to-transparent px-5 py-4">
+        <div className="flex items-center gap-4">
+          <Link to="/progression" className="group inline-flex items-center gap-3">
+            <TrendingUp className="h-4 w-4 text-gold" />
+            <div>
+              <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Score d'homme</div>
+              <div className="text-lg font-semibold tabular-nums text-gold transition-opacity group-hover:opacity-80">{manScore}/100</div>
+            </div>
+          </Link>
+          <p className="max-w-md text-[12px] italic leading-relaxed text-muted-foreground">
+            « ETHAN ne mesure pas seulement ce que tu fais. Il t'aide à devenir l'homme que tu as choisi d'être. »
+          </p>
+        </div>
+        <Link
+          to="/execution"
+          className="inline-flex items-center gap-2 rounded-md bg-gold px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90"
+        >
+          <Zap className="h-4 w-4" /> Entrer en Mode Exécution
+        </Link>
+      </section>
 
       {/* Bandeau Mission + Alignement */}
       <section className="mt-8 grid gap-3 md:grid-cols-3">

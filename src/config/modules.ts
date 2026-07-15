@@ -23,6 +23,9 @@ import {
   Bell,
   Dna,
   Heart,
+  History,
+  TrendingUp as TrendingUpIcon,
+  Zap,
   type LucideIcon,
 } from "lucide-react";
 
@@ -55,6 +58,8 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
     modules: [
       { id: "adn", label: "ADN", to: "/adn", icon: Dna, status: "live", description: "Mission, valeurs, code d'honneur, principes" },
       { id: "renaitre", label: "Renaître", to: "/renaitre", icon: Heart, status: "live", description: "Mission de vie — projet humanitaire" },
+      { id: "memoire", label: "Mémoire", to: "/memoire", icon: History, status: "live", description: "Histoire de ton évolution — décisions, réussites, échecs, apprentissages" },
+      { id: "progression", label: "Progression", to: "/progression", icon: TrendingUpIcon, status: "live", description: "L'évolution de l'homme sur 8 axes fondamentaux" },
     ],
   },
   {
@@ -104,6 +109,7 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
     id: "systeme",
     label: "Système",
     modules: [
+      { id: "execution", label: "Mode Exécution", to: "/execution", icon: Zap, status: "live", description: "Environnement zéro-distraction pour exécuter" },
       { id: "parametres", label: "Paramètres", to: "/parametres", icon: Settings, status: "soon", description: "Préférences du système" },
       { id: "ia", label: "IA ETHAN", to: "/ia", icon: Sparkles, status: "soon", description: "Directeur général personnel" },
       { id: "notifications", label: "Notifications", to: "/notifications", icon: Bell, status: "soon", description: "Rappels et alertes" },
