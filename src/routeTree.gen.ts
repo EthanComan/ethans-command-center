@@ -15,6 +15,7 @@ import { Route as SanteRouteImport } from './routes/sante'
 import { Route as RenaitreRouteImport } from './routes/renaitre'
 import { Route as ProtocolesRouteImport } from './routes/protocoles'
 import { Route as ProspectionRouteImport } from './routes/prospection'
+import { Route as ProgressionRouteImport } from './routes/progression'
 import { Route as PipelineRouteImport } from './routes/pipeline'
 import { Route as PatrimoineRouteImport } from './routes/patrimoine'
 import { Route as PartenairesRouteImport } from './routes/partenaires'
@@ -22,12 +23,14 @@ import { Route as ParametresRouteImport } from './routes/parametres'
 import { Route as ObjectifsRouteImport } from './routes/objectifs'
 import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MentalRouteImport } from './routes/mental'
+import { Route as MemoireRouteImport } from './routes/memoire'
 import { Route as KpiRouteImport } from './routes/kpi'
 import { Route as JournalRouteImport } from './routes/journal'
 import { Route as InvestissementsRouteImport } from './routes/investissements'
 import { Route as IaRouteImport } from './routes/ia'
 import { Route as HabitudesRouteImport } from './routes/habitudes'
 import { Route as FinancesRouteImport } from './routes/finances'
+import { Route as ExecutionRouteImport } from './routes/execution'
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as BusinessRouteImport } from './routes/business'
 import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
@@ -62,6 +65,11 @@ const ProtocolesRoute = ProtocolesRouteImport.update({
 const ProspectionRoute = ProspectionRouteImport.update({
   id: '/prospection',
   path: '/prospection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressionRoute = ProgressionRouteImport.update({
+  id: '/progression',
+  path: '/progression',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PipelineRoute = PipelineRouteImport.update({
@@ -99,6 +107,11 @@ const MentalRoute = MentalRouteImport.update({
   path: '/mental',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MemoireRoute = MemoireRouteImport.update({
+  id: '/memoire',
+  path: '/memoire',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KpiRoute = KpiRouteImport.update({
   id: '/kpi',
   path: '/kpi',
@@ -127,6 +140,11 @@ const HabitudesRoute = HabitudesRouteImport.update({
 const FinancesRoute = FinancesRouteImport.update({
   id: '/finances',
   path: '/finances',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExecutionRoute = ExecutionRouteImport.update({
+  id: '/execution',
+  path: '/execution',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CrmRoute = CrmRouteImport.update({
@@ -161,12 +179,14 @@ export interface FileRoutesByFullPath {
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
+  '/execution': typeof ExecutionRoute
   '/finances': typeof FinancesRoute
   '/habitudes': typeof HabitudesRoute
   '/ia': typeof IaRoute
   '/investissements': typeof InvestissementsRoute
   '/journal': typeof JournalRoute
   '/kpi': typeof KpiRoute
+  '/memoire': typeof MemoireRoute
   '/mental': typeof MentalRoute
   '/notifications': typeof NotificationsRoute
   '/objectifs': typeof ObjectifsRoute
@@ -174,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/partenaires': typeof PartenairesRoute
   '/patrimoine': typeof PatrimoineRoute
   '/pipeline': typeof PipelineRoute
+  '/progression': typeof ProgressionRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
   '/renaitre': typeof RenaitreRoute
@@ -187,12 +208,14 @@ export interface FileRoutesByTo {
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
+  '/execution': typeof ExecutionRoute
   '/finances': typeof FinancesRoute
   '/habitudes': typeof HabitudesRoute
   '/ia': typeof IaRoute
   '/investissements': typeof InvestissementsRoute
   '/journal': typeof JournalRoute
   '/kpi': typeof KpiRoute
+  '/memoire': typeof MemoireRoute
   '/mental': typeof MentalRoute
   '/notifications': typeof NotificationsRoute
   '/objectifs': typeof ObjectifsRoute
@@ -200,6 +223,7 @@ export interface FileRoutesByTo {
   '/partenaires': typeof PartenairesRoute
   '/patrimoine': typeof PatrimoineRoute
   '/pipeline': typeof PipelineRoute
+  '/progression': typeof ProgressionRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
   '/renaitre': typeof RenaitreRoute
@@ -214,12 +238,14 @@ export interface FileRoutesById {
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
+  '/execution': typeof ExecutionRoute
   '/finances': typeof FinancesRoute
   '/habitudes': typeof HabitudesRoute
   '/ia': typeof IaRoute
   '/investissements': typeof InvestissementsRoute
   '/journal': typeof JournalRoute
   '/kpi': typeof KpiRoute
+  '/memoire': typeof MemoireRoute
   '/mental': typeof MentalRoute
   '/notifications': typeof NotificationsRoute
   '/objectifs': typeof ObjectifsRoute
@@ -227,6 +253,7 @@ export interface FileRoutesById {
   '/partenaires': typeof PartenairesRoute
   '/patrimoine': typeof PatrimoineRoute
   '/pipeline': typeof PipelineRoute
+  '/progression': typeof ProgressionRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
   '/renaitre': typeof RenaitreRoute
@@ -242,12 +269,14 @@ export interface FileRouteTypes {
     | '/bibliotheque'
     | '/business'
     | '/crm'
+    | '/execution'
     | '/finances'
     | '/habitudes'
     | '/ia'
     | '/investissements'
     | '/journal'
     | '/kpi'
+    | '/memoire'
     | '/mental'
     | '/notifications'
     | '/objectifs'
@@ -255,6 +284,7 @@ export interface FileRouteTypes {
     | '/partenaires'
     | '/patrimoine'
     | '/pipeline'
+    | '/progression'
     | '/prospection'
     | '/protocoles'
     | '/renaitre'
@@ -268,12 +298,14 @@ export interface FileRouteTypes {
     | '/bibliotheque'
     | '/business'
     | '/crm'
+    | '/execution'
     | '/finances'
     | '/habitudes'
     | '/ia'
     | '/investissements'
     | '/journal'
     | '/kpi'
+    | '/memoire'
     | '/mental'
     | '/notifications'
     | '/objectifs'
@@ -281,6 +313,7 @@ export interface FileRouteTypes {
     | '/partenaires'
     | '/patrimoine'
     | '/pipeline'
+    | '/progression'
     | '/prospection'
     | '/protocoles'
     | '/renaitre'
@@ -294,12 +327,14 @@ export interface FileRouteTypes {
     | '/bibliotheque'
     | '/business'
     | '/crm'
+    | '/execution'
     | '/finances'
     | '/habitudes'
     | '/ia'
     | '/investissements'
     | '/journal'
     | '/kpi'
+    | '/memoire'
     | '/mental'
     | '/notifications'
     | '/objectifs'
@@ -307,6 +342,7 @@ export interface FileRouteTypes {
     | '/partenaires'
     | '/patrimoine'
     | '/pipeline'
+    | '/progression'
     | '/prospection'
     | '/protocoles'
     | '/renaitre'
@@ -321,12 +357,14 @@ export interface RootRouteChildren {
   BibliothequeRoute: typeof BibliothequeRoute
   BusinessRoute: typeof BusinessRoute
   CrmRoute: typeof CrmRoute
+  ExecutionRoute: typeof ExecutionRoute
   FinancesRoute: typeof FinancesRoute
   HabitudesRoute: typeof HabitudesRoute
   IaRoute: typeof IaRoute
   InvestissementsRoute: typeof InvestissementsRoute
   JournalRoute: typeof JournalRoute
   KpiRoute: typeof KpiRoute
+  MemoireRoute: typeof MemoireRoute
   MentalRoute: typeof MentalRoute
   NotificationsRoute: typeof NotificationsRoute
   ObjectifsRoute: typeof ObjectifsRoute
@@ -334,6 +372,7 @@ export interface RootRouteChildren {
   PartenairesRoute: typeof PartenairesRoute
   PatrimoineRoute: typeof PatrimoineRoute
   PipelineRoute: typeof PipelineRoute
+  ProgressionRoute: typeof ProgressionRoute
   ProspectionRoute: typeof ProspectionRoute
   ProtocolesRoute: typeof ProtocolesRoute
   RenaitreRoute: typeof RenaitreRoute
@@ -386,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProspectionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/progression': {
+      id: '/progression'
+      path: '/progression'
+      fullPath: '/progression'
+      preLoaderRoute: typeof ProgressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pipeline': {
       id: '/pipeline'
       path: '/pipeline'
@@ -435,6 +481,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MentalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/memoire': {
+      id: '/memoire'
+      path: '/memoire'
+      fullPath: '/memoire'
+      preLoaderRoute: typeof MemoireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kpi': {
       id: '/kpi'
       path: '/kpi'
@@ -475,6 +528,13 @@ declare module '@tanstack/react-router' {
       path: '/finances'
       fullPath: '/finances'
       preLoaderRoute: typeof FinancesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/execution': {
+      id: '/execution'
+      path: '/execution'
+      fullPath: '/execution'
+      preLoaderRoute: typeof ExecutionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crm': {
@@ -521,12 +581,14 @@ const rootRouteChildren: RootRouteChildren = {
   BibliothequeRoute: BibliothequeRoute,
   BusinessRoute: BusinessRoute,
   CrmRoute: CrmRoute,
+  ExecutionRoute: ExecutionRoute,
   FinancesRoute: FinancesRoute,
   HabitudesRoute: HabitudesRoute,
   IaRoute: IaRoute,
   InvestissementsRoute: InvestissementsRoute,
   JournalRoute: JournalRoute,
   KpiRoute: KpiRoute,
+  MemoireRoute: MemoireRoute,
   MentalRoute: MentalRoute,
   NotificationsRoute: NotificationsRoute,
   ObjectifsRoute: ObjectifsRoute,
@@ -534,6 +596,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartenairesRoute: PartenairesRoute,
   PatrimoineRoute: PatrimoineRoute,
   PipelineRoute: PipelineRoute,
+  ProgressionRoute: ProgressionRoute,
   ProspectionRoute: ProspectionRoute,
   ProtocolesRoute: ProtocolesRoute,
   RenaitreRoute: RenaitreRoute,
