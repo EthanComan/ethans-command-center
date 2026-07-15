@@ -32,7 +32,14 @@
 import { analyze as analyzeBrain } from "./engine";
 import { computeAlignment } from "./alignment";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
-import { HORIZON_LABEL } from "@/modules/objectifs/types";
+import { HORIZON_LABEL, type Priority } from "@/modules/objectifs/types";
+
+const PRIORITY_WEIGHT: Record<Priority, number> = {
+  critique: 5,
+  haute: 4,
+  moyenne: 3,
+  basse: 2,
+};
 
 export interface NbaCandidate {
   id: string;
@@ -121,7 +128,7 @@ registerContributor(() => {
       title: o.title,
       source: "objectifs",
       // Priorité brute (1-5) → 55 à 90.
-      score: 45 + o.priority * 9,
+      score: 45 + PRIORITY_WEIGHT[o.priority] * 9,
       why: parent
         ? `Rattaché à ${HORIZON_LABEL[parent.horizon]} · « ${parent.title} ».`
         : "Objectif du jour non encore complété.",
