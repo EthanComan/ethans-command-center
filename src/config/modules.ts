@@ -26,6 +26,7 @@ import {
   History,
   TrendingUp as TrendingUpIcon,
   Zap,
+  CalendarDays,
   type LucideIcon,
 } from "lucide-react";
 
@@ -67,6 +68,7 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
     label: "Business",
     modules: [
       { id: "dashboard", label: "Dashboard", to: "/", icon: LayoutDashboard, status: "live", description: "Vue d'ensemble de la journée" },
+      { id: "planning", label: "Planning", to: "/planning", icon: CalendarDays, status: "live", description: "Planning Intelligent — jour, semaine, RDV, blocs, sport, habitudes, tâches inter-modules" },
       { id: "business", label: "Business", to: "/business", icon: Briefcase, status: "soon", description: "Pilotage global de l'activité" },
       { id: "prospection", label: "Prospection", to: "/prospection", icon: Target, status: "soon", description: "Séquences et opportunités" },
       { id: "crm", label: "CRM", to: "/crm", icon: Users, status: "soon", description: "Contacts et interactions" },
