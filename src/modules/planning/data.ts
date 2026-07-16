@@ -94,6 +94,8 @@ const TODAY_BLOCKS: PlanningBlock[] = [
     end: "07:15",
     source: "habitudes",
     protocolId: "protocole-matin",
+    objectiveId: "mission",
+    note: "Ancrage quotidien sur la Mission Renaître.",
   },
   {
     id: "b-sport",
@@ -166,18 +168,29 @@ const TODAY_BLOCKS: PlanningBlock[] = [
     linkedModule: "business",
   },
   {
+    id: "b-renaitre",
+    kind: "deep_work",
+    title: "Renaître — rédaction de la charte fondatrice",
+    start: "17:15",
+    end: "18:00",
+    source: "objectifs",
+    objectiveId: "mission",
+    linkedModule: "renaitre",
+    note: "Bloc dédié à la Mission de vie : reconstruire des femmes brisées par la violence.",
+  },
+  {
     id: "b-buffer",
     kind: "buffer",
     title: "Marge — imprevus, respiration",
-    start: "17:15",
-    end: "18:00",
+    start: "18:00",
+    end: "18:15",
     source: "manuel",
   },
   {
     id: "b-personal",
     kind: "personal",
     title: "Temps famille",
-    start: "18:00",
+    start: "18:15",
     end: "20:30",
     source: "manuel",
     locked: true,
@@ -202,14 +215,14 @@ const buildDay = (offset: number, intention: string, blocks: PlanningBlock[] = [
 
 const TODAY: PlanningDay = {
   date: iso(today),
-  intention: "Combler l'ecart prospection + envoyer la proposition Alpha.",
+  intention: "Servir Renaître par le business : combler l'écart prospection, envoyer la proposition Alpha, avancer la charte fondatrice.",
   alignmentScore: 82,
   blocks: TODAY_BLOCKS,
 };
 
 const WEEK: PlanningWeek = {
   weekOf: iso(mondayOf(today)),
-  theme: "Convertir le pipeline chaud — 25 appels + 2 offres signees",
+  theme: "Convertir le pipeline chaud pour financer Renaître — 25 appels, 2 offres signées, charte fondatrice v1.",
   focusObjectiveId: "week-calls",
   days: [
     buildDay(-((today.getDay() + 6) % 7), "Cadrage semaine — pipeline + priorites"),
@@ -217,8 +230,8 @@ const WEEK: PlanningWeek = {
     TODAY,
     buildDay(1, "Rendez-vous clients — 3 demos"),
     buildDay(2, "Redaction offres + relances"),
-    buildDay(3, "Sport long + revue hebdo"),
-    buildDay(4, "Repos actif — vision & lecture"),
+    buildDay(3, "Sport long + revue hebdo + bloc Renaître (réseau experts)"),
+    buildDay(4, "Repos actif — vision, lecture, écriture Renaître"),
   ],
 };
 
