@@ -16,6 +16,7 @@ import { Route as RenaitreRouteImport } from './routes/renaitre'
 import { Route as ProtocolesRouteImport } from './routes/protocoles'
 import { Route as ProspectionRouteImport } from './routes/prospection'
 import { Route as ProgressionRouteImport } from './routes/progression'
+import { Route as PlanningRouteImport } from './routes/planning'
 import { Route as PipelineRouteImport } from './routes/pipeline'
 import { Route as PatrimoineRouteImport } from './routes/patrimoine'
 import { Route as PartenairesRouteImport } from './routes/partenaires'
@@ -70,6 +71,11 @@ const ProspectionRoute = ProspectionRouteImport.update({
 const ProgressionRoute = ProgressionRouteImport.update({
   id: '/progression',
   path: '/progression',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanningRoute = PlanningRouteImport.update({
+  id: '/planning',
+  path: '/planning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PipelineRoute = PipelineRouteImport.update({
@@ -194,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/partenaires': typeof PartenairesRoute
   '/patrimoine': typeof PatrimoineRoute
   '/pipeline': typeof PipelineRoute
+  '/planning': typeof PlanningRoute
   '/progression': typeof ProgressionRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
@@ -223,6 +230,7 @@ export interface FileRoutesByTo {
   '/partenaires': typeof PartenairesRoute
   '/patrimoine': typeof PatrimoineRoute
   '/pipeline': typeof PipelineRoute
+  '/planning': typeof PlanningRoute
   '/progression': typeof ProgressionRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/partenaires': typeof PartenairesRoute
   '/patrimoine': typeof PatrimoineRoute
   '/pipeline': typeof PipelineRoute
+  '/planning': typeof PlanningRoute
   '/progression': typeof ProgressionRoute
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
@@ -284,6 +293,7 @@ export interface FileRouteTypes {
     | '/partenaires'
     | '/patrimoine'
     | '/pipeline'
+    | '/planning'
     | '/progression'
     | '/prospection'
     | '/protocoles'
@@ -313,6 +323,7 @@ export interface FileRouteTypes {
     | '/partenaires'
     | '/patrimoine'
     | '/pipeline'
+    | '/planning'
     | '/progression'
     | '/prospection'
     | '/protocoles'
@@ -342,6 +353,7 @@ export interface FileRouteTypes {
     | '/partenaires'
     | '/patrimoine'
     | '/pipeline'
+    | '/planning'
     | '/progression'
     | '/prospection'
     | '/protocoles'
@@ -372,6 +384,7 @@ export interface RootRouteChildren {
   PartenairesRoute: typeof PartenairesRoute
   PatrimoineRoute: typeof PatrimoineRoute
   PipelineRoute: typeof PipelineRoute
+  PlanningRoute: typeof PlanningRoute
   ProgressionRoute: typeof ProgressionRoute
   ProspectionRoute: typeof ProspectionRoute
   ProtocolesRoute: typeof ProtocolesRoute
@@ -430,6 +443,13 @@ declare module '@tanstack/react-router' {
       path: '/progression'
       fullPath: '/progression'
       preLoaderRoute: typeof ProgressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planning': {
+      id: '/planning'
+      path: '/planning'
+      fullPath: '/planning'
+      preLoaderRoute: typeof PlanningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pipeline': {
@@ -596,6 +616,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartenairesRoute: PartenairesRoute,
   PatrimoineRoute: PatrimoineRoute,
   PipelineRoute: PipelineRoute,
+  PlanningRoute: PlanningRoute,
   ProgressionRoute: ProgressionRoute,
   ProspectionRoute: ProspectionRoute,
   ProtocolesRoute: ProtocolesRoute,
