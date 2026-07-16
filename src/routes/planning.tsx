@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarDays, Clock, MapPin, Lock, Target, ArrowRight, Zap } from "lucide-react";
 import { readToday, readWeek, currentBlock, nextBlock, BLOCK_KIND_META, type PlanningBlock } from "@/modules/planning/data";
-import { get as getObjective } from "@/modules/objectifs/data";
+import { get as getObjective, ancestorsOf } from "@/modules/objectifs/data";
+import { readRenaitre } from "@/modules/renaitre/data";
+import { Heart } from "lucide-react";
 
 export const Route = createFileRoute("/planning")({
   head: () => ({
@@ -18,6 +20,23 @@ function PlanningPage() {
   const week = readWeek();
   const now = currentBlock();
   const next = nextBlock();
+  const mission = readRenaitre();
+  const missionBlocks = day.blocks.filter((b) => {
+    if (!b.objectiveId) return false;
+    if (b.objectiveId === "mission") return true;
+    return ancestorsOf(b.objectiveId).some((a) => a.id === "mission");
+  });
+  const missionMinutes = missionBlocks.reduce((acc, b) => {
+    const [sh, sm] = b.start.split(":").map(Number);
+    const [eh, em] = b.end.split(":").map(Number);
+    return acc + (eh * 60 + em - sh * 60 - sm);
+  }, 0);
+  const totalMinutes = day.blocks.reduce((acc, b) => {
+    const [sh, sm] = b.start.split(":").map(Number);
+    const [eh, em] = b.end.split(":").map(Number);
+    return acc + (eh * 60 + em - sh * 60 - sm);
+  }, 0);
+  const missionPct = totalMinutes ? Math.round((missionMinutes / totalMinutes) * 100) : 0;
 
   return (
     <div className="mx-auto max-w-6xl space-y-8 px-6 py-10">
@@ -68,6 +87,26 @@ function PlanningPage() {
           ) : (
             <p className="mt-2 text-sm text-muted-foreground">Fin de journee.</p>
           )}
+        </div>
+      </section>
+
+      {/* Bandeau Mission Renaître */}
+      <section className="rounded-2xl border border-gold/40 bg-gradient-to-br from-gold/[0.08] via-transparent to-transparent p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-gold">
+              <Heart className="h-3.5 w-3.5" /> Mission de vie — Renaître
+            </div>
+            <p className="mt-2 text-[15px] leading-snug text-foreground/90">{mission.north}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Chaque bloc de la journée doit, directement ou indirectement, remonter à cette mission. Le planning n'est pas une liste — c'est un acte au service de Renaître.
+            </p>
+          </div>
+          <div className="rounded-xl border border-gold/30 bg-background/40 px-4 py-3 text-right">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Temps au service de Renaître</p>
+            <p className="text-2xl font-semibold text-gold">{missionPct}%</p>
+            <p className="text-[10px] text-muted-foreground">{missionBlocks.length} bloc(s) rattaché(s)</p>
+          </div>
         </div>
       </section>
 
@@ -124,8 +163,10 @@ function PlanningPage() {
 function BlockRow({ block, isNow }: { block: PlanningBlock; isNow: boolean }) {
   const meta = BLOCK_KIND_META[block.kind];
   const objective = block.objectiveId ? getObjective(block.objectiveId) : undefined;
+  const chain = block.objectiveId ? [...ancestorsOf(block.objectiveId), objective].filter(Boolean) : [];
+  const servesMission = chain.some((o) => o?.id === "mission");
   return (
-    <li className={`flex items-stretch gap-3 rounded-xl border px-4 py-3 transition-colors ${isNow ? "border-gold/60 bg-gold/[0.06]" : "border-border bg-elevated hover:border-gold/30"}`}>
+    <li className={`flex items-stretch gap-3 rounded-xl border px-4 py-3 transition-colors ${isNow ? "border-gold/60 bg-gold/[0.06]" : servesMission ? "border-gold/30 bg-gold/[0.03] hover:border-gold/50" : "border-border bg-elevated hover:border-gold/30"}`}>
       <div className="flex w-20 shrink-0 flex-col text-xs tabular-nums text-muted-foreground">
         <span className="text-foreground/90">{block.start}</span>
         <span>{block.end}</span>
@@ -135,7 +176,17 @@ function BlockRow({ block, isNow }: { block: PlanningBlock; isNow: boolean }) {
           <span className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] ${meta.tone}`}>{meta.label}</span>
           <p className="text-sm font-medium">{block.title}</p>
           {block.locked && <Lock className="h-3 w-3 text-muted-foreground" aria-label="Verrouille" />}
+          {servesMission && (
+            <span className="inline-flex items-center gap-1 rounded border border-gold/40 bg-gold/[0.08] px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-gold">
+              <Heart className="h-3 w-3" /> Renaître
+            </span>
+          )}
         </div>
+        {chain.length > 0 && (
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            {chain.map((o) => o!.title).join("  ›  ")}
+          </p>
+        )}
         <div className="mt-1 flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
           {block.location && <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{block.location}</span>}
           {objective && (
@@ -152,6 +203,9 @@ function BlockRow({ block, isNow }: { block: PlanningBlock; isNow: boolean }) {
             <Clock className="h-3 w-3" /> source : {block.source}
           </span>
         </div>
+        {block.note && (
+          <p className="mt-1 text-[11px] italic text-muted-foreground/80">{block.note}</p>
+        )}
       </div>
     </li>
   );
