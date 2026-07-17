@@ -299,6 +299,7 @@ function Index() {
           )}
         </ul>
       </section>
+      )}
 
       {/* Écarts détectés — plan de correction */}
       <section className="mt-8 rounded-2xl border border-border bg-elevated p-6">
