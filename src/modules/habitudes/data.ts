@@ -181,17 +181,33 @@ function isDueOn(habit: Habit, date: Date): boolean {
   }
 }
 
+function mulberry32(seed: number): () => number {
+  return () => {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 function buildSeedLogs(): HabitLog[] {
   const logs: HabitLog[] = [];
   const now = today();
   const reference = new Date(now);
+  // Générateur pseudo-aléatoire déterministe pour des séries reproductibles
+  // entre les rechargements du serveur de développement.
+  const randFor = (key: string) => {
+    let seed = 0;
+    for (let i = 0; i < key.length; i++) seed = (seed * 31 + key.charCodeAt(i)) >>> 0;
+    return mulberry32(seed);
+  };
   // Génère 90 jours de logs pour créer des séries réalistes.
   for (let i = -89; i <= 0; i++) {
     const d = addDays(reference, i);
     const dateStr = iso(d);
     for (const h of SEED_HABITS) {
       if (!isDueOn(h, d)) continue;
-      const rand = Math.random();
+      const rand = randFor(`${h.id}-${dateStr}`)();
       let status: HabitLogStatus = "done";
       if (rand > 0.92) status = "missed";
       else if (rand > 0.85) status = "partial";
