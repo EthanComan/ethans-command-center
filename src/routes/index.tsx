@@ -26,6 +26,7 @@ import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
 import { HORIZON_LABEL } from "@/modules/objectifs/types";
 import { globalManScore } from "@/modules/progression/data";
 import { readTodayHabits, markDone, markMissed } from "@/modules/habitudes/data";
+import { HABIT_PRIORITY_WEIGHT } from "@/modules/habitudes/types";
 
 export const Route = createFileRoute("/")({
   component: Index,
