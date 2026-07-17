@@ -55,6 +55,10 @@ function Index() {
   const manScore = globalManScore();
   const [habitItems, setHabitItems] = useState(readTodayHabits());
 
+  useEffect(() => {
+    setHabitItems(readTodayHabits());
+  }, []);
+
   // Rendu date côté client uniquement — évite le hydration mismatch.
   const [today, setToday] = useState("");
   useEffect(() => {
