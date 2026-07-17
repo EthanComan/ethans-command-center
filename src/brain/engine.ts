@@ -119,7 +119,7 @@ function compose(signal: Signal, energy: number): Omit<RecommendedAction, "score
         title: `Protéger la série « ${ctx.habit} »`,
         reason: `Série de ${ctx.streak} jours en cours. La rompre coûte plus que de l'exécuter maintenant.`,
         impact: "Préserve un actif de discipline long-terme.",
-        estimatedMinutes: 90,
+        estimatedMinutes: Number(ctx.estimatedMinutes ?? 90),
         to: SOURCE_ROUTE[signal.source],
       };
     case "goal_gap":

@@ -10,6 +10,8 @@ import {
   Brain,
   Zap,
   TrendingUp,
+  Repeat,
+  Flame,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { analyze } from "@/brain/engine";
@@ -23,6 +25,7 @@ import { Link } from "@tanstack/react-router";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
 import { HORIZON_LABEL } from "@/modules/objectifs/types";
 import { globalManScore } from "@/modules/progression/data";
+import { readTodayHabits, markDone, markMissed } from "@/modules/habitudes/data";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -49,6 +52,7 @@ function Index() {
   const renaitre = readRenaitre();
   const todays = todayObjectives();
   const manScore = globalManScore();
+  const [habitItems, setHabitItems] = useState(readTodayHabits());
 
   // Rendu date côté client uniquement — évite le hydration mismatch.
   const [today, setToday] = useState("");
@@ -230,6 +234,58 @@ function Index() {
             ))}
           </ul>
         </div>
+      </section>
+
+      {/* Habitudes du jour */}
+      <section className="mt-8 rounded-2xl border border-border bg-elevated p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Repeat className="h-4 w-4 text-gold" />
+            <h3 className="text-sm font-medium tracking-tight">Habitudes du jour</h3>
+          </div>
+          <Link to="/habitudes" className="text-[11px] text-muted-foreground transition-colors hover:text-gold">
+            Voir tout →
+          </Link>
+        </div>
+        <ul className="mt-4 divide-y divide-border/60">
+          {habitItems
+            .filter((i) => i.dueToday)
+            .slice(0, 4)
+            .map((i) => (
+              <li key={i.habit.id} className="flex items-center justify-between gap-3 py-3">
+                <div className="flex items-start gap-3">
+                  <button
+                    onClick={() => {
+                      i.doneToday ? markMissed(i.habit.id) : markDone(i.habit.id);
+                      setHabitItems(readTodayHabits());
+                    }}
+                    className="mt-0.5 text-muted-foreground transition-colors hover:text-gold"
+                    aria-label={i.doneToday ? "Marquer non fait" : "Marquer fait"}
+                  >
+                    {i.doneToday ? (
+                      <CheckCircle2 className="h-4 w-4 text-gold" />
+                    ) : (
+                      <Circle className="h-4 w-4" strokeWidth={1.5} />
+                    )}
+                  </button>
+                  <div>
+                    <p className={`text-sm ${i.doneToday ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                      {i.habit.title}
+                    </p>
+                    <p className="text-[11px] text-muted-foreground">
+                      <Flame className="mb-0.5 inline h-3 w-3 text-gold" /> {i.streak} j · {i.habit.estimatedMinutes} min
+                    </p>
+                  </div>
+                </div>
+                <span className="rounded border border-border/60 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {i.habit.category}
+                </span>
+              </li>
+            ))}
+          {habitItems.filter((i) => i.dueToday).length === 0 && (
+            <li className="py-3 text-sm text-muted-foreground">Aucune habitude aujourd'hui.</li>
+          )}
+        </ul>
       </section>
 
       {/* Écarts détectés — plan de correction */}
