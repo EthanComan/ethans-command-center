@@ -53,9 +53,11 @@ function Index() {
   const renaitre = readRenaitre();
   const todays = todayObjectives();
   const manScore = globalManScore();
-  const [habitItems, setHabitItems] = useState(readTodayHabits());
+  const [mounted, setMounted] = useState(false);
+  const [habitItems, setHabitItems] = useState<HabitForToday[]>([]);
 
   useEffect(() => {
+    setMounted(true);
     setHabitItems(readTodayHabits());
   }, []);
 
