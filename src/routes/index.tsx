@@ -244,6 +244,7 @@ function Index() {
       </section>
 
       {/* Habitudes du jour */}
+      {mounted && (
       <section className="mt-8 rounded-2xl border border-border bg-elevated p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
