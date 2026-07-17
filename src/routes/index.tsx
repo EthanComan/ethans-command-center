@@ -250,6 +250,10 @@ function Index() {
         <ul className="mt-4 divide-y divide-border/60">
           {habitItems
             .filter((i) => i.dueToday)
+            .sort((a, b) => {
+              if (a.doneToday !== b.doneToday) return a.doneToday ? 1 : -1;
+              return (HABIT_PRIORITY_WEIGHT[b.habit.priority] ?? 0) - (HABIT_PRIORITY_WEIGHT[a.habit.priority] ?? 0);
+            })
             .slice(0, 4)
             .map((i) => (
               <li key={i.habit.id} className="flex items-center justify-between gap-3 py-3">
