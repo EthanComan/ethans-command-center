@@ -32,6 +32,8 @@
 import { analyze as analyzeBrain } from "./engine";
 import { computeAlignment } from "./alignment";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
+import { readTodayHabits } from "@/modules/habitudes/data";
+import { HABIT_PRIORITY_WEIGHT, HABIT_CATEGORY_LABEL } from "@/modules/habitudes/types";
 import { HORIZON_LABEL, type Priority } from "@/modules/objectifs/types";
 
 const PRIORITY_WEIGHT: Record<Priority, number> = {
@@ -137,7 +139,32 @@ registerContributor(() => {
       to: "/objectifs",
       impact: "Chaque action du jour doit servir un objectif supérieur.",
     };
-  });
+    });
+});
+
+// 4) Habitudes du jour — protéger les séries, privilégier fondamentales/mission.
+registerContributor(() => {
+  return readTodayHabits()
+    .filter((i) => i.dueToday && !i.doneToday)
+    .map((i) => {
+      const h = i.habit;
+      const streakBoost = Math.min(25, i.streak / 2);
+      const missionBoost = h.category === "mission" ? 15 : h.category === "fondamentale" ? 10 : 0;
+      const score = 40 + HABIT_PRIORITY_WEIGHT[h.priority] * 12 + streakBoost + missionBoost;
+      return {
+        id: `habit:${h.id}`,
+        title: h.title,
+        source: "habitudes",
+        score: Math.min(98, Math.round(score)),
+        why: i.streak > 0
+          ? `Série de ${i.streak} jours en cours. La rompre coûte plus que l'exécuter maintenant.`
+          : `Habitude ${HABIT_CATEGORY_LABEL[h.category] ?? h.category} du jour — elle construit l'identité à long terme.`,
+        linkedTo: h.objectiveId,
+        estimatedMinutes: h.estimatedMinutes,
+        to: "/habitudes",
+        impact: "Renforce la constance, l'axe Discipline et l'alignement avec la mission.",
+      };
+    });
 });
 
 /* ------------------------------------------------------------------ */

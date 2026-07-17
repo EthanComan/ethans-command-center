@@ -12,6 +12,7 @@
 import type { EthanModule } from "@/core/contracts";
 import type { Signal } from "@/brain/types";
 import { publish } from "@/core/bus";
+import { habitudesModule } from "./habitudes";
 import {
   readAll as readObjectives,
   byHorizon as objectivesByHorizon,
@@ -71,27 +72,9 @@ export const sportModule: EthanModule<SportState> = {
 };
 
 // ─────────────────────────────────────────────────────────────
-// HABITUDES — série en cours.
+// HABITUDES — moteur de comportements quotidiens.
 // ─────────────────────────────────────────────────────────────
-interface HabitState { name: string; streak: number; doneToday: boolean }
-const habits: HabitState[] = [
-  { name: "Deep work 90 min", streak: 14, doneToday: false },
-];
-
-export const habitudesModule: EthanModule<HabitState[]> = {
-  id: "habitudes",
-  snapshot: () => habits,
-  getSignals: () => habits
-    .filter((h) => !h.doneToday)
-    .map((h) => ({
-      id: `habit-${h.name}`,
-      source: "habitudes",
-      kind: "streak_risk" as const,
-      intensity: Math.min(0.95, 0.3 + h.streak / 30),
-      updatedAt: now() - 20 * HOUR,
-      context: { habit: h.name, streak: h.streak },
-    })),
-};
+export { habitudesModule } from "./habitudes";
 
 // ─────────────────────────────────────────────────────────────
 // PROSPECTION — cadence hebdomadaire.

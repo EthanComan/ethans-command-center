@@ -29,6 +29,7 @@ export type EventKind =
   | "mental:energy_updated"
   | "habitudes:completed"
   | "habitudes:streak_at_risk"
+  | "habitudes:updated"
   // Patrimoine
   | "finances:cashflow_alert"
   | "investissements:position_updated"

@@ -7,6 +7,8 @@
  * V1 : seed + trajectoires trimestrielles. V2 : calcul depuis modules.
  */
 
+import { readAllHabits, computeConsistency } from "@/modules/habitudes/data";
+
 export type AxeId =
   | "discipline"
   | "competences"
@@ -93,8 +95,34 @@ export const AXES: Axe[] = [
   },
 ];
 
-export function readAxes(): ReadonlyArray<Axe> { return AXES; }
+export function disciplineFromHabits(): number {
+  const habits = readAllHabits();
+  if (habits.length === 0) return AXES.find((a) => a.id === "discipline")?.now ?? 72;
+  const scores = habits
+    .filter((h) => h.category === "fondamentale" || h.category === "performance")
+    .map((h) => computeConsistency(h.id).last30Days);
+  if (scores.length === 0) return 50;
+  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+}
+
+export function constanceFromHabits(): number {
+  const habits = readAllHabits();
+  if (habits.length === 0) return AXES.find((a) => a.id === "constance")?.now ?? 66;
+  const scores = habits.map((h) => computeConsistency(h.id).last30Days);
+  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+}
+
+export function readAxes(): ReadonlyArray<Axe> {
+  const discipline = disciplineFromHabits();
+  const constance = constanceFromHabits();
+  return AXES.map((a) => {
+    if (a.id === "discipline") return { ...a, now: discipline };
+    if (a.id === "constance") return { ...a, now: constance };
+    return a;
+  });
+}
 
 export function globalManScore(): number {
-  return Math.round(AXES.reduce((a, x) => a + x.now, 0) / AXES.length);
+  const axes = readAxes();
+  return Math.round(axes.reduce((a, x) => a + x.now, 0) / axes.length);
 }

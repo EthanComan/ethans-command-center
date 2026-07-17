@@ -84,7 +84,7 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
       { id: "sport", label: "Sport", to: "/sport", icon: Dumbbell, status: "soon", description: "Entraînements et progression" },
       { id: "sante", label: "Santé", to: "/sante", icon: HeartPulse, status: "soon", description: "Biomarqueurs et récupération" },
       { id: "mental", label: "Mental", to: "/mental", icon: Brain, status: "soon", description: "Focus, énergie, sommeil" },
-      { id: "habitudes", label: "Habitudes", to: "/habitudes", icon: Repeat, status: "soon", description: "Routines quotidiennes" },
+      { id: "habitudes", label: "Habitudes", to: "/habitudes", icon: Repeat, status: "live", description: "Moteur de comportements quotidiens" },
     ],
   },
   {

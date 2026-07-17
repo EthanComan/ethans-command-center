@@ -20,6 +20,9 @@
  *      (energie mentale + charge cognitive + fenetres profondes + contraintes).
  */
 
+import { readTodayHabits } from "@/modules/habitudes/data";
+import { HABIT_DOMAIN_LABEL } from "@/modules/habitudes/types";
+
 export type BlockKind =
   | "deep_work"      // bloc de travail profond
   | "meeting"        // rendez-vous
@@ -213,11 +216,49 @@ const buildDay = (offset: number, intention: string, blocks: PlanningBlock[] = [
   blocks,
 });
 
+function blocksFromHabits(refDate: Date = today): PlanningBlock[] {
+  const items = readTodayHabits(refDate);
+  const blocks: PlanningBlock[] = [];
+  for (const item of items) {
+    if (!item.dueToday || item.doneToday) continue;
+    if (!item.habit.recommendedTime) continue;
+    const [h, m] = item.habit.recommendedTime.split(":").map(Number);
+    if (Number.isNaN(h) || Number.isNaN(m)) continue;
+    const start = item.habit.recommendedTime;
+    const endH = h + Math.floor((m + item.habit.estimatedMinutes) / 60);
+    const endM = (m + item.habit.estimatedMinutes) % 60;
+    const end = `${String(endH).padStart(2, "0")}:${String(endM).padStart(2, "0")}`;
+    blocks.push({
+      id: `hab-${item.habit.id}`,
+      kind: "habit",
+      title: `${item.habit.title} (${HABIT_DOMAIN_LABEL[item.habit.domain]})`,
+      start,
+      end,
+      source: "habitudes",
+      objectiveId: item.habit.objectiveId,
+      linkedModule: "habitudes",
+      note: item.habit.why,
+    });
+  }
+  return blocks;
+}
+
+function mergeBlocks(base: PlanningBlock[], generated: PlanningBlock[]): PlanningBlock[] {
+  const seen = new Set(base.map((b) => b.start));
+  const merged = [...base];
+  for (const b of generated) {
+    if (seen.has(b.start)) continue;
+    merged.push(b);
+    seen.add(b.start);
+  }
+  return merged.sort((a, b) => a.start.localeCompare(b.start));
+}
+
 const TODAY: PlanningDay = {
   date: iso(today),
   intention: "Servir Renaître par le business : combler l'écart prospection, envoyer la proposition Alpha, avancer la charte fondatrice.",
   alignmentScore: 82,
-  blocks: TODAY_BLOCKS,
+  blocks: mergeBlocks(TODAY_BLOCKS, blocksFromHabits(today)),
 };
 
 const WEEK: PlanningWeek = {
