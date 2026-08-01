@@ -566,6 +566,61 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
             className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
           />
         </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Nature</label>
+          <select
+            value={nature}
+            onChange={(e) => setNature(e.target.value as HabitNature)}
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          >
+            {Object.entries(HABIT_NATURE_LABEL).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">
+            Poids d'impact — {impactWeight}/10
+          </label>
+          <input
+            type="range"
+            min={1}
+            max={10}
+            value={impactWeight}
+            onChange={(e) => setImpactWeight(Number(e.target.value))}
+            className="mt-3 w-full accent-[var(--gold,#d4af37)]"
+          />
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Ce qu'elle alimente</label>
+          <select
+            value={linkKind}
+            onChange={(e) => setLinkKind(e.target.value as Habit["links"][number]["kind"])}
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          >
+            {Object.entries(HABIT_LINK_LABEL).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Cible (nom)</label>
+          <input
+            value={linkLabel}
+            onChange={(e) => setLinkLabel(e.target.value)}
+            placeholder="Ex: KPI Appels / semaine"
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Contribution</label>
+          <input
+            value={linkContribution}
+            onChange={(e) => setLinkContribution(e.target.value)}
+            placeholder="Ex: +25 appels / semaine"
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          />
+        </div>
       </div>
       <button
         type="submit"
