@@ -17,6 +17,15 @@ import type {
   HabitPriority,
   HabitSnapshot,
 } from "./types";
+import {
+  DEFAULT_NOTIFICATION,
+  HABIT_PHASES,
+  HABIT_PRIORITY_WEIGHT,
+  type HabitNotification,
+  type HabitPhase,
+  type ImpactProfile,
+  type PhaseDefinition,
+} from "./types";
 
 const today = () => new Date();
 const iso = (d: Date) => d.toISOString().slice(0, 10);
@@ -37,6 +46,10 @@ const HABIT_ID = {
   journal: "hab-journal",
   financeReview: "hab-finance-review",
   network: "hab-network",
+  launchReview: "hab-launch-review",
+  followUps: "hab-follow-ups",
+  renaitreStructuring: "hab-renaitre-structuring",
+  recovery: "hab-recovery",
 } as const;
 
 const SEED_HABITS: Habit[] = [
@@ -47,10 +60,17 @@ const SEED_HABITS: Habit[] = [
     objectiveId: "mission",
     domain: "spiritualite",
     category: "fondamentale",
+    nature: "obligatoire",
     frequency: { kind: "daily" },
     recommendedTime: "06:30",
     priority: "critique",
     estimatedMinutes: 45,
+    impactWeight: 9,
+    links: [
+      { kind: "objectif", id: "mission", label: "Mission Renaître", contribution: "Aligne la journée sur la mission", weight: 0.4, to: "/objectifs" },
+      { kind: "progression", id: "discipline", label: "Axe Discipline", contribution: "+2 pts / mois de constance", weight: 0.35, to: "/progression" },
+      { kind: "progression", id: "constance", label: "Axe Constance", contribution: "Socle du score d'homme", weight: 0.25, to: "/progression" },
+    ],
     createdAt: iso(addDays(today(), -30)),
   },
   {
@@ -60,10 +80,17 @@ const SEED_HABITS: Habit[] = [
     objectiveId: "week-calls",
     domain: "business",
     category: "performance",
+    nature: "progression",
     frequency: { kind: "daily" },
     recommendedTime: "09:00",
     priority: "critique",
     estimatedMinutes: 90,
+    impactWeight: 10,
+    links: [
+      { kind: "objectif", id: "week-calls", label: "Objectif hebdo business", contribution: "Avance le livrable clé", weight: 0.4, to: "/objectifs" },
+      { kind: "kpi", id: "kpi-output", label: "KPI Output hebdomadaire", contribution: "+1 livrable / jour", weight: 0.35, to: "/kpi" },
+      { kind: "progression", id: "competences", label: "Axe Compétences", contribution: "Approfondissement du métier", weight: 0.25, to: "/progression" },
+    ],
     createdAt: iso(addDays(today(), -45)),
   },
   {
@@ -73,10 +100,17 @@ const SEED_HABITS: Habit[] = [
     objectiveId: "week-calls",
     domain: "business",
     category: "performance",
+    nature: "progression",
     frequency: { kind: "weekly", days: [1, 2, 3, 4, 5] },
     recommendedTime: "11:00",
     priority: "haute",
     estimatedMinutes: 60,
+    impactWeight: 9,
+    links: [
+      { kind: "kpi", id: "kpi-calls", label: "KPI Appels / semaine", contribution: "+25 appels / semaine", weight: 0.4, to: "/kpi" },
+      { kind: "projet", id: "pipeline", label: "Pipeline commercial", contribution: "Alimente le haut de tunnel", weight: 0.3, to: "/pipeline" },
+      { kind: "renaitre", id: "financement", label: "Renaître — financement", contribution: "Le CA finance le refuge", weight: 0.3, to: "/renaitre" },
+    ],
     createdAt: iso(addDays(today(), -30)),
   },
   {
@@ -86,10 +120,18 @@ const SEED_HABITS: Habit[] = [
     objectiveId: "day-deadlift",
     domain: "sport",
     category: "fondamentale",
+    nature: "obligatoire",
     frequency: { kind: "weekly", days: [1, 3, 5] },
     recommendedTime: "07:30",
     priority: "haute",
     estimatedMinutes: 75,
+    impactWeight: 8,
+    pausedInPhases: ["recuperation"],
+    links: [
+      { kind: "progression", id: "sante", label: "Axe Santé", contribution: "+3 pts / trimestre", weight: 0.5, to: "/progression" },
+      { kind: "objectif", id: "day-deadlift", label: "Objectif force", contribution: "Progression de charge", weight: 0.3, to: "/objectifs" },
+      { kind: "kpi", id: "kpi-energy", label: "KPI Énergie", contribution: "Énergie disponible pour le deep work", weight: 0.2, to: "/kpi" },
+    ],
     createdAt: iso(addDays(today(), -60)),
   },
   {
@@ -98,10 +140,16 @@ const SEED_HABITS: Habit[] = [
     why: "Penser à long terme demande de nouveaux modèles mentaux chaque jour.",
     domain: "lecture",
     category: "fondamentale",
+    nature: "progression",
     frequency: { kind: "daily" },
     recommendedTime: "21:00",
     priority: "moyenne",
     estimatedMinutes: 30,
+    impactWeight: 5,
+    links: [
+      { kind: "progression", id: "competences", label: "Axe Compétences", contribution: "+1 modèle mental / semaine", weight: 0.6, to: "/progression" },
+      { kind: "projet", id: "bibliotheque", label: "Bibliothèque", contribution: "Alimente les notes de lecture", weight: 0.4, to: "/bibliotheque" },
+    ],
     createdAt: iso(addDays(today(), -90)),
   },
   {
@@ -110,10 +158,16 @@ const SEED_HABITS: Habit[] = [
     why: "L'homme que j'ai choisi d'être dépasse les résultats. L'ancrage spirituel guide les décisions.",
     domain: "spiritualite",
     category: "fondamentale",
+    nature: "obligatoire",
     frequency: { kind: "daily" },
     recommendedTime: "06:00",
     priority: "haute",
     estimatedMinutes: 15,
+    impactWeight: 8,
+    links: [
+      { kind: "progression", id: "mission", label: "Axe Mission", contribution: "Maintient le cap intérieur", weight: 0.5, to: "/progression" },
+      { kind: "objectif", id: "mission", label: "Mission Renaître", contribution: "Rappelle pour qui je me lève", weight: 0.5, to: "/objectifs" },
+    ],
     createdAt: iso(addDays(today(), -45)),
   },
   {
@@ -123,10 +177,17 @@ const SEED_HABITS: Habit[] = [
     objectiveId: "mission",
     domain: "renaitre",
     category: "mission",
+    nature: "obligatoire",
     frequency: { kind: "daily" },
     recommendedTime: "17:15",
     priority: "critique",
     estimatedMinutes: 45,
+    impactWeight: 10,
+    links: [
+      { kind: "renaitre", id: "refuge", label: "Renaître — pilier Refuge", contribution: "+1 pas concret / jour", weight: 0.5, to: "/renaitre" },
+      { kind: "objectif", id: "mission", label: "Mission de vie", contribution: "Progression directe de la mission", weight: 0.3, to: "/objectifs" },
+      { kind: "progression", id: "impact", label: "Axe Impact", contribution: "+4 pts / trimestre", weight: 0.2, to: "/progression" },
+    ],
     createdAt: iso(addDays(today(), -20)),
   },
   {
@@ -136,10 +197,16 @@ const SEED_HABITS: Habit[] = [
     objectiveId: "day-journal",
     domain: "developpement_personnel",
     category: "fondamentale",
+    nature: "obligatoire",
     frequency: { kind: "daily" },
     recommendedTime: "21:30",
     priority: "haute",
     estimatedMinutes: 20,
+    impactWeight: 7,
+    links: [
+      { kind: "projet", id: "memoire", label: "Mémoire d'ETHAN", contribution: "+1 entrée d'apprentissage", weight: 0.5, to: "/memoire" },
+      { kind: "progression", id: "discipline", label: "Axe Discipline", contribution: "Boucle de rétroaction quotidienne", weight: 0.5, to: "/progression" },
+    ],
     createdAt: iso(addDays(today(), -40)),
   },
   {
@@ -148,10 +215,16 @@ const SEED_HABITS: Habit[] = [
     why: "La clarté financière quotidienne protège la liberté à long terme.",
     domain: "finances",
     category: "performance",
+    nature: "progression",
     frequency: { kind: "weekly", days: [1, 3, 5] },
     recommendedTime: "08:45",
     priority: "moyenne",
     estimatedMinutes: 5,
+    impactWeight: 5,
+    links: [
+      { kind: "kpi", id: "kpi-cashflow", label: "KPI Cash-flow", contribution: "Détection précoce des dérives", weight: 0.6, to: "/kpi" },
+      { kind: "progression", id: "patrimoine", label: "Axe Patrimoine", contribution: "Pilotage du capital", weight: 0.4, to: "/progression" },
+    ],
     createdAt: iso(addDays(today(), -25)),
   },
   {
@@ -160,11 +233,94 @@ const SEED_HABITS: Habit[] = [
     why: "Le réseau est un actif qui se cultive un point de contact à la fois.",
     domain: "relations",
     category: "performance",
+    nature: "progression",
     frequency: { kind: "weekly", days: [2, 4] },
     recommendedTime: "14:00",
     priority: "moyenne",
     estimatedMinutes: 15,
+    impactWeight: 6,
+    links: [
+      { kind: "progression", id: "reseau", label: "Axe Réseau", contribution: "+2 relations actives / mois", weight: 0.6, to: "/progression" },
+      { kind: "projet", id: "partenaires", label: "Partenaires", contribution: "Pipeline d'alliances", weight: 0.4, to: "/partenaires" },
+    ],
     createdAt: iso(addDays(today(), -35)),
+  },
+  {
+    id: HABIT_ID.launchReview,
+    title: "Revue de lancement — métriques, retours, correctifs",
+    why: "En phase de lancement, la vitesse d'itération décide du résultat.",
+    domain: "business",
+    category: "performance",
+    nature: "contextuelle",
+    frequency: { kind: "daily" },
+    recommendedTime: "18:00",
+    priority: "haute",
+    estimatedMinutes: 30,
+    impactWeight: 8,
+    phases: ["lancement"],
+    links: [
+      { kind: "kpi", id: "kpi-launch", label: "KPI Lancement", contribution: "Boucle d'itération quotidienne", weight: 0.6, to: "/kpi" },
+      { kind: "projet", id: "business", label: "Projet en lancement", contribution: "Réduit le temps de correction", weight: 0.4, to: "/business" },
+    ],
+    createdAt: iso(addDays(today(), -15)),
+  },
+  {
+    id: HABIT_ID.followUps,
+    title: "Relancer 10 prospects en attente",
+    why: "En prospection intensive, la relance vaut plus que le nouveau contact.",
+    domain: "business",
+    category: "performance",
+    nature: "contextuelle",
+    frequency: { kind: "weekly", days: [1, 2, 3, 4, 5] },
+    recommendedTime: "16:00",
+    priority: "haute",
+    estimatedMinutes: 40,
+    impactWeight: 8,
+    phases: ["prospection_intensive", "lancement"],
+    links: [
+      { kind: "kpi", id: "kpi-followups", label: "KPI Relances", contribution: "+50 relances / semaine", weight: 0.5, to: "/kpi" },
+      { kind: "projet", id: "crm", label: "CRM", contribution: "Réduit les deals dormants", weight: 0.5, to: "/crm" },
+    ],
+    createdAt: iso(addDays(today(), -15)),
+  },
+  {
+    id: HABIT_ID.renaitreStructuring,
+    title: "Structuration Renaître — statuts, partenaires, financement",
+    why: "La mission ne se construit pas par intention, mais par structure.",
+    objectiveId: "mission",
+    domain: "renaitre",
+    category: "mission",
+    nature: "contextuelle",
+    frequency: { kind: "weekly", days: [2, 4, 6] },
+    recommendedTime: "15:00",
+    priority: "critique",
+    estimatedMinutes: 90,
+    impactWeight: 10,
+    phases: ["renaitre"],
+    links: [
+      { kind: "renaitre", id: "structure", label: "Renaître — structuration", contribution: "Avance juridique et partenariale", weight: 0.6, to: "/renaitre" },
+      { kind: "progression", id: "impact", label: "Axe Impact", contribution: "+6 pts / trimestre", weight: 0.4, to: "/progression" },
+    ],
+    createdAt: iso(addDays(today(), -10)),
+  },
+  {
+    id: HABIT_ID.recovery,
+    title: "Protocole de récupération — sommeil, mobilité, marche",
+    why: "Récupérer n'est pas s'arrêter : c'est préparer la prochaine séquence d'intensité.",
+    domain: "sante",
+    category: "fondamentale",
+    nature: "contextuelle",
+    frequency: { kind: "daily" },
+    recommendedTime: "20:00",
+    priority: "haute",
+    estimatedMinutes: 40,
+    impactWeight: 7,
+    phases: ["recuperation", "vacances"],
+    links: [
+      { kind: "progression", id: "sante", label: "Axe Santé", contribution: "Restaure la capacité d'exécution", weight: 0.7, to: "/progression" },
+      { kind: "kpi", id: "kpi-energy", label: "KPI Énergie", contribution: "Remonte l'énergie disponible", weight: 0.3, to: "/kpi" },
+    ],
+    createdAt: iso(addDays(today(), -12)),
   },
 ];
 
@@ -234,6 +390,98 @@ function buildSeedLogs(): HabitLog[] {
 
 const habitsStore = createStore<Habit[]>("habitudes", "habits", SEED_HABITS);
 const logsStore = createStore<HabitLog[]>("habitudes", "logs", buildSeedLogs());
+const phaseStore = createStore<HabitPhase>("habitudes", "phase", "standard");
+
+/* ------------------------------------------------------------------ */
+/*  Phases de vie                                                      */
+/* ------------------------------------------------------------------ */
+
+export function currentPhase(): HabitPhase {
+  return phaseStore.read();
+}
+
+export function phaseDefinition(phase: HabitPhase = currentPhase()): PhaseDefinition {
+  return HABIT_PHASES.find((p) => p.id === phase) ?? HABIT_PHASES[0];
+}
+
+export function setPhase(phase: HabitPhase): void {
+  phaseStore.write(phase);
+  publish({
+    kind: "habitudes:updated",
+    source: "habitudes",
+    at: Date.now(),
+    payload: { phase },
+  });
+}
+
+/**
+ * Une habitude est-elle active dans la phase courante ?
+ *   - obligatoire  : toujours active, sauf suspension explicite.
+ *   - progression  : masquée si son domaine est mis en sourdine par la phase.
+ *   - contextuelle : active uniquement si la phase est listée.
+ */
+export function isActiveInPhase(habit: Habit, phase: HabitPhase = currentPhase()): boolean {
+  if (habit.pausedInPhases?.includes(phase)) return false;
+  if (habit.phases && habit.phases.length > 0) return habit.phases.includes(phase);
+  if (habit.nature === "contextuelle") return false;
+  if (habit.nature === "obligatoire") return true;
+  const def = phaseDefinition(phase);
+  return !def.mute.includes(habit.domain);
+}
+
+export function notificationFor(habit: Habit): HabitNotification {
+  return { ...DEFAULT_NOTIFICATION, ...(habit.notification ?? {}) };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Impact                                                             */
+/* ------------------------------------------------------------------ */
+
+/** Poids effectif d'une habitude, amplifié par la phase courante. */
+export function effectiveWeight(habit: Habit, phase: HabitPhase = currentPhase()): number {
+  const def = phaseDefinition(phase);
+  let w = habit.impactWeight;
+  if (def.boost.includes(habit.domain)) w *= 1.25;
+  if (def.mute.includes(habit.domain)) w *= 0.6;
+  if (habit.nature === "obligatoire") w *= 1.15;
+  return Math.max(1, Math.min(12, Math.round(w * 10) / 10));
+}
+
+export function computeImpact(habitId: string, refDate: Date = today()): ImpactProfile {
+  const habit = readHabit(habitId);
+  if (!habit) {
+    return { weight: 0, weightedScore: 0, delivered30: 0, costOfSkipping: 0, systemLinks: 0 };
+  }
+  const c = computeConsistency(habitId, refDate);
+  const weight = effectiveWeight(habit);
+  const linkWeight = habit.links.reduce((acc, l) => acc + l.weight, 0);
+  const delivered30 = Math.round((c.last30Days / 100) * weight * 10);
+  const costOfSkipping = Math.min(
+    100,
+    Math.round(weight * 6 + HABIT_PRIORITY_WEIGHT[habit.priority] * 6 + linkWeight * 10 + Math.min(20, c.currentStreak))
+  );
+  return {
+    weight,
+    weightedScore: Math.round((c.last30Days * weight) / 12),
+    delivered30: Math.min(100, delivered30),
+    costOfSkipping,
+    systemLinks: habit.links.length,
+  };
+}
+
+/** Score d'impact global du système : constance pondérée par les poids. */
+export function globalImpactScore(refDate: Date = today()): number {
+  const habits = habitsStore.read().filter((h) => isActiveInPhase(h));
+  if (habits.length === 0) return 0;
+  let num = 0;
+  let den = 0;
+  for (const h of habits) {
+    const w = effectiveWeight(h);
+    num += computeConsistency(h.id, refDate).last30Days * w;
+    den += w;
+  }
+  return den ? Math.round(num / den) : 0;
+}
 
 export function readAllHabits(): Habit[] {
   return habitsStore.read();
@@ -380,7 +628,8 @@ export function readTodayHabits(refDate: Date = today()): HabitForToday[] {
   const todayMap = new Map(logs.filter((l) => l.date === dateStr).map((l) => [l.habitId, l]));
   return habits
     .map((habit) => {
-      const dueToday = isDueOn(habit, refDate);
+      const activeInPhase = isActiveInPhase(habit);
+      const dueToday = activeInPhase && isDueOn(habit, refDate);
       const log = todayMap.get(habit.id);
       const doneToday = log?.status === "done" || log?.status === "excused";
       return {
@@ -390,11 +639,15 @@ export function readTodayHabits(refDate: Date = today()): HabitForToday[] {
         log,
         streak: computeStreak(habit.id, refDate),
         consistency: computeConsistency(habit.id, refDate),
+        activeInPhase,
+        impact: computeImpact(habit.id, refDate),
       };
     })
     .sort((a, b) => {
       if (a.dueToday !== b.dueToday) return a.dueToday ? -1 : 1;
       if (a.doneToday !== b.doneToday) return a.doneToday ? 1 : -1;
+      if (a.impact.costOfSkipping !== b.impact.costOfSkipping)
+        return b.impact.costOfSkipping - a.impact.costOfSkipping;
       return b.consistency.currentStreak - a.consistency.currentStreak;
     });
 }
@@ -405,11 +658,13 @@ export function snapshotHabits(refDate: Date = today()): HabitSnapshot {
   const todayHabits = readTodayHabits(refDate);
   const streaks: Record<string, number> = {};
   const consistency: Record<string, ConsistencyProfile> = {};
+  const impact: Record<string, ImpactProfile> = {};
   for (const h of habits) {
     streaks[h.id] = computeStreak(h.id, refDate);
     consistency[h.id] = computeConsistency(h.id, refDate);
+    impact[h.id] = computeImpact(h.id, refDate);
   }
-  return { habits, logs, today: todayHabits, streaks, consistency };
+  return { habits, logs, today: todayHabits, streaks, consistency, impact, phase: currentPhase() };
 }
 
 export function logHabit(habitId: string, status: HabitLogStatus, note?: string): void {

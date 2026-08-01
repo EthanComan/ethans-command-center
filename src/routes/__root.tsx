@@ -16,6 +16,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { AppTopbar } from "@/components/app-topbar";
 import { Toaster } from "@/components/ui/sonner";
 import { bootEthan } from "@/core/bootstrap";
+import { NotificationEngine } from "@/components/notification-engine";
 
 // Amorce le système d'exploitation ETHAN : enregistre tous les modules
 // et déclenche les câblages initiaux (CRM → Planning, etc.).
@@ -108,7 +109,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: "/favicon.png", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/icon-192.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "preconnect", href: "https://rsms.me/" },
       { rel: "stylesheet", href: "https://rsms.me/inter/inter.css" },
     ],
@@ -153,6 +156,7 @@ function RootComponent() {
           <Outlet />
         </SidebarInset>
         <Toaster />
+        <NotificationEngine />
       </SidebarProvider>
     </QueryClientProvider>
   );
