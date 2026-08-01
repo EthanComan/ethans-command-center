@@ -36,7 +36,8 @@ export type ModuleId =
   | "objectifs"
   | "journal"
   | "protocoles"
-  | "planning";
+  | "planning"
+  | "notifications";
 
 export interface EthanModule<TSnapshot = unknown> {
   id: ModuleId;

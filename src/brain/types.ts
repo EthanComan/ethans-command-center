@@ -22,7 +22,8 @@ export type ModuleSource =
   | "objectifs"
   | "journal"
   | "protocoles"
-  | "planning";
+  | "planning"
+  | "notifications";
 
 export type SignalKind =
   | "inactivity"        // absence d'action sur une métrique clé

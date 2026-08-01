@@ -114,7 +114,7 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
       { id: "execution", label: "Mode Exécution", to: "/execution", icon: Zap, status: "live", description: "Environnement zéro-distraction pour exécuter" },
       { id: "parametres", label: "Paramètres", to: "/parametres", icon: Settings, status: "soon", description: "Préférences du système" },
       { id: "ia", label: "IA ETHAN", to: "/ia", icon: Sparkles, status: "soon", description: "Directeur général personnel" },
-      { id: "notifications", label: "Notifications", to: "/notifications", icon: Bell, status: "soon", description: "Rappels et alertes" },
+      { id: "notifications", label: "Notifications", to: "/notifications", icon: Bell, status: "live", description: "Rappels natifs et alertes système" },
     ],
   },
 ];

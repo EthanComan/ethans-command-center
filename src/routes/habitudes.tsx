@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Repeat, CheckCircle2, Circle, AlertCircle, Flame, TrendingUp, Target, Plus, X, ChevronDown, ChevronUp, Heart } from "lucide-react";
+import { Repeat, CheckCircle2, Circle, AlertCircle, Flame, TrendingUp, Target, Plus, X, ChevronDown, ChevronUp, Heart, Link2, Zap, Bell } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   readAllHabits,
@@ -10,16 +10,25 @@ import {
   addHabit,
   deleteHabit,
   globalConsistency,
+  currentPhase,
+  setPhase,
+  phaseDefinition,
+  globalImpactScore,
 } from "@/modules/habitudes/data";
 import {
   HABIT_DOMAIN_LABEL,
   HABIT_CATEGORY_LABEL,
   HABIT_PRIORITY_WEIGHT,
+  HABIT_NATURE_LABEL,
+  HABIT_LINK_LABEL,
+  HABIT_PHASES,
   type Habit,
   type HabitCategory,
   type HabitDomain,
   type HabitForToday,
   type HabitFrequency,
+  type HabitNature,
+  type HabitPhase,
   type HabitPriority,
 } from "@/modules/habitudes/types";
 import { ancestorsOf } from "@/modules/objectifs/data";
@@ -60,18 +69,48 @@ const PRIORITY_TONE: Record<HabitPriority, string> = {
   basse: "text-muted-foreground border-border/60 bg-transparent",
 };
 
+const NATURE_TONE: Record<HabitNature, string> = {
+  obligatoire: "text-red-200 border-red-400/40 bg-red-500/[0.10]",
+  progression: "text-sky-200 border-sky-400/30 bg-sky-500/[0.08]",
+  contextuelle: "text-violet-200 border-violet-400/30 bg-violet-500/[0.08]",
+};
+
+function LinkChips({ habit }: { habit: Habit }) {
+  if (habit.links.length === 0) return null;
+  return (
+    <div className="mt-2 flex flex-wrap gap-1.5">
+      {habit.links.map((l) => (
+        <Link
+          key={`${l.kind}-${l.id}`}
+          to={l.to ?? "/"}
+          className="inline-flex items-center gap-1 rounded border border-border bg-background/40 px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold"
+          title={l.contribution}
+        >
+          <Link2 className="h-2.5 w-2.5" />
+          <span className="uppercase tracking-[0.14em]">{HABIT_LINK_LABEL[l.kind]}</span>
+          <span className="text-foreground/80">{l.label}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 function HabitudesPage() {
   // Lecture côté client pour éviter le mismatch d'hydratation sur les dates.
   const [mounted, setMounted] = useState(false);
   const [items, setItems] = useState<HabitForToday[]>([]);
   const [allHabits, setAllHabits] = useState<Habit[]>([]);
   const [consistency, setConsistency] = useState(0);
+  const [impactScore, setImpactScore] = useState(0);
+  const [phase, setPhaseState] = useState<HabitPhase>("standard");
   const [showForm, setShowForm] = useState(false);
 
   const refresh = () => {
     setItems(readTodayHabits());
     setAllHabits(readAllHabits());
     setConsistency(globalConsistency());
+    setImpactScore(globalImpactScore());
+    setPhaseState(currentPhase());
   };
 
   useEffect(() => {
@@ -101,6 +140,10 @@ function HabitudesPage() {
         </div>
         <div className="flex gap-3">
           <div className="rounded-xl border border-border bg-elevated px-4 py-3 text-right">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Impact 30j</p>
+            <p className="text-2xl font-semibold text-foreground">{mounted ? `${impactScore}%` : "—"}</p>
+          </div>
+          <div className="rounded-xl border border-border bg-elevated px-4 py-3 text-right">
             <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Constance 7j</p>
             <p className="text-2xl font-semibold text-gold">{mounted ? consistency : 0}%</p>
           </div>
@@ -110,6 +153,43 @@ function HabitudesPage() {
           </div>
         </div>
       </header>
+
+      {/* Phase de vie */}
+      <section className="mt-6 rounded-2xl border border-border bg-elevated p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Phase actuelle</p>
+            <p className="mt-1 text-sm font-medium text-foreground">{phaseDefinition(phase).label}</p>
+            <p className="mt-1 max-w-xl text-[12px] text-muted-foreground">{phaseDefinition(phase).description}</p>
+          </div>
+          <Link
+            to="/notifications"
+            className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold"
+          >
+            <Bell className="h-3.5 w-3.5" /> Rappels natifs
+          </Link>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {HABIT_PHASES.map((p) => (
+            <button
+              key={p.id}
+              onClick={() => { setPhase(p.id); refresh(); }}
+              className={`rounded-md border px-3 py-1.5 text-xs transition-colors ${
+                p.id === phase
+                  ? "border-gold/50 bg-gold/[0.10] text-gold"
+                  : "border-border text-muted-foreground hover:border-gold/30 hover:text-foreground"
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+        {mounted && (
+          <p className="mt-3 text-[11px] text-muted-foreground">
+            {items.filter((i) => !i.activeInPhase).length} habitude(s) mise(s) en veille par cette phase — les non négociables restent actives.
+          </p>
+        )}
+      </section>
 
       {/* Vue Aujourd'hui */}
       <section className="mt-8">
@@ -194,8 +274,14 @@ function HabitRow({ item, onChange }: { item: HabitForToday; onChange: () => voi
             <span className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] ${CATEGORY_TONE[h.category]}`}>
               {HABIT_CATEGORY_LABEL[h.category]}
             </span>
+            <span className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] ${NATURE_TONE[h.nature]}`}>
+              {HABIT_NATURE_LABEL[h.nature]}
+            </span>
             <span className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] ${PRIORITY_TONE[h.priority]}`}>
               {h.priority}
+            </span>
+            <span className="inline-flex items-center gap-1 rounded border border-gold/30 bg-gold/[0.06] px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] text-gold">
+              <Zap className="h-2.5 w-2.5" /> Impact {item.impact.weight}/10
             </span>
           </div>
           <p className={`mt-1.5 text-sm font-medium ${item.doneToday ? "text-muted-foreground line-through" : "text-foreground"}`}>
@@ -207,6 +293,7 @@ function HabitRow({ item, onChange }: { item: HabitForToday; onChange: () => voi
               <Target className="mb-0.5 inline h-3 w-3" /> {objective.title}
             </p>
           )}
+          <LinkChips habit={h} />
         </div>
       </div>
       <div className="flex items-center gap-4 md:justify-end">
@@ -216,6 +303,9 @@ function HabitRow({ item, onChange }: { item: HabitForToday; onChange: () => voi
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
             <TrendingUp className="h-3 w-3" /> {item.consistency.last7Days}% 7j
+          </div>
+          <div className="mt-1 flex items-center justify-end gap-1.5 text-[11px] text-muted-foreground">
+            <AlertCircle className="h-3 w-3 text-red-300" /> Coût d'abandon {item.impact.costOfSkipping}
           </div>
           {h.recommendedTime && (
             <p className="mt-1 text-[11px] tabular-nums text-muted-foreground">{h.recommendedTime} · {h.estimatedMinutes} min</p>
@@ -257,6 +347,9 @@ function HabitCard({ habit, onDelete }: { habit: Habit; onDelete: () => void }) 
           <span className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] ${CATEGORY_TONE[habit.category]}`}>
             {HABIT_CATEGORY_LABEL[habit.category]}
           </span>
+          <span className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.16em] ${NATURE_TONE[habit.nature]}`}>
+            {HABIT_NATURE_LABEL[habit.nature]}
+          </span>
         </div>
         <button
           onClick={() => { deleteHabit(habit.id); onDelete(); }}
@@ -273,6 +366,7 @@ function HabitCard({ habit, onDelete }: { habit: Habit; onDelete: () => void }) 
           <Target className="mb-0.5 inline h-3 w-3" /> {objective.title}
         </Link>
       )}
+      <LinkChips habit={habit} />
       <button
         onClick={() => setOpen((o) => !o)}
         className="mt-3 flex items-center gap-1 text-[11px] text-muted-foreground transition-colors hover:text-gold"
@@ -283,6 +377,23 @@ function HabitCard({ habit, onDelete }: { habit: Habit; onDelete: () => void }) 
         <div className="mt-3 space-y-2 border-t border-border pt-3 text-[12px] text-muted-foreground">
           <p><span className="text-foreground">Fréquence :</span> {formatFrequency(habit.frequency)}</p>
           <p><span className="text-foreground">Priorité :</span> {habit.priority}</p>
+          <p><span className="text-foreground">Poids d'impact :</span> {habit.impactWeight}/10</p>
+          {habit.phases && habit.phases.length > 0 && (
+            <p><span className="text-foreground">Phases actives :</span> {habit.phases.join(", ")}</p>
+          )}
+          {habit.pausedInPhases && habit.pausedInPhases.length > 0 && (
+            <p><span className="text-foreground">Suspendue en :</span> {habit.pausedInPhases.join(", ")}</p>
+          )}
+          {habit.links.length > 0 && (
+            <div>
+              <p className="text-foreground">Ce qu'elle alimente :</p>
+              <ul className="mt-1 space-y-0.5">
+                {habit.links.map((l) => (
+                  <li key={`${l.kind}-${l.id}`}>· {l.label} — {l.contribution}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {habit.recommendedTime && <p><span className="text-foreground">Horaire :</span> {habit.recommendedTime}</p>}
           <p><span className="text-foreground">Durée :</span> {habit.estimatedMinutes} min</p>
         </div>
@@ -296,6 +407,11 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
   const [why, setWhy] = useState("");
   const [domain, setDomain] = useState<HabitDomain>("business");
   const [category, setCategory] = useState<HabitCategory>("fondamentale");
+  const [nature, setNature] = useState<HabitNature>("progression");
+  const [impactWeight, setImpactWeight] = useState(6);
+  const [linkKind, setLinkKind] = useState<Habit["links"][number]["kind"]>("objectif");
+  const [linkLabel, setLinkLabel] = useState("");
+  const [linkContribution, setLinkContribution] = useState("");
   const [priority, setPriority] = useState<HabitPriority>("haute");
   const [frequencyKind, setFrequencyKind] = useState<HabitFrequency["kind"]>("daily");
   const [recommendedTime, setRecommendedTime] = useState("");
@@ -314,6 +430,19 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
       why: why.trim(),
       domain,
       category,
+      nature,
+      impactWeight,
+      links: linkLabel.trim()
+        ? [
+            {
+              kind: linkKind,
+              id: linkLabel.trim().toLowerCase().replace(/\s+/g, "-"),
+              label: linkLabel.trim(),
+              contribution: linkContribution.trim() || "Contribution directe",
+              weight: 0.5,
+            },
+          ]
+        : [],
       frequency,
       priority,
       recommendedTime: recommendedTime || undefined,
@@ -324,6 +453,10 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
     setWhy("");
     setDomain("business");
     setCategory("fondamentale");
+    setNature("progression");
+    setImpactWeight(6);
+    setLinkLabel("");
+    setLinkContribution("");
     setPriority("haute");
     setFrequencyKind("daily");
     setRecommendedTime("");
@@ -430,6 +563,61 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
             value={objectiveId}
             onChange={(e) => setObjectiveId(e.target.value)}
             placeholder="Ex: week-calls, mission, day-journal"
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          />
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Nature</label>
+          <select
+            value={nature}
+            onChange={(e) => setNature(e.target.value as HabitNature)}
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          >
+            {Object.entries(HABIT_NATURE_LABEL).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">
+            Poids d'impact — {impactWeight}/10
+          </label>
+          <input
+            type="range"
+            min={1}
+            max={10}
+            value={impactWeight}
+            onChange={(e) => setImpactWeight(Number(e.target.value))}
+            className="mt-3 w-full accent-[var(--gold,#d4af37)]"
+          />
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Ce qu'elle alimente</label>
+          <select
+            value={linkKind}
+            onChange={(e) => setLinkKind(e.target.value as Habit["links"][number]["kind"])}
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          >
+            {Object.entries(HABIT_LINK_LABEL).map(([k, v]) => (
+              <option key={k} value={k}>{v}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Cible (nom)</label>
+          <input
+            value={linkLabel}
+            onChange={(e) => setLinkLabel(e.target.value)}
+            placeholder="Ex: KPI Appels / semaine"
+            className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
+          />
+        </div>
+        <div className="md:col-span-2">
+          <label className="text-[11px] uppercase tracking-wider text-muted-foreground">Contribution</label>
+          <input
+            value={linkContribution}
+            onChange={(e) => setLinkContribution(e.target.value)}
+            placeholder="Ex: +25 appels / semaine"
             className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-gold"
           />
         </div>

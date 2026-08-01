@@ -46,6 +46,7 @@ const SOURCE_CATEGORY: Record<ModuleSource, ActionCategory> = {
   journal: "personnel",
   protocoles: "personnel",
   planning: "personnel",
+  notifications: "personnel",
 };
 
 const SOURCE_ROUTE: Record<ModuleSource, string> = {
@@ -66,6 +67,7 @@ const SOURCE_ROUTE: Record<ModuleSource, string> = {
   journal: "/journal",
   protocoles: "/protocoles",
   planning: "/",
+  notifications: "/notifications",
 };
 
 function freshness(updatedAt: number): number {
