@@ -407,6 +407,11 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
   const [why, setWhy] = useState("");
   const [domain, setDomain] = useState<HabitDomain>("business");
   const [category, setCategory] = useState<HabitCategory>("fondamentale");
+  const [nature, setNature] = useState<HabitNature>("progression");
+  const [impactWeight, setImpactWeight] = useState(6);
+  const [linkKind, setLinkKind] = useState<Habit["links"][number]["kind"]>("objectif");
+  const [linkLabel, setLinkLabel] = useState("");
+  const [linkContribution, setLinkContribution] = useState("");
   const [priority, setPriority] = useState<HabitPriority>("haute");
   const [frequencyKind, setFrequencyKind] = useState<HabitFrequency["kind"]>("daily");
   const [recommendedTime, setRecommendedTime] = useState("");
@@ -425,6 +430,19 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
       why: why.trim(),
       domain,
       category,
+      nature,
+      impactWeight,
+      links: linkLabel.trim()
+        ? [
+            {
+              kind: linkKind,
+              id: linkLabel.trim().toLowerCase().replace(/\s+/g, "-"),
+              label: linkLabel.trim(),
+              contribution: linkContribution.trim() || "Contribution directe",
+              weight: 0.5,
+            },
+          ]
+        : [],
       frequency,
       priority,
       recommendedTime: recommendedTime || undefined,
@@ -435,6 +453,10 @@ function HabitForm({ onCreated }: { onCreated: () => void }) {
     setWhy("");
     setDomain("business");
     setCategory("fondamentale");
+    setNature("progression");
+    setImpactWeight(6);
+    setLinkLabel("");
+    setLinkContribution("");
     setPriority("haute");
     setFrequencyKind("daily");
     setRecommendedTime("");
