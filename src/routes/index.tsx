@@ -48,17 +48,19 @@ const STATUS_DOT: Record<DomainState["status"], string> = {
 function Index() {
   const brain = analyze();
   const align = computeAlignment();
-  const nba = computeNextBestAction();
   const adn = readAdn();
   const renaitre = readRenaitre();
   const todays = todayObjectives();
   const manScore = globalManScore();
   const [mounted, setMounted] = useState(false);
   const [habitItems, setHabitItems] = useState<HabitForToday[]>([]);
+  // Le NBA dépend de l'heure courante → calcul client uniquement.
+  const [nba, setNba] = useState<ReturnType<typeof computeNextBestAction> | null>(null);
 
   useEffect(() => {
     setMounted(true);
     setHabitItems(readTodayHabits());
+    setNba(computeNextBestAction());
   }, []);
 
   // Rendu date côté client uniquement — évite le hydration mismatch.
@@ -98,7 +100,11 @@ function Index() {
       </div>
 
       {/* NBA — La question fondatrice d'ETHAN */}
-      <NextBestActionHero nba={nba} />
+      {nba ? (
+        <NextBestActionHero nba={nba} />
+      ) : (
+        <section className="mt-6 h-52 rounded-2xl border border-gold/20 bg-elevated" aria-hidden />
+      )}
 
       {/* Bandeau philosophie + lancement Mode Execution */}
       <section className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-gold/25 bg-gradient-to-r from-gold/[0.06] via-transparent to-transparent px-5 py-4">
