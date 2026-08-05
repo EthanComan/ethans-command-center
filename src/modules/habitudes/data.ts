@@ -27,6 +27,7 @@ import {
   type PhaseDefinition,
 } from "./types";
 
+const SEED_REFERENCE_DATE = new Date("2026-08-05T00:00:00");
 const today = () => new Date();
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 const addDays = (d: Date, n: number) => {
@@ -34,6 +35,7 @@ const addDays = (d: Date, n: number) => {
   x.setDate(x.getDate() + n);
   return x;
 };
+
 
 const HABIT_ID = {
   morningRitual: "hab-morning-ritual",
