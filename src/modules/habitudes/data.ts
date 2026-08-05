@@ -350,10 +350,9 @@ function mulberry32(seed: number): () => number {
 
 function buildSeedLogs(): HabitLog[] {
   const logs: HabitLog[] = [];
-  const now = today();
-  const reference = new Date(now);
+  const reference = SEED_REFERENCE_DATE;
   // Générateur pseudo-aléatoire déterministe pour des séries reproductibles
-  // entre les rechargements du serveur de développement.
+  // entre les rechargements du serveur de développement et le client.
   const randFor = (key: string) => {
     let seed = 0;
     for (let i = 0; i < key.length; i++) seed = (seed * 31 + key.charCodeAt(i)) >>> 0;
@@ -389,6 +388,7 @@ function buildSeedLogs(): HabitLog[] {
   }
   return logs;
 }
+
 
 const habitsStore = createStore<Habit[]>("habitudes", "habits", SEED_HABITS);
 const logsStore = createStore<HabitLog[]>("habitudes", "logs", buildSeedLogs());
