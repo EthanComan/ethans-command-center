@@ -27,6 +27,7 @@ import {
   type PhaseDefinition,
 } from "./types";
 
+const SEED_REFERENCE_DATE = new Date("2026-08-05T00:00:00");
 const today = () => new Date();
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 const addDays = (d: Date, n: number) => {
@@ -34,6 +35,7 @@ const addDays = (d: Date, n: number) => {
   x.setDate(x.getDate() + n);
   return x;
 };
+
 
 const HABIT_ID = {
   morningRitual: "hab-morning-ritual",
@@ -71,7 +73,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "progression", id: "discipline", label: "Axe Discipline", contribution: "+2 pts / mois de constance", weight: 0.35, to: "/progression" },
       { kind: "progression", id: "constance", label: "Axe Constance", contribution: "Socle du score d'homme", weight: 0.25, to: "/progression" },
     ],
-    createdAt: iso(addDays(today(), -30)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -30)),
   },
   {
     id: HABIT_ID.deepWork,
@@ -91,7 +93,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "kpi", id: "kpi-output", label: "KPI Output hebdomadaire", contribution: "+1 livrable / jour", weight: 0.35, to: "/kpi" },
       { kind: "progression", id: "competences", label: "Axe Compétences", contribution: "Approfondissement du métier", weight: 0.25, to: "/progression" },
     ],
-    createdAt: iso(addDays(today(), -45)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -45)),
   },
   {
     id: HABIT_ID.prospectionCalls,
@@ -111,7 +113,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "projet", id: "pipeline", label: "Pipeline commercial", contribution: "Alimente le haut de tunnel", weight: 0.3, to: "/pipeline" },
       { kind: "renaitre", id: "financement", label: "Renaître — financement", contribution: "Le CA finance le refuge", weight: 0.3, to: "/renaitre" },
     ],
-    createdAt: iso(addDays(today(), -30)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -30)),
   },
   {
     id: HABIT_ID.sport,
@@ -132,7 +134,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "objectif", id: "day-deadlift", label: "Objectif force", contribution: "Progression de charge", weight: 0.3, to: "/objectifs" },
       { kind: "kpi", id: "kpi-energy", label: "KPI Énergie", contribution: "Énergie disponible pour le deep work", weight: 0.2, to: "/kpi" },
     ],
-    createdAt: iso(addDays(today(), -60)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -60)),
   },
   {
     id: HABIT_ID.reading,
@@ -150,7 +152,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "progression", id: "competences", label: "Axe Compétences", contribution: "+1 modèle mental / semaine", weight: 0.6, to: "/progression" },
       { kind: "projet", id: "bibliotheque", label: "Bibliothèque", contribution: "Alimente les notes de lecture", weight: 0.4, to: "/bibliotheque" },
     ],
-    createdAt: iso(addDays(today(), -90)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -90)),
   },
   {
     id: HABIT_ID.prayer,
@@ -168,7 +170,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "progression", id: "mission", label: "Axe Mission", contribution: "Maintient le cap intérieur", weight: 0.5, to: "/progression" },
       { kind: "objectif", id: "mission", label: "Mission Renaître", contribution: "Rappelle pour qui je me lève", weight: 0.5, to: "/objectifs" },
     ],
-    createdAt: iso(addDays(today(), -45)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -45)),
   },
   {
     id: HABIT_ID.renaitreAction,
@@ -188,7 +190,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "objectif", id: "mission", label: "Mission de vie", contribution: "Progression directe de la mission", weight: 0.3, to: "/objectifs" },
       { kind: "progression", id: "impact", label: "Axe Impact", contribution: "+4 pts / trimestre", weight: 0.2, to: "/progression" },
     ],
-    createdAt: iso(addDays(today(), -20)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -20)),
   },
   {
     id: HABIT_ID.journal,
@@ -207,7 +209,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "projet", id: "memoire", label: "Mémoire d'ETHAN", contribution: "+1 entrée d'apprentissage", weight: 0.5, to: "/memoire" },
       { kind: "progression", id: "discipline", label: "Axe Discipline", contribution: "Boucle de rétroaction quotidienne", weight: 0.5, to: "/progression" },
     ],
-    createdAt: iso(addDays(today(), -40)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -40)),
   },
   {
     id: HABIT_ID.financeReview,
@@ -225,7 +227,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "kpi", id: "kpi-cashflow", label: "KPI Cash-flow", contribution: "Détection précoce des dérives", weight: 0.6, to: "/kpi" },
       { kind: "progression", id: "patrimoine", label: "Axe Patrimoine", contribution: "Pilotage du capital", weight: 0.4, to: "/progression" },
     ],
-    createdAt: iso(addDays(today(), -25)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -25)),
   },
   {
     id: HABIT_ID.network,
@@ -243,7 +245,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "progression", id: "reseau", label: "Axe Réseau", contribution: "+2 relations actives / mois", weight: 0.6, to: "/progression" },
       { kind: "projet", id: "partenaires", label: "Partenaires", contribution: "Pipeline d'alliances", weight: 0.4, to: "/partenaires" },
     ],
-    createdAt: iso(addDays(today(), -35)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -35)),
   },
   {
     id: HABIT_ID.launchReview,
@@ -262,7 +264,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "kpi", id: "kpi-launch", label: "KPI Lancement", contribution: "Boucle d'itération quotidienne", weight: 0.6, to: "/kpi" },
       { kind: "projet", id: "business", label: "Projet en lancement", contribution: "Réduit le temps de correction", weight: 0.4, to: "/business" },
     ],
-    createdAt: iso(addDays(today(), -15)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -15)),
   },
   {
     id: HABIT_ID.followUps,
@@ -281,7 +283,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "kpi", id: "kpi-followups", label: "KPI Relances", contribution: "+50 relances / semaine", weight: 0.5, to: "/kpi" },
       { kind: "projet", id: "crm", label: "CRM", contribution: "Réduit les deals dormants", weight: 0.5, to: "/crm" },
     ],
-    createdAt: iso(addDays(today(), -15)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -15)),
   },
   {
     id: HABIT_ID.renaitreStructuring,
@@ -301,7 +303,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "renaitre", id: "structure", label: "Renaître — structuration", contribution: "Avance juridique et partenariale", weight: 0.6, to: "/renaitre" },
       { kind: "progression", id: "impact", label: "Axe Impact", contribution: "+6 pts / trimestre", weight: 0.4, to: "/progression" },
     ],
-    createdAt: iso(addDays(today(), -10)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -10)),
   },
   {
     id: HABIT_ID.recovery,
@@ -320,7 +322,7 @@ const SEED_HABITS: Habit[] = [
       { kind: "progression", id: "sante", label: "Axe Santé", contribution: "Restaure la capacité d'exécution", weight: 0.7, to: "/progression" },
       { kind: "kpi", id: "kpi-energy", label: "KPI Énergie", contribution: "Remonte l'énergie disponible", weight: 0.3, to: "/kpi" },
     ],
-    createdAt: iso(addDays(today(), -12)),
+    createdAt: iso(addDays(SEED_REFERENCE_DATE, -12)),
   },
 ];
 
@@ -348,10 +350,9 @@ function mulberry32(seed: number): () => number {
 
 function buildSeedLogs(): HabitLog[] {
   const logs: HabitLog[] = [];
-  const now = today();
-  const reference = new Date(now);
+  const reference = SEED_REFERENCE_DATE;
   // Générateur pseudo-aléatoire déterministe pour des séries reproductibles
-  // entre les rechargements du serveur de développement.
+  // entre les rechargements du serveur de développement et le client.
   const randFor = (key: string) => {
     let seed = 0;
     for (let i = 0; i < key.length; i++) seed = (seed * 31 + key.charCodeAt(i)) >>> 0;
@@ -387,6 +388,7 @@ function buildSeedLogs(): HabitLog[] {
   }
   return logs;
 }
+
 
 const habitsStore = createStore<Habit[]>("habitudes", "habits", SEED_HABITS);
 const logsStore = createStore<HabitLog[]>("habitudes", "logs", buildSeedLogs());
