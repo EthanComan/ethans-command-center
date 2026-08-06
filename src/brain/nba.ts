@@ -33,6 +33,7 @@ import { analyze as analyzeBrain } from "./engine";
 import { computeAlignment } from "./alignment";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
 import { readTodayHabits } from "@/modules/habitudes/data";
+import { directives as businessDirectives } from "@/modules/business/data";
 import { HABIT_PRIORITY_WEIGHT, HABIT_CATEGORY_LABEL } from "@/modules/habitudes/types";
 import { HORIZON_LABEL, type Priority } from "@/modules/objectifs/types";
 
