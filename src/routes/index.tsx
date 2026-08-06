@@ -51,7 +51,7 @@ function Index() {
   const adn = readAdn();
   const renaitre = readRenaitre();
   const todays = todayObjectives();
-  const manScore = globalManScore();
+  const [manScore, setManScore] = useState(0);
   const [mounted, setMounted] = useState(false);
   const [habitItems, setHabitItems] = useState<HabitForToday[]>([]);
   // Le NBA dépend de l'heure courante → calcul client uniquement.
@@ -59,6 +59,7 @@ function Index() {
 
   useEffect(() => {
     setMounted(true);
+    setManScore(globalManScore());
     setHabitItems(readTodayHabits());
     setNba(computeNextBestAction());
   }, []);
@@ -113,7 +114,7 @@ function Index() {
             <TrendingUp className="h-4 w-4 text-gold" />
             <div>
               <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Score d'homme</div>
-              <div className="text-lg font-semibold tabular-nums text-gold transition-opacity group-hover:opacity-80">{manScore}/100</div>
+              <div className="text-lg font-semibold tabular-nums text-gold transition-opacity group-hover:opacity-80">{mounted ? `${manScore}/100` : "—"}</div>
             </div>
           </Link>
           <p className="max-w-md text-[12px] italic leading-relaxed text-muted-foreground">
