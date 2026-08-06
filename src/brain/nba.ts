@@ -33,6 +33,7 @@ import { analyze as analyzeBrain } from "./engine";
 import { computeAlignment } from "./alignment";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
 import { readTodayHabits } from "@/modules/habitudes/data";
+import { directives as businessDirectives } from "@/modules/business/data";
 import { HABIT_PRIORITY_WEIGHT, HABIT_CATEGORY_LABEL } from "@/modules/habitudes/types";
 import { HORIZON_LABEL, type Priority } from "@/modules/objectifs/types";
 
@@ -170,6 +171,24 @@ registerContributor(() => {
 /* ------------------------------------------------------------------ */
 /*  Pipeline d'agrégation                                              */
 /* ------------------------------------------------------------------ */
+
+// 5) Directeur commercial — dossiers qui refroidissent, maillon faible,
+//    leviers marketing et opérations off-market.
+registerContributor(() =>
+  businessDirectives()
+    .slice(0, 4)
+    .map((d) => ({
+      id: `business:${d.id}`,
+      title: d.title,
+      source: "business",
+      score: d.score,
+      why: d.why,
+      linkedTo: "Activité VEFA — financement de Renaître",
+      estimatedMinutes: d.minutes,
+      to: "/business",
+      impact: d.impact,
+    })),
+);
 
 export function computeNextBestAction(): NextBestAction {
   const buckets = contributors.map((c) => {
