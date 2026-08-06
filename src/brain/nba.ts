@@ -172,6 +172,24 @@ registerContributor(() => {
 /*  Pipeline d'agrégation                                              */
 /* ------------------------------------------------------------------ */
 
+// 5) Directeur commercial — dossiers qui refroidissent, maillon faible,
+//    leviers marketing et opérations off-market.
+registerContributor(() =>
+  businessDirectives()
+    .slice(0, 4)
+    .map((d) => ({
+      id: `business:${d.id}`,
+      title: d.title,
+      source: "business",
+      score: d.score,
+      why: d.why,
+      linkedTo: "Activité VEFA — financement de Renaître",
+      estimatedMinutes: d.minutes,
+      to: "/business",
+      impact: d.impact,
+    })),
+);
+
 export function computeNextBestAction(): NextBestAction {
   const buckets = contributors.map((c) => {
     try {
