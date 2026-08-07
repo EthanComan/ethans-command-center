@@ -13,6 +13,10 @@ import {
   GraduationCap,
   ArrowRight,
   ShieldCheck,
+  Gavel,
+  Euro,
+  Flame,
+  Timer,
 } from "lucide-react";
 import {
   DEALS,
@@ -47,6 +51,24 @@ import {
   VEFA_GUARANTEES,
   VEFA_PROCESS,
 } from "@/modules/business/vefa";
+import { verdicts, weeklyDecision, hotList } from "@/modules/business/coach";
+import {
+  activityGaps,
+  ACTIVITY_LABEL,
+  analyzeSources,
+  byChannel,
+  byCity,
+  byDeveloper,
+  byTypology,
+  cashFlowSchedule,
+  caSignedThisMonthEUR,
+  commissionsCashedEUR,
+  commissionsPendingEUR,
+  commissionsSignedThisMonthEUR,
+  pipelineCounters,
+  temperatureMix,
+  weekHours,
+} from "@/modules/business/analytics";
 
 export const Route = createFileRoute("/business")({
   head: () => ({
@@ -70,10 +92,20 @@ export const Route = createFileRoute("/business")({
   component: BusinessPage,
 });
 
-type TabId = "pilotage" | "pipeline" | "programmes" | "offmarket" | "marketing" | "metier";
+type TabId =
+  | "decisions"
+  | "pilotage"
+  | "commissions"
+  | "pipeline"
+  | "programmes"
+  | "offmarket"
+  | "marketing"
+  | "metier";
 
 const TABS: { id: TabId; label: string; icon: typeof Briefcase }[] = [
+  { id: "decisions", label: "Décisions", icon: Gavel },
   { id: "pilotage", label: "Pilotage", icon: BarChart3 },
+  { id: "commissions", label: "Commissions", icon: Euro },
   { id: "pipeline", label: "Pipeline", icon: Handshake },
   { id: "programmes", label: "Programmes", icon: Building2 },
   { id: "offmarket", label: "Off-market", icon: Lock },
