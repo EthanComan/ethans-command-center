@@ -126,11 +126,19 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 function BusinessPage() {
-  const [tab, setTab] = useState<TabId>("pilotage");
+  const [tab, setTab] = useState<TabId>("decisions");
   const funnel = useMemo(() => analyzeFunnel(), []);
   const weak = useMemo(() => weakestLink(), []);
   const orders = useMemo(() => directives().slice(0, 5), []);
   const byStage = useMemo(() => dealsByStage(), []);
+  const calls = useMemo(() => verdicts(), []);
+  const decision = useMemo(() => weeklyDecision(), []);
+  const hot = useMemo(() => hotList(), []);
+  const counters = useMemo(() => pipelineCounters(), []);
+  const temps = useMemo(() => temperatureMix(), []);
+  const sources = useMemo(() => analyzeSources(), []);
+  const activity = useMemo(() => activityGaps(), []);
+  const cash = useMemo(() => cashFlowSchedule(), []);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6">
@@ -149,28 +157,19 @@ function BusinessPage() {
         </p>
       </header>
 
-      {/* Chiffres clés */}
-      <section className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Card>
-          <Label>Pipeline (commissions)</Label>
-          <div className="mt-1 text-xl font-semibold tabular-nums text-gold">
-            {formatEUR(pipelineValueEUR())}
-          </div>
-        </Card>
-        <Card>
-          <Label>Prévision pondérée</Label>
-          <div className="mt-1 text-xl font-semibold tabular-nums">{formatEUR(weightedForecastEUR())}</div>
-        </Card>
-        <Card>
-          <Label>Dossiers actifs</Label>
-          <div className="mt-1 text-xl font-semibold tabular-nums">{DEALS.length}</div>
-        </Card>
-        <Card>
-          <Label>Maillon faible</Label>
-          <div className="mt-1 text-sm font-medium leading-tight">
-            {weak ? `${weak.rate}% ${weak.to}` : "—"}
-          </div>
-        </Card>
+      {/* Compteurs du pipeline — la photo complète en un regard */}
+      <section className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+        {counters.map((c) => (
+          <Card key={c.id} className="p-3">
+            <Label>{c.label}</Label>
+            <div
+              className={`mt-1 text-lg font-semibold tabular-nums ${c.money ? "text-gold" : ""}`}
+            >
+              {c.value}
+            </div>
+            <div className="mt-0.5 text-[10px] leading-tight text-muted-foreground">{c.hint}</div>
+          </Card>
+        ))}
       </section>
 
       {/* Tabs */}
