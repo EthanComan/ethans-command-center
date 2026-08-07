@@ -191,6 +191,23 @@ registerContributor(() =>
     })),
 );
 
+// 6) Directeur commercial — verdicts : décisions et challenges, pas des tâches.
+registerContributor(() =>
+  businessVerdicts()
+    .slice(0, 3)
+    .map((v) => ({
+      id: `verdict:${v.id}`,
+      title: v.order,
+      source: "directeur commercial",
+      score: v.score,
+      why: v.statement,
+      linkedTo: "Activité VEFA — financement de Renaître",
+      estimatedMinutes: v.minutes,
+      to: "/business",
+      impact: v.evidence,
+    })),
+);
+
 export function computeNextBestAction(): NextBestAction {
   const buckets = contributors.map((c) => {
     try {
