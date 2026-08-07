@@ -13,6 +13,10 @@ import {
   GraduationCap,
   ArrowRight,
   ShieldCheck,
+  Gavel,
+  Euro,
+  Flame,
+  Timer,
 } from "lucide-react";
 import {
   DEALS,
@@ -47,6 +51,24 @@ import {
   VEFA_GUARANTEES,
   VEFA_PROCESS,
 } from "@/modules/business/vefa";
+import { verdicts, weeklyDecision, hotList } from "@/modules/business/coach";
+import {
+  activityGaps,
+  ACTIVITY_LABEL,
+  analyzeSources,
+  byChannel,
+  byCity,
+  byDeveloper,
+  byTypology,
+  cashFlowSchedule,
+  caSignedThisMonthEUR,
+  commissionsCashedEUR,
+  commissionsPendingEUR,
+  commissionsSignedThisMonthEUR,
+  pipelineCounters,
+  temperatureMix,
+  weekHours,
+} from "@/modules/business/analytics";
 
 export const Route = createFileRoute("/business")({
   head: () => ({
@@ -70,10 +92,20 @@ export const Route = createFileRoute("/business")({
   component: BusinessPage,
 });
 
-type TabId = "pilotage" | "pipeline" | "programmes" | "offmarket" | "marketing" | "metier";
+type TabId =
+  | "decisions"
+  | "pilotage"
+  | "commissions"
+  | "pipeline"
+  | "programmes"
+  | "offmarket"
+  | "marketing"
+  | "metier";
 
 const TABS: { id: TabId; label: string; icon: typeof Briefcase }[] = [
+  { id: "decisions", label: "Décisions", icon: Gavel },
   { id: "pilotage", label: "Pilotage", icon: BarChart3 },
+  { id: "commissions", label: "Commissions", icon: Euro },
   { id: "pipeline", label: "Pipeline", icon: Handshake },
   { id: "programmes", label: "Programmes", icon: Building2 },
   { id: "offmarket", label: "Off-market", icon: Lock },
@@ -94,11 +126,19 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 function BusinessPage() {
-  const [tab, setTab] = useState<TabId>("pilotage");
+  const [tab, setTab] = useState<TabId>("decisions");
   const funnel = useMemo(() => analyzeFunnel(), []);
   const weak = useMemo(() => weakestLink(), []);
   const orders = useMemo(() => directives().slice(0, 5), []);
   const byStage = useMemo(() => dealsByStage(), []);
+  const calls = useMemo(() => verdicts(), []);
+  const decision = useMemo(() => weeklyDecision(), []);
+  const hot = useMemo(() => hotList(), []);
+  const counters = useMemo(() => pipelineCounters(), []);
+  const temps = useMemo(() => temperatureMix(), []);
+  const sources = useMemo(() => analyzeSources(), []);
+  const activity = useMemo(() => activityGaps(), []);
+  const cash = useMemo(() => cashFlowSchedule(), []);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6">
@@ -117,28 +157,19 @@ function BusinessPage() {
         </p>
       </header>
 
-      {/* Chiffres clés */}
-      <section className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Card>
-          <Label>Pipeline (commissions)</Label>
-          <div className="mt-1 text-xl font-semibold tabular-nums text-gold">
-            {formatEUR(pipelineValueEUR())}
-          </div>
-        </Card>
-        <Card>
-          <Label>Prévision pondérée</Label>
-          <div className="mt-1 text-xl font-semibold tabular-nums">{formatEUR(weightedForecastEUR())}</div>
-        </Card>
-        <Card>
-          <Label>Dossiers actifs</Label>
-          <div className="mt-1 text-xl font-semibold tabular-nums">{DEALS.length}</div>
-        </Card>
-        <Card>
-          <Label>Maillon faible</Label>
-          <div className="mt-1 text-sm font-medium leading-tight">
-            {weak ? `${weak.rate}% ${weak.to}` : "—"}
-          </div>
-        </Card>
+      {/* Compteurs du pipeline — la photo complète en un regard */}
+      <section className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+        {counters.map((c) => (
+          <Card key={c.id} className="p-3">
+            <Label>{c.label}</Label>
+            <div
+              className={`mt-1 text-lg font-semibold tabular-nums ${c.money ? "text-gold" : ""}`}
+            >
+              {c.value}
+            </div>
+            <div className="mt-0.5 text-[10px] leading-tight text-muted-foreground">{c.hint}</div>
+          </Card>
+        ))}
       </section>
 
       {/* Tabs */}
@@ -163,6 +194,266 @@ function BusinessPage() {
           );
         })}
       </nav>
+
+      {tab === "decisions" && (
+        <div className="mt-6 space-y-6">
+          {decision && (
+            <section>
+              <Label>La décision de la semaine</Label>
+              <div className="mt-2 rounded-xl border border-gold/40 bg-gold/[0.06] p-4">
+                <div className="text-base font-semibold leading-snug">{decision.statement}</div>
+                <div className="mt-2 text-xs text-muted-foreground">{decision.evidence}</div>
+                <div className="mt-3 flex items-start gap-1.5 text-sm text-gold">
+                  <ArrowRight className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                  {decision.order}
+                </div>
+                <div className="mt-3 flex items-center gap-3">
+                  <Link
+                    to="/execution"
+                    className="rounded-md border border-gold/50 bg-gold/10 px-3 py-1.5 text-xs text-gold transition-colors hover:bg-gold/20"
+                  >
+                    Exécuter maintenant
+                  </Link>
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    {decision.minutes} min · priorité {decision.score}
+                  </span>
+                </div>
+              </div>
+            </section>
+          )}
+
+          <section className="grid grid-cols-3 gap-2">
+            {(["chaud", "tiede", "froid"] as const).map((t) => (
+              <Card key={t} className="p-3">
+                <Label>{t === "chaud" ? "Chauds" : t === "tiede" ? "Tièdes" : "Froids"}</Label>
+                <div
+                  className={`mt-1 text-xl font-semibold tabular-nums ${
+                    t === "chaud" ? "text-gold" : t === "froid" ? "text-muted-foreground" : ""
+                  }`}
+                >
+                  {temps[t]}
+                </div>
+              </Card>
+            ))}
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold">Ce que te dit ton directeur commercial</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Des verdicts, pas des tableaux. Chaque phrase se termine par un ordre.
+            </p>
+            <div className="mt-3 space-y-2">
+              {calls.map((v) => (
+                <Card
+                  key={v.id}
+                  className={
+                    v.tone === "challenge"
+                      ? "border-red-400/30 bg-red-500/[0.05]"
+                      : v.tone === "decision"
+                        ? "border-gold/30"
+                        : ""
+                  }
+                >
+                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em]">
+                    <span
+                      className={
+                        v.tone === "challenge"
+                          ? "text-red-300"
+                          : v.tone === "decision"
+                            ? "text-gold"
+                            : "text-muted-foreground"
+                      }
+                    >
+                      {v.tone === "challenge"
+                        ? "Challenge"
+                        : v.tone === "decision"
+                          ? "Décision"
+                          : "Diagnostic"}
+                    </span>
+                    <span className="text-muted-foreground">{v.minutes} min</span>
+                  </div>
+                  <div className="mt-1.5 text-sm font-medium leading-snug">{v.statement}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{v.evidence}</div>
+                  <div className="mt-2 flex items-start gap-1.5 text-xs text-foreground/90">
+                    <ArrowRight className="mt-0.5 h-3 w-3 shrink-0 text-gold" />
+                    {v.order}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="flex items-center gap-1.5 text-sm font-semibold">
+              <Flame className="h-3.5 w-3.5 text-gold" /> Ordre de traitement des dossiers
+            </h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Commission × probabilité × urgence. Tu descends la liste, tu ne choisis pas.
+            </p>
+            <div className="mt-3 space-y-1.5">
+              {hot.map((h, i) => (
+                <Card key={h.deal.id} className="flex items-center gap-3 p-3">
+                  <span className="text-xs font-semibold tabular-nums text-gold">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-medium">{h.deal.client}</div>
+                    <div className="text-[11px] text-muted-foreground">
+                      {STAGE_LABEL[h.deal.stage]} · {h.deal.daysSinceContact} j sans contact
+                    </div>
+                  </div>
+                  <span
+                    className={`rounded border px-1.5 py-0.5 text-[10px] uppercase tracking-[0.14em] ${
+                      h.temperature === "chaud"
+                        ? "border-gold/40 bg-gold/10 text-gold"
+                        : h.temperature === "tiede"
+                          ? "border-border text-foreground/70"
+                          : "border-border text-muted-foreground"
+                    }`}
+                  >
+                    {h.temperature}
+                  </span>
+                  <span className="text-xs tabular-nums text-gold">
+                    {formatEUR(h.deal.commissionEUR)}
+                  </span>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <h2 className="flex items-center gap-1.5 text-sm font-semibold">
+              <Timer className="h-3.5 w-3.5 text-gold" /> Où part réellement ton temps ·{" "}
+              {weekHours()} h cette semaine
+            </h2>
+            <div className="mt-3 space-y-2">
+              {activity.map((a) => (
+                <div key={a.kind}>
+                  <div className="flex items-baseline justify-between text-xs">
+                    <span className="text-foreground/90">{ACTIVITY_LABEL[a.kind]}</span>
+                    <span className="tabular-nums text-muted-foreground">
+                      {a.hours} h · {a.share}%{" "}
+                      <span className={a.gap > 5 ? "text-red-300" : a.gap < -5 ? "text-amber-300" : "text-emerald-300"}>
+                        (cible {a.target}%)
+                      </span>
+                    </span>
+                  </div>
+                  <div className="mt-1 flex h-1.5 overflow-hidden rounded-full bg-elevated">
+                    <div
+                      className={a.gap > 5 ? "h-1.5 bg-red-400/70" : "h-1.5 bg-gold/70"}
+                      style={{ width: `${Math.min(100, a.share)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
+
+      {tab === "commissions" && (
+        <div className="mt-6 space-y-6">
+          <section className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <Card>
+              <Label>CA signé ce mois</Label>
+              <div className="mt-1 text-xl font-semibold tabular-nums">
+                {formatEUR(caSignedThisMonthEUR())}
+              </div>
+            </Card>
+            <Card>
+              <Label>Commissions signées</Label>
+              <div className="mt-1 text-xl font-semibold tabular-nums text-gold">
+                {formatEUR(commissionsSignedThisMonthEUR())}
+              </div>
+            </Card>
+            <Card>
+              <Label>En attente de versement</Label>
+              <div className="mt-1 text-xl font-semibold tabular-nums">
+                {formatEUR(commissionsPendingEUR())}
+              </div>
+            </Card>
+            <Card>
+              <Label>Déjà encaissé</Label>
+              <div className="mt-1 text-xl font-semibold tabular-nums">
+                {formatEUR(commissionsCashedEUR())}
+              </div>
+            </Card>
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold">Encaissements projetés</h2>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {cash.map((c) => (
+                <Card key={c.offset}>
+                  <Label>{c.offset === 0 ? "Ce mois-ci" : `Dans ${c.offset} mois`}</Label>
+                  <div className="mt-1 text-lg font-semibold tabular-nums text-gold">
+                    {formatEUR(c.securedEUR)}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground">
+                    sécurisé
+                    {c.projectedEUR > 0 && ` · +${formatEUR(c.projectedEUR)} pipeline pondéré`}
+                  </div>
+                </Card>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Pipeline total : {formatEUR(pipelineValueEUR())} · prévision honnête pondérée :{" "}
+              {formatEUR(weightedForecastEUR())} sur {DEALS.length} dossiers actifs.
+            </p>
+          </section>
+
+          <section className="grid gap-4 sm:grid-cols-2">
+            {[
+              { title: "Promoteur le plus rentable", rows: byDeveloper() },
+              { title: "Type de bien le plus rentable", rows: byTypology() },
+              { title: "Secteur le plus performant", rows: byCity() },
+              { title: "Canal d'acquisition le plus rentable", rows: byChannel() },
+            ].map((block) => (
+              <div key={block.title}>
+                <h2 className="text-sm font-semibold">{block.title}</h2>
+                <div className="mt-2 space-y-1.5">
+                  {block.rows.map((r) => (
+                    <Card key={r.key} className="p-3">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="truncate text-sm">{r.label}</span>
+                        <span className="shrink-0 text-xs tabular-nums text-gold">
+                          {formatEUR(r.commissionEUR)} · {r.share}%
+                        </span>
+                      </div>
+                      <div className="mt-1 h-1 rounded-full bg-elevated">
+                        <div className="h-1 rounded-full bg-gold/70" style={{ width: `${r.share}%` }} />
+                      </div>
+                      <div className="mt-1 text-[10px] text-muted-foreground">
+                        {r.count} vente{r.count > 1 ? "s" : ""} · {formatEUR(r.volumeEUR)} de volume
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </section>
+
+          <section>
+            <h2 className="text-sm font-semibold">Rentabilité par source d'acquisition</h2>
+            <div className="mt-2 space-y-1.5">
+              {sources.map((s) => (
+                <Card key={s.source} className="p-3">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <span className="text-sm font-medium">{s.source}</span>
+                    <span className="text-xs tabular-nums text-gold">
+                      {formatEUR(s.valuePerLeadEUR)} / lead
+                    </span>
+                  </div>
+                  <div className="mt-1 text-[11px] text-muted-foreground">
+                    {LEAD_CHANNEL_LABEL[s.channel]} · {s.leads} leads · {s.convRdv}% en RDV ·{" "}
+                    {s.ventes} vente{s.ventes > 1 ? "s" : ""} · {formatEUR(s.commissionEUR)}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
 
       {tab === "pilotage" && (
         <div className="mt-6 space-y-6">

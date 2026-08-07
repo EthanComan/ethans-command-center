@@ -34,6 +34,7 @@ import { computeAlignment } from "./alignment";
 import { todayObjectives, ancestorsOf } from "@/modules/objectifs/data";
 import { readTodayHabits } from "@/modules/habitudes/data";
 import { directives as businessDirectives } from "@/modules/business/data";
+import { verdicts as businessVerdicts } from "@/modules/business/coach";
 import { HABIT_PRIORITY_WEIGHT, HABIT_CATEGORY_LABEL } from "@/modules/habitudes/types";
 import { HORIZON_LABEL, type Priority } from "@/modules/objectifs/types";
 
@@ -187,6 +188,23 @@ registerContributor(() =>
       estimatedMinutes: d.minutes,
       to: "/business",
       impact: d.impact,
+    })),
+);
+
+// 6) Directeur commercial — verdicts : décisions et challenges, pas des tâches.
+registerContributor(() =>
+  businessVerdicts()
+    .slice(0, 3)
+    .map((v) => ({
+      id: `verdict:${v.id}`,
+      title: v.order,
+      source: "directeur commercial",
+      score: v.score,
+      why: v.statement,
+      linkedTo: "Activité VEFA — financement de Renaître",
+      estimatedMinutes: v.minutes,
+      to: "/business",
+      impact: v.evidence,
     })),
 );
 
