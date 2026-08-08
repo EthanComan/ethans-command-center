@@ -21,7 +21,6 @@
  */
 
 import { readTodayHabits } from "@/modules/habitudes/data";
-import { HABIT_DOMAIN_LABEL } from "@/modules/habitudes/types";
 
 export type BlockKind =
   | "deep_work"      // bloc de travail profond
@@ -98,7 +97,6 @@ const TODAY_BLOCKS: PlanningBlock[] = [
     source: "habitudes",
     protocolId: "protocole-matin",
     objectiveId: "mission",
-    note: "Ancrage quotidien sur la Mission Renaître.",
   },
   {
     id: "b-sport",
@@ -173,13 +171,12 @@ const TODAY_BLOCKS: PlanningBlock[] = [
   {
     id: "b-renaitre",
     kind: "deep_work",
-    title: "Renaître — rédaction de la charte fondatrice",
+    title: "Charte fondatrice — rédaction",
     start: "17:15",
     end: "18:00",
     source: "objectifs",
     objectiveId: "mission",
     linkedModule: "renaitre",
-    note: "Bloc dédié à la Mission de vie : reconstruire des femmes brisées par la violence.",
   },
   {
     id: "b-buffer",
@@ -231,13 +228,12 @@ function blocksFromHabits(refDate: Date = today): PlanningBlock[] {
     blocks.push({
       id: `hab-${item.habit.id}`,
       kind: "habit",
-      title: `${item.habit.title} (${HABIT_DOMAIN_LABEL[item.habit.domain]})`,
+      title: item.habit.title,
       start,
       end,
       source: "habitudes",
       objectiveId: item.habit.objectiveId,
       linkedModule: "habitudes",
-      note: item.habit.why,
     });
   }
   return blocks;
