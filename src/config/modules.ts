@@ -113,6 +113,8 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
     id: "systeme",
     label: "Système",
     modules: [
+      { id: "ethan", label: "ETHAN", to: "/ethan", icon: MessagesSquare, status: "live", description: "Conversation globale — parle de n'importe quel sujet" },
+      { id: "suivi", label: "Suivi", to: "/suivi", icon: Radar, status: "live", description: "Ce qu'ETHAN observe dans le temps et te signale" },
       { id: "execution", label: "Mode Exécution", to: "/execution", icon: Zap, status: "live", description: "Environnement zéro-distraction pour exécuter" },
       { id: "parametres", label: "Paramètres", to: "/parametres", icon: Settings, status: "soon", description: "Préférences du système" },
       { id: "ia", label: "IA ETHAN", to: "/ia", icon: Sparkles, status: "soon", description: "Directeur général personnel" },
