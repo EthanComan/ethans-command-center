@@ -26,7 +26,7 @@ export const Route = createFileRoute("/api/chat")({
               ETHAN_SYSTEM_PROMPT +
               "\n\n# CONTEXTE ACTUEL DU SYSTÈME (déjà connu, ne le redemande pas)\n" +
               (typeof context === "string" ? context : "Aucun contexte fourni."),
-            messages: convertToModelMessages(messages as UIMessage[]),
+            messages: await convertToModelMessages(messages as UIMessage[]),
           });
           return result.toUIMessageStreamResponse({ originalMessages: messages as UIMessage[] });
         } catch (error) {
