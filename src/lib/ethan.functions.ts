@@ -103,7 +103,14 @@ export const progressItem = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     const now = new Date();
-    const patch: Record<string, unknown> = { last_activity_at: now.toISOString() };
+    const patch: {
+      last_activity_at: string;
+      status?: string;
+      next_action?: string | null;
+      why?: string | null;
+      missing?: string | null;
+      snooze_until?: string | null;
+    } = { last_activity_at: now.toISOString() };
 
     if (data.event === "cloture") patch.status = "clos";
     if (data.event === "fait") {
