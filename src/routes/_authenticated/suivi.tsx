@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/suivi")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: SuiviPage;
+  component: SuiviPage,
 });
 
 const ORDER: Attention[] = ["urgent", "important", "opportunite", "information"];
