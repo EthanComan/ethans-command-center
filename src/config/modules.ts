@@ -27,6 +27,8 @@ import {
   TrendingUp as TrendingUpIcon,
   Zap,
   CalendarDays,
+  MessagesSquare,
+  Radar,
   type LucideIcon,
 } from "lucide-react";
 
