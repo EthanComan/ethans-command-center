@@ -14,7 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ethan_item_events: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          item_id: string
+          kind: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          item_id: string
+          kind?: string
+          user_id?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          item_id?: string
+          kind?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_item_events_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_tracked_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ethan_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ethan_tracked_items: {
+        Row: {
+          attention: string
+          context: string | null
+          created_at: string
+          due_at: string | null
+          id: string
+          kind: string
+          last_activity_at: string
+          missing: string | null
+          next_action: string | null
+          snooze_until: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          value_eur: number | null
+          why: string | null
+        }
+        Insert: {
+          attention?: string
+          context?: string | null
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          kind?: string
+          last_activity_at?: string
+          missing?: string | null
+          next_action?: string | null
+          snooze_until?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id?: string
+          value_eur?: number | null
+          why?: string | null
+        }
+        Update: {
+          attention?: string
+          context?: string | null
+          created_at?: string
+          due_at?: string | null
+          id?: string
+          kind?: string
+          last_activity_at?: string
+          missing?: string | null
+          next_action?: string | null
+          snooze_until?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          value_eur?: number | null
+          why?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
