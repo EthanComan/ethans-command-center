@@ -26,6 +26,7 @@ import { readToday, BLOCK_KIND_META } from "@/modules/planning/data";
 import { todayObjectives, byHorizon } from "@/modules/objectifs/data";
 import { readTodayHabits } from "@/modules/habitudes/data";
 import type { HabitForToday } from "@/modules/habitudes/types";
+import { EthanSignals } from "@/components/ethan-signals";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -77,6 +78,8 @@ function Index() {
           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </Link>
       </header>
+
+      <EthanSignals />
 
       {/* KPI financiers */}
       <section className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
