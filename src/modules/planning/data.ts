@@ -169,14 +169,13 @@ const TODAY_BLOCKS: PlanningBlock[] = [
     linkedModule: "business",
   },
   {
-    id: "b-renaitre",
+    id: "b-admin",
     kind: "deep_work",
-    title: "Charte fondatrice — rédaction",
+    title: "Administratif — dossiers & réservations",
     start: "17:15",
     end: "18:00",
     source: "objectifs",
-    objectiveId: "mission",
-    linkedModule: "renaitre",
+    linkedModule: "business",
   },
   {
     id: "b-buffer",
@@ -252,14 +251,14 @@ function mergeBlocks(base: PlanningBlock[], generated: PlanningBlock[]): Plannin
 
 const TODAY: PlanningDay = {
   date: iso(today),
-  intention: "Servir Renaître par le business : combler l'écart prospection, envoyer la proposition Alpha, avancer la charte fondatrice.",
+  intention: "Combler l'écart prospection et envoyer la proposition Alpha.",
   alignmentScore: 82,
   blocks: mergeBlocks(TODAY_BLOCKS, blocksFromHabits(today)),
 };
 
 const WEEK: PlanningWeek = {
   weekOf: iso(mondayOf(today)),
-  theme: "Convertir le pipeline chaud pour financer Renaître — 25 appels, 2 offres signées, charte fondatrice v1.",
+  theme: "Convertir le pipeline chaud — 25 appels, 2 offres signées.",
   focusObjectiveId: "week-calls",
   days: [
     buildDay(-((today.getDay() + 6) % 7), "Cadrage semaine — pipeline + priorites"),
@@ -267,8 +266,8 @@ const WEEK: PlanningWeek = {
     TODAY,
     buildDay(1, "Rendez-vous clients — 3 demos"),
     buildDay(2, "Redaction offres + relances"),
-    buildDay(3, "Sport long + revue hebdo + bloc Renaître (réseau experts)"),
-    buildDay(4, "Repos actif — vision, lecture, écriture Renaître"),
+    buildDay(3, "Sport long + revue hebdo"),
+    buildDay(4, "Repos actif — lecture, préparation semaine"),
   ],
 };
 
