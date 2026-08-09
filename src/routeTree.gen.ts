@@ -35,9 +35,12 @@ import { Route as ExecutionRouteImport } from './routes/execution'
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as BusinessRouteImport } from './routes/business'
 import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdnRouteImport } from './routes/adn'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedEthanRouteImport } from './routes/_authenticated/ethan'
 
 const VisionRoute = VisionRouteImport.update({
   id: '/vision',
@@ -169,9 +172,18 @@ const BibliothequeRoute = BibliothequeRouteImport.update({
   path: '/bibliotheque',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdnRoute = AdnRouteImport.update({
   id: '/adn',
   path: '/adn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -184,10 +196,16 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedEthanRoute = AuthenticatedEthanRouteImport.update({
+  id: '/ethan',
+  path: '/ethan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/adn': typeof AdnRoute
+  '/auth': typeof AuthRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
@@ -214,11 +232,13 @@ export interface FileRoutesByFullPath {
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
+  '/ethan': typeof AuthenticatedEthanRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/adn': typeof AdnRoute
+  '/auth': typeof AuthRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
@@ -245,12 +265,15 @@ export interface FileRoutesByTo {
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
+  '/ethan': typeof AuthenticatedEthanRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/adn': typeof AdnRoute
+  '/auth': typeof AuthRoute
   '/bibliotheque': typeof BibliothequeRoute
   '/business': typeof BusinessRoute
   '/crm': typeof CrmRoute
@@ -277,6 +300,7 @@ export interface FileRoutesById {
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
+  '/_authenticated/ethan': typeof AuthenticatedEthanRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
@@ -284,6 +308,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/adn'
+    | '/auth'
     | '/bibliotheque'
     | '/business'
     | '/crm'
@@ -310,11 +335,13 @@ export interface FileRouteTypes {
     | '/sante'
     | '/sport'
     | '/vision'
+    | '/ethan'
     | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/adn'
+    | '/auth'
     | '/bibliotheque'
     | '/business'
     | '/crm'
@@ -341,11 +368,14 @@ export interface FileRouteTypes {
     | '/sante'
     | '/sport'
     | '/vision'
+    | '/ethan'
     | '/api/chat'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/adn'
+    | '/auth'
     | '/bibliotheque'
     | '/business'
     | '/crm'
@@ -372,12 +402,15 @@ export interface FileRouteTypes {
     | '/sante'
     | '/sport'
     | '/vision'
+    | '/_authenticated/ethan'
     | '/api/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AdnRoute: typeof AdnRoute
+  AuthRoute: typeof AuthRoute
   BibliothequeRoute: typeof BibliothequeRoute
   BusinessRoute: typeof BusinessRoute
   CrmRoute: typeof CrmRoute
@@ -591,11 +624,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BibliothequeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/adn': {
       id: '/adn'
       path: '/adn'
       fullPath: '/adn'
       preLoaderRoute: typeof AdnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -612,12 +659,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/ethan': {
+      id: '/_authenticated/ethan'
+      path: '/ethan'
+      fullPath: '/ethan'
+      preLoaderRoute: typeof AuthenticatedEthanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedEthanRoute: typeof AuthenticatedEthanRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedEthanRoute: AuthenticatedEthanRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AdnRoute: AdnRoute,
+  AuthRoute: AuthRoute,
   BibliothequeRoute: BibliothequeRoute,
   BusinessRoute: BusinessRoute,
   CrmRoute: CrmRoute,
