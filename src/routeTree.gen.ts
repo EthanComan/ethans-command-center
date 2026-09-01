@@ -41,6 +41,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedSuiviRouteImport } from './routes/_authenticated/suivi'
+import { Route as AuthenticatedIdentiteRouteImport } from './routes/_authenticated/identite'
 import { Route as AuthenticatedEthanRouteImport } from './routes/_authenticated/ethan'
 
 const VisionRoute = VisionRouteImport.update({
@@ -202,6 +203,11 @@ const AuthenticatedSuiviRoute = AuthenticatedSuiviRouteImport.update({
   path: '/suivi',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedIdentiteRoute = AuthenticatedIdentiteRouteImport.update({
+  id: '/identite',
+  path: '/identite',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEthanRoute = AuthenticatedEthanRouteImport.update({
   id: '/ethan',
   path: '/ethan',
@@ -239,6 +245,7 @@ export interface FileRoutesByFullPath {
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
   '/ethan': typeof AuthenticatedEthanRoute
+  '/identite': typeof AuthenticatedIdentiteRoute
   '/suivi': typeof AuthenticatedSuiviRoute
   '/api/chat': typeof ApiChatRoute
 }
@@ -273,6 +280,7 @@ export interface FileRoutesByTo {
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
   '/ethan': typeof AuthenticatedEthanRoute
+  '/identite': typeof AuthenticatedIdentiteRoute
   '/suivi': typeof AuthenticatedSuiviRoute
   '/api/chat': typeof ApiChatRoute
 }
@@ -309,6 +317,7 @@ export interface FileRoutesById {
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
   '/_authenticated/ethan': typeof AuthenticatedEthanRoute
+  '/_authenticated/identite': typeof AuthenticatedIdentiteRoute
   '/_authenticated/suivi': typeof AuthenticatedSuiviRoute
   '/api/chat': typeof ApiChatRoute
 }
@@ -345,6 +354,7 @@ export interface FileRouteTypes {
     | '/sport'
     | '/vision'
     | '/ethan'
+    | '/identite'
     | '/suivi'
     | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
@@ -379,6 +389,7 @@ export interface FileRouteTypes {
     | '/sport'
     | '/vision'
     | '/ethan'
+    | '/identite'
     | '/suivi'
     | '/api/chat'
   id:
@@ -414,6 +425,7 @@ export interface FileRouteTypes {
     | '/sport'
     | '/vision'
     | '/_authenticated/ethan'
+    | '/_authenticated/identite'
     | '/_authenticated/suivi'
     | '/api/chat'
   fileRoutesById: FileRoutesById
@@ -678,6 +690,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSuiviRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/identite': {
+      id: '/_authenticated/identite'
+      path: '/identite'
+      fullPath: '/identite'
+      preLoaderRoute: typeof AuthenticatedIdentiteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ethan': {
       id: '/_authenticated/ethan'
       path: '/ethan'
@@ -690,11 +709,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedEthanRoute: typeof AuthenticatedEthanRoute
+  AuthenticatedIdentiteRoute: typeof AuthenticatedIdentiteRoute
   AuthenticatedSuiviRoute: typeof AuthenticatedSuiviRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEthanRoute: AuthenticatedEthanRoute,
+  AuthenticatedIdentiteRoute: AuthenticatedIdentiteRoute,
   AuthenticatedSuiviRoute: AuthenticatedSuiviRoute,
 }
 

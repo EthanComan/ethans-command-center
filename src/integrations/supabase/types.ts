@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      ethan_archetype_scores: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          score: number
+          trait: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          score?: number
+          trait: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          score?: number
+          trait?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ethan_identity_entries: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          lesson: string | null
+          occurred_on: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          lesson?: string | null
+          occurred_on?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          lesson?: string | null
+          occurred_on?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ethan_item_events: {
         Row: {
           content: string
