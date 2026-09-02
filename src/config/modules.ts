@@ -29,6 +29,7 @@ import {
   CalendarDays,
   MessagesSquare,
   Radar,
+  Compass,
   type LucideIcon,
 } from "lucide-react";
 
