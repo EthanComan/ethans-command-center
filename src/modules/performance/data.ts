@@ -56,7 +56,7 @@ export function energyIndex(): number {
   const consistency =
     habits.length === 0
       ? 0
-      : Math.round(habits.reduce((s, h) => s + computeConsistency(h.id).rate, 0) / habits.length);
+      : Math.round(habits.reduce((s, h) => s + computeConsistency(h.id).last30Days, 0) / habits.length);
   return Math.round(base * 0.7 + consistency * 0.3);
 }
 
