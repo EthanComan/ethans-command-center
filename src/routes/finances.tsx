@@ -144,11 +144,13 @@ function FinancesPage() {
         <h3 className="text-sm font-medium">Encaissements projetés</h3>
         <div className="mt-4 grid gap-3 md:grid-cols-4">
           {upcomingCash().map((m) => (
-            <div key={m.label} className="rounded-xl border border-border p-4">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{m.label}</p>
-              <p className="mt-2 text-base font-semibold tabular-nums">{eur(m.amountEUR)}</p>
+            <div key={m.offset} className="rounded-xl border border-border p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">M+{m.offset}</p>
+              <p className="mt-2 text-base font-semibold tabular-nums">{eur(m.securedEUR)}</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">projeté {eur(m.projectedEUR)}</p>
             </div>
           ))}
+
         </div>
       </section>
     </div>
