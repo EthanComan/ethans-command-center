@@ -59,6 +59,7 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
     id: "fondations",
     label: "Fondations",
     modules: [
+      { id: "identite", label: "Identité", to: "/identite", icon: Compass, status: "live", description: "Historique, identité actuelle, direction — et grille de leadership" },
       { id: "adn", label: "ADN", to: "/adn", icon: Dna, status: "live", description: "Mission, valeurs, code d'honneur, principes" },
       { id: "renaitre", label: "Renaître", to: "/renaitre", icon: Heart, status: "live", description: "Mission de vie — projet humanitaire" },
       { id: "memoire", label: "Mémoire", to: "/memoire", icon: History, status: "live", description: "Histoire de ton évolution — décisions, réussites, échecs, apprentissages" },
