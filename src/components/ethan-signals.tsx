@@ -2,19 +2,39 @@
  * "ETHAN vient vers moi" — bandeau de sollicitations.
  * Ne s'affiche que si une intervention est réellement nécessaire.
  */
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listItems } from "@/lib/ethan.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { ATTENTION_META, interventions, solicitations } from "@/brain/vigilance";
 
 export function EthanSignals() {
   const fetchItems = useServerFn(listItems);
+  const [authed, setAuthed] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (active) setAuthed(Boolean(data.session));
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAuthed(Boolean(session));
+    });
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
   const { data } = useQuery({
     queryKey: ["ethan", "items"],
     queryFn: () => fetchItems(),
+    enabled: authed,
     retry: false,
   });
+
 
   const list = solicitations(interventions(data ?? [])).slice(0, 3);
   if (list.length === 0) return null;
