@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   Briefcase,
+  Activity,
   Target,
   Users,
   Handshake,
