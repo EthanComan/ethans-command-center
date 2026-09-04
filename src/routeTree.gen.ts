@@ -44,6 +44,7 @@ import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedSuiviRouteImport } from './routes/_authenticated/suivi'
 import { Route as AuthenticatedIdentiteRouteImport } from './routes/_authenticated/identite'
 import { Route as AuthenticatedEthanRouteImport } from './routes/_authenticated/ethan'
+import { Route as ApiPublicCronPushRouteImport } from './routes/api/public/cron/push'
 
 const VisionRoute = VisionRouteImport.update({
   id: '/vision',
@@ -219,6 +220,11 @@ const AuthenticatedEthanRoute = AuthenticatedEthanRouteImport.update({
   path: '/ethan',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicCronPushRoute = ApiPublicCronPushRouteImport.update({
+  id: '/api/public/cron/push',
+  path: '/api/public/cron/push',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -255,6 +261,7 @@ export interface FileRoutesByFullPath {
   '/identite': typeof AuthenticatedIdentiteRoute
   '/suivi': typeof AuthenticatedSuiviRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/public/cron/push': typeof ApiPublicCronPushRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByTo {
   '/identite': typeof AuthenticatedIdentiteRoute
   '/suivi': typeof AuthenticatedSuiviRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/public/cron/push': typeof ApiPublicCronPushRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -329,6 +337,7 @@ export interface FileRoutesById {
   '/_authenticated/identite': typeof AuthenticatedIdentiteRoute
   '/_authenticated/suivi': typeof AuthenticatedSuiviRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/public/cron/push': typeof ApiPublicCronPushRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -367,6 +376,7 @@ export interface FileRouteTypes {
     | '/identite'
     | '/suivi'
     | '/api/chat'
+    | '/api/public/cron/push'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -403,6 +413,7 @@ export interface FileRouteTypes {
     | '/identite'
     | '/suivi'
     | '/api/chat'
+    | '/api/public/cron/push'
   id:
     | '__root__'
     | '/'
@@ -440,6 +451,7 @@ export interface FileRouteTypes {
     | '/_authenticated/identite'
     | '/_authenticated/suivi'
     | '/api/chat'
+    | '/api/public/cron/push'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -475,6 +487,7 @@ export interface RootRouteChildren {
   SportRoute: typeof SportRoute
   VisionRoute: typeof VisionRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiPublicCronPushRoute: typeof ApiPublicCronPushRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -724,6 +737,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEthanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/cron/push': {
+      id: '/api/public/cron/push'
+      path: '/api/public/cron/push'
+      fullPath: '/api/public/cron/push'
+      preLoaderRoute: typeof ApiPublicCronPushRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -775,6 +795,7 @@ const rootRouteChildren: RootRouteChildren = {
   SportRoute: SportRoute,
   VisionRoute: VisionRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiPublicCronPushRoute: ApiPublicCronPushRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

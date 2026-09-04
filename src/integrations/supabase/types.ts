@@ -139,6 +139,81 @@ export type Database = {
         }
         Relationships: []
       }
+      ethan_push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          last_seen_at: string
+          p256dh: string
+          timezone: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          last_seen_at?: string
+          p256dh: string
+          timezone?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          last_seen_at?: string
+          p256dh?: string
+          timezone?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ethan_scheduled_push: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          key: string
+          priority: string
+          send_at: string
+          sent_at: string | null
+          title: string
+          url: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          key: string
+          priority?: string
+          send_at: string
+          sent_at?: string | null
+          title: string
+          url?: string
+          user_id?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          key?: string
+          priority?: string
+          send_at?: string
+          sent_at?: string | null
+          title?: string
+          url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ethan_tracked_items: {
         Row: {
           attention: string

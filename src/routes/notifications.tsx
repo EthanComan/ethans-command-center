@@ -26,6 +26,16 @@ import {
   type NotificationPriority,
 } from "@/modules/notifications/types";
 import { phaseDefinition } from "@/modules/habitudes/data";
+import {
+  disableRemotePush,
+  enableRemotePush,
+  pushSupported,
+  remoteState,
+  syncRemoteSchedule,
+  testRemotePush,
+  type RemoteState,
+} from "@/modules/notifications/push";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/notifications")({
   head: () => ({
@@ -160,6 +170,9 @@ function NotificationsPage() {
           </p>
         )}
       </section>
+
+      {/* Canal distant : app fermée */}
+      <RemoteChannel />
 
       {/* Réglages */}
       <section className="mt-8 grid gap-4 md:grid-cols-2">
