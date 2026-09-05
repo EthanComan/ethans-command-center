@@ -325,6 +325,159 @@ function NotificationsPage() {
   );
 }
 
+function RemoteChannel() {
+  const [state, setState] = useState<RemoteState>("unsupported");
+  const [signedIn, setSignedIn] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  const [scheduled, setScheduled] = useState<number | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    void remoteState().then((s) => active && setState(s));
+    void supabase.auth.getSession().then(({ data }) => active && setSignedIn(Boolean(data.session)));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => setSignedIn(Boolean(session)));
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  const enable = async () => {
+    setBusy(true);
+    setMessage("");
+    try {
+      const res = await enableRemotePush();
+      if (res.ok) {
+        setState("on");
+        setMessage("Canal actif : tu recevras tes rappels même ETHAN fermé.");
+      } else {
+        const reasons: Record<string, string> = {
+          unsupported: "Cet appareil ne gère pas les rappels hors application.",
+          denied: "Les notifications sont bloquées pour ce site.",
+          "no-sw": "Impossible de démarrer le service en arrière-plan.",
+          "no-key": "Le canal distant n'est pas encore configuré côté serveur.",
+        };
+        setMessage(reasons[res.reason ?? ""] ?? "Activation impossible pour le moment.");
+      }
+    } catch {
+      setMessage("Activation impossible pour le moment.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const disable = async () => {
+    setBusy(true);
+    await disableRemotePush().catch(() => undefined);
+    setState("off");
+    setScheduled(null);
+    setMessage("Canal désactivé sur cet appareil.");
+    setBusy(false);
+  };
+
+  const sync = async () => {
+    setBusy(true);
+    try {
+      setScheduled(await syncRemoteSchedule());
+      setMessage("Rappels du jour envoyés au serveur.");
+    } catch {
+      setMessage("Synchronisation impossible pour le moment.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const test = async () => {
+    setBusy(true);
+    try {
+      const sent = await testRemotePush();
+      setMessage(sent ? `Test envoyé sur ${sent} appareil${sent > 1 ? "s" : ""}.` : "Aucun appareil enregistré.");
+    } catch {
+      setMessage("Envoi de test impossible.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <section className="mt-6 rounded-2xl border border-border bg-elevated p-6">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h2 className="flex items-center gap-2 text-sm font-semibold">
+            <BellRing className="h-4 w-4 text-gold" /> Recevoir même application fermée
+          </h2>
+          <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">
+            Les rappels partent alors du serveur : ils arrivent sur ton téléphone, ton ordinateur et
+            ta montre même si ETHAN n'est ouvert nulle part. Sur iPhone, ajoute d'abord ETHAN à
+            l'écran d'accueil.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2 text-[11px]">
+            <span className="rounded border border-border bg-background/40 px-2 py-1 text-muted-foreground">
+              Canal : {state === "on" ? "actif" : state === "off" ? "inactif" : "non supporté"}
+            </span>
+            <span className="rounded border border-border bg-background/40 px-2 py-1 text-muted-foreground">
+              Compte : {signedIn ? "connecté" : "non connecté"}
+            </span>
+            {scheduled !== null && (
+              <span className="rounded border border-border bg-background/40 px-2 py-1 text-muted-foreground">
+                {scheduled} rappel{scheduled > 1 ? "s" : ""} programmé{scheduled > 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          {state === "on" ? (
+            <>
+              <button
+                onClick={sync}
+                disabled={busy}
+                className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90 disabled:opacity-40"
+              >
+                Synchroniser mes rappels
+              </button>
+              <button
+                onClick={test}
+                disabled={busy}
+                className="rounded-md border border-border px-4 py-2 text-xs text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold disabled:opacity-40"
+              >
+                Tester hors application
+              </button>
+              <button
+                onClick={disable}
+                disabled={busy}
+                className="rounded-md border border-border px-4 py-2 text-xs text-muted-foreground transition-colors hover:border-red-400/40 hover:text-red-300 disabled:opacity-40"
+              >
+                Désactiver sur cet appareil
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={enable}
+              disabled={busy || state === "unsupported" || !signedIn}
+              className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90 disabled:opacity-40"
+            >
+              Activer le canal distant
+            </button>
+          )}
+        </div>
+      </div>
+      {!signedIn && state !== "unsupported" && (
+        <p className="mt-4 rounded-lg border border-border bg-background/40 p-3 text-[12px] text-muted-foreground">
+          Connecte-toi à ton compte pour lier cet appareil.{" "}
+          <Link to="/auth" className="text-gold">Se connecter</Link>
+        </p>
+      )}
+      {message && (
+        <p className="mt-4 flex items-start gap-2 rounded-lg border border-border bg-background/40 p-3 text-[12px] text-muted-foreground">
+          <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+          {message}
+        </p>
+      )}
+    </section>
+  );
+}
+
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <button
