@@ -22,7 +22,7 @@ import {
   cashFlowSchedule,
 } from "@/modules/business/analytics";
 import { hotList } from "@/modules/business/coach";
-import { readToday, BLOCK_KIND_META } from "@/modules/planning/data";
+import { readToday, readTodayBase, BLOCK_KIND_META } from "@/modules/planning/data";
 import { todayObjectives, byHorizon } from "@/modules/objectifs/data";
 import { readTodayHabits } from "@/modules/habitudes/data";
 import type { HabitForToday } from "@/modules/habitudes/types";
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const day = readToday();
+  const [day, setDay] = useState(readTodayBase());
   const objectives = todayObjectives();
   const week = byHorizon("week");
   const hot = hotList().slice(0, 4);
@@ -55,6 +55,7 @@ function Index() {
   useEffect(() => {
     setToday(new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }));
     setHabits(readTodayHabits());
+    setDay(readToday());
   }, []);
 
   const due = habits.filter((h) => h.dueToday);
