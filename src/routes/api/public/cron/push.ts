@@ -6,11 +6,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 async function run(request: Request): Promise<Response> {
-  const secret = process.env["ETHAN_CRON_SECRET"];
-  const provided = request.headers.get("x-ethan-cron-secret");
-  if (!secret || provided !== secret) {
+  const provided = request.headers.get("x-ethan-cron-secret") ?? "";
+  const accepted = [process.env["ETHAN_CRON_TOKEN"], process.env["ETHAN_CRON_SECRET"]].filter(
+    (v): v is string => Boolean(v)
+  );
+  if (!accepted.length || !accepted.includes(provided)) {
     return new Response("Unauthorized", { status: 401 });
   }
+
 
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { deliverPush } = await import("@/lib/web-push.server");

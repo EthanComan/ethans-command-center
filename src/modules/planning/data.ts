@@ -249,11 +249,12 @@ function mergeBlocks(base: PlanningBlock[], generated: PlanningBlock[]): Plannin
   return merged.sort((a, b) => a.start.localeCompare(b.start));
 }
 
+/** Journée de référence, identique côté serveur et client (aucune lecture locale). */
 const TODAY: PlanningDay = {
   date: iso(today),
   intention: "Combler l'écart prospection et envoyer la proposition Alpha.",
   alignmentScore: 82,
-  blocks: mergeBlocks(TODAY_BLOCKS, blocksFromHabits(today)),
+  blocks: TODAY_BLOCKS,
 };
 
 const WEEK: PlanningWeek = {
@@ -271,8 +272,14 @@ const WEEK: PlanningWeek = {
   ],
 };
 
-export function readToday(): PlanningDay {
+/** Journée sans les habitudes locales : sûre pour le premier rendu. */
+export function readTodayBase(): PlanningDay {
   return TODAY;
+}
+
+/** Journée complète, habitudes du jour incluses (client uniquement). */
+export function readToday(): PlanningDay {
+  return { ...TODAY, blocks: mergeBlocks(TODAY_BLOCKS, blocksFromHabits(today)) };
 }
 
 export function readWeek(): PlanningWeek {

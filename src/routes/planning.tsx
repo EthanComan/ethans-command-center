@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { CalendarDays, Lock, MapPin, Zap } from "lucide-react";
 import {
   readToday,
+  readTodayBase,
   readWeek,
   currentBlock,
   nextBlock,
@@ -31,13 +32,14 @@ const minutes = (b: PlanningBlock) => {
 };
 
 function PlanningPage() {
-  const day = readToday();
+  const [day, setDay] = useState(readTodayBase());
   const week = readWeek();
   const [now, setNow] = useState<PlanningBlock | undefined>(undefined);
   const [next, setNext] = useState<PlanningBlock | undefined>(undefined);
   const [label, setLabel] = useState("");
 
   useEffect(() => {
+    setDay(readToday());
     setNow(currentBlock());
     setNext(nextBlock());
     setLabel(new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }));
