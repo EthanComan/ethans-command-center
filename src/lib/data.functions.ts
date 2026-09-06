@@ -98,7 +98,8 @@ export const deleteRow = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-export type Row = Record<string, unknown> & { id: string };
+export type Cell = string | number | boolean | null | string[];
+export type Row = { id: string } & Record<string, Cell>;
 
 /** Typage minimal permissif : les tables sont validées par la whitelist ci-dessus. */
 interface QueryLike {
