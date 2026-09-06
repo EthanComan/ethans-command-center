@@ -14,6 +14,114 @@ export type Database = {
   }
   public: {
     Tables: {
+      ethan_activities: {
+        Row: {
+          contact_id: string | null
+          content: string
+          created_at: string
+          deal_id: string | null
+          id: string
+          kind: string
+          occurred_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_id?: string | null
+          content: string
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          kind?: string
+          occurred_at?: string
+          user_id?: string
+        }
+        Update: {
+          contact_id?: string | null
+          content?: string
+          created_at?: string
+          deal_id?: string | null
+          id?: string
+          kind?: string
+          occurred_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_activities_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ethan_activities_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ethan_appointments: {
+        Row: {
+          contact_id: string | null
+          created_at: string
+          deal_id: string | null
+          duration_min: number
+          id: string
+          kind: string
+          location: string | null
+          notes: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_id?: string | null
+          created_at?: string
+          deal_id?: string | null
+          duration_min?: number
+          id?: string
+          kind?: string
+          location?: string | null
+          notes?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          contact_id?: string | null
+          created_at?: string
+          deal_id?: string | null
+          duration_min?: number
+          id?: string
+          kind?: string
+          location?: string | null
+          notes?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_appointments_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ethan_appointments_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ethan_archetype_scores: {
         Row: {
           created_at: string
@@ -39,6 +147,288 @@ export type Database = {
           note?: string | null
           score?: number
           trait?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ethan_contacts: {
+        Row: {
+          company: string | null
+          contact_type: string
+          created_at: string
+          email: string | null
+          first_name: string
+          follow_up_on: string | null
+          id: string
+          last_contact_at: string | null
+          last_name: string
+          linkedin: string | null
+          next_action: string | null
+          notes: string | null
+          phone: string | null
+          priority: string
+          role_title: string | null
+          source: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company?: string | null
+          contact_type?: string
+          created_at?: string
+          email?: string | null
+          first_name?: string
+          follow_up_on?: string | null
+          id?: string
+          last_contact_at?: string | null
+          last_name?: string
+          linkedin?: string | null
+          next_action?: string | null
+          notes?: string | null
+          phone?: string | null
+          priority?: string
+          role_title?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          company?: string | null
+          contact_type?: string
+          created_at?: string
+          email?: string | null
+          first_name?: string
+          follow_up_on?: string | null
+          id?: string
+          last_contact_at?: string | null
+          last_name?: string
+          linkedin?: string | null
+          next_action?: string | null
+          notes?: string | null
+          phone?: string | null
+          priority?: string
+          role_title?: string | null
+          source?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ethan_deals: {
+        Row: {
+          budget_eur: number | null
+          client_name: string | null
+          commission_eur: number | null
+          contact_id: string | null
+          created_at: string
+          developer: string | null
+          due_on: string | null
+          id: string
+          last_action: string | null
+          location: string | null
+          need: string | null
+          next_action: string | null
+          notes: string | null
+          operation_type: string | null
+          probability: number
+          program: string | null
+          stage: string
+          stakeholders: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_eur?: number | null
+          client_name?: string | null
+          commission_eur?: number | null
+          contact_id?: string | null
+          created_at?: string
+          developer?: string | null
+          due_on?: string | null
+          id?: string
+          last_action?: string | null
+          location?: string | null
+          need?: string | null
+          next_action?: string | null
+          notes?: string | null
+          operation_type?: string | null
+          probability?: number
+          program?: string | null
+          stage?: string
+          stakeholders?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          budget_eur?: number | null
+          client_name?: string | null
+          commission_eur?: number | null
+          contact_id?: string | null
+          created_at?: string
+          developer?: string | null
+          due_on?: string | null
+          id?: string
+          last_action?: string | null
+          location?: string | null
+          need?: string | null
+          next_action?: string | null
+          notes?: string | null
+          operation_type?: string | null
+          probability?: number
+          program?: string | null
+          stage?: string
+          stakeholders?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_deals_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ethan_goals: {
+        Row: {
+          created_at: string
+          current_value: number | null
+          description: string | null
+          horizon: string
+          id: string
+          parent_id: string | null
+          priority: string
+          progress: number
+          status: string
+          target_date: string | null
+          target_value: number | null
+          title: string
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_value?: number | null
+          description?: string | null
+          horizon?: string
+          id?: string
+          parent_id?: string | null
+          priority?: string
+          progress?: number
+          status?: string
+          target_date?: string | null
+          target_value?: number | null
+          title: string
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          current_value?: number | null
+          description?: string | null
+          horizon?: string
+          id?: string
+          parent_id?: string | null
+          priority?: string
+          progress?: number
+          status?: string
+          target_date?: string | null
+          target_value?: number | null
+          title?: string
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_goals_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ethan_habit_logs: {
+        Row: {
+          created_at: string
+          done_on: string
+          habit_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done_on?: string
+          habit_id: string
+          id?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          done_on?: string
+          habit_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_habit_logs_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ethan_habits: {
+        Row: {
+          active: boolean
+          created_at: string
+          detail: string | null
+          domain: string
+          frequency: string
+          id: string
+          time_of_day: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          detail?: string | null
+          domain?: string
+          frequency?: string
+          id?: string
+          time_of_day?: string | null
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          detail?: string | null
+          domain?: string
+          frequency?: string
+          id?: string
+          time_of_day?: string | null
+          title?: string
           updated_at?: string
           user_id?: string
         }
@@ -139,6 +529,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ethan_notes: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          pinned: boolean
+          tags: string[]
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          pinned?: boolean
+          tags?: string[]
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          pinned?: boolean
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ethan_push_subscriptions: {
         Row: {
           auth: string
@@ -213,6 +639,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      ethan_tasks: {
+        Row: {
+          completed_at: string | null
+          contact_id: string | null
+          created_at: string
+          deal_id: string | null
+          detail: string | null
+          domain: string
+          due_on: string | null
+          id: string
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          deal_id?: string | null
+          detail?: string | null
+          domain?: string
+          due_on?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          completed_at?: string | null
+          contact_id?: string | null
+          created_at?: string
+          deal_id?: string | null
+          detail?: string | null
+          domain?: string
+          due_on?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ethan_tasks_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ethan_tasks_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "ethan_deals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ethan_tracked_items: {
         Row: {
