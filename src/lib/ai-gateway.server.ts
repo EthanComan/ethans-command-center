@@ -1,13 +1,15 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 
-/** Provider AI de Lovable — clé serveur uniquement. */
-export function createLovableAiGatewayProvider(apiKey: string) {
+/**
+ * Direct Gemini provider — server-side API key only.
+ * ETHAN's prompt, context and application logic remain unchanged.
+ */
+export function createGeminiProvider(apiKey: string) {
   return createOpenAICompatible({
-    name: "lovable",
-    baseURL: "https://ai.gateway.lovable.dev/v1",
+    name: "gemini",
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
     headers: {
-      "Lovable-API-Key": apiKey,
-      "X-Lovable-AIG-SDK": "vercel-ai-sdk",
+      Authorization: `Bearer ${apiKey}`,
     },
   });
 }
