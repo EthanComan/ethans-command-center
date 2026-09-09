@@ -1,4 +1,4 @@
-import { createLovableAiGatewayProvider } from "@/lib/ai-gateway.server";
+import { createGeminiProvider } from "@/lib/ai-gateway.server";
 import { ETHAN_SYSTEM_PROMPT } from "@/lib/ethan-context";
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
@@ -14,14 +14,14 @@ export const Route = createFileRoute("/api/chat")({
           return new Response("Messages requis", { status: 400 });
         }
 
-        const key = process.env["LOVABLE_API_KEY"];
-        if (!key) return new Response("Clé IA manquante", { status: 500 });
+        const key = process.env["GEMINI_API_KEY"];
+        if (!key) return new Response("Clé Gemini manquante", { status: 500 });
 
-        const gateway = createLovableAiGatewayProvider(key);
+        const gateway = createGeminiProvider(key);
 
         try {
           const result = streamText({
-            model: gateway("google/gemini-3.6-flash"),
+            model: gateway("gemini-3.6-flash"),
             system:
               ETHAN_SYSTEM_PROMPT +
               "\n\n# CONTEXTE ACTUEL DU SYSTÈME (déjà connu, ne le redemande pas)\n" +
@@ -37,3 +37,4 @@ export const Route = createFileRoute("/api/chat")({
     },
   },
 });
+        
