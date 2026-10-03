@@ -9,16 +9,22 @@ import type { TrackedItem } from "@/brain/vigilance";
 
 const ATTENTIONS = ["urgent", "important", "opportunite", "information"] as const;
 
+const Channel = z.enum(["directeur", "builder"]).default("directeur");
+const channelInput = (input: unknown) =>
+  z.object({ channel: Channel }).parse(input ?? {});
+
 export const listMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
-    const { data, error } = await context.supabase
+  .inputValidator(channelInput)
+  .handler(async ({ data, context }) => {
+    const { data: rows, error } = await context.supabase
       .from("ethan_messages")
       .select("id, role, content, created_at")
+      .eq("channel", data.channel)
       .order("created_at", { ascending: true })
       .limit(500);
     if (error) throw new Error(error.message);
-    return data ?? [];
+    return rows ?? [];
   });
 
 export const saveMessages = createServerFn({ method: "POST" })
@@ -26,6 +32,7 @@ export const saveMessages = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
     z
       .object({
+        channel: Channel,
         messages: z.array(
           z.object({ role: z.enum(["user", "assistant"]), content: z.string().min(1) }),
         ),
@@ -33,7 +40,11 @@ export const saveMessages = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    const rows = data.messages.map((m) => ({ ...m, user_id: context.userId }));
+    const rows = data.messages.map((m) => ({
+      ...m,
+      channel: data.channel,
+      user_id: context.userId,
+    }));
     const { error } = await context.supabase.from("ethan_messages").insert(rows);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -41,11 +52,13 @@ export const saveMessages = createServerFn({ method: "POST" })
 
 export const clearConversation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }) => {
+  .inputValidator(channelInput)
+  .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("ethan_messages")
       .delete()
-      .eq("user_id", context.userId);
+      .eq("user_id", context.userId)
+      .eq("channel", data.channel);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

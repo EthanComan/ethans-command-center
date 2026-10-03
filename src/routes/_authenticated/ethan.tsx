@@ -61,7 +61,10 @@ function EthanChat() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [input, setInput] = useState("");
 
-  const history = useQuery({ queryKey: ["ethan", "messages"], queryFn: () => fetchMessages() });
+  const history = useQuery({
+    queryKey: ["ethan", "messages", "directeur"],
+    queryFn: () => fetchMessages({ data: { channel: "directeur" } }),
+  });
   const items = useQuery({ queryKey: ["ethan", "items"], queryFn: () => fetchItems() });
 
   const initial = useMemo<UIMessage[]>(
@@ -89,7 +92,7 @@ function EthanChat() {
 
   const save = useMutation({
     mutationFn: (payload: { role: "user" | "assistant"; content: string }[]) =>
-      persist({ data: { messages: payload } }),
+      persist({ data: { channel: "directeur", messages: payload } }),
   });
 
   // Restaure la conversation continue une fois l'historique chargé.
@@ -142,10 +145,10 @@ function EthanChat() {
           variant="ghost"
           size="sm"
           onClick={async () => {
-            await wipe({ data: undefined });
+            await wipe({ data: { channel: "directeur" } });
             setMessages([]);
             persisted.current.clear();
-            void qc.invalidateQueries({ queryKey: ["ethan", "messages"] });
+            void qc.invalidateQueries({ queryKey: ["ethan", "messages", "directeur"] });
           }}
         >
           Nouvelle conversation
