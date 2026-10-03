@@ -4,6 +4,9 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { clearConversation, listMessages, saveMessages } from "@/lib/ethan.functions";
 
 import {
   Conversation,
@@ -91,28 +94,49 @@ function BuilderChat() {
     status === "submitted" ||
     status === "streaming";
 
+  const fetchMessages = useServerFn(listMessages);
+  const persist = useServerFn(saveMessages);
+  const wipe = useServerFn(clearConversation);
+  const history = useQuery({
+    queryKey: ["ethan", "messages", "builder"],
+    queryFn: () => fetchMessages({ data: { channel: "builder" } }),
+  });
+
+  // Restaure l'historique Builder depuis la base.
+  const restored = useRef(false);
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-
-      if (saved) {
-        setMessages(JSON.parse(saved) as UIMessage[]);
-      }
-    } catch {
-      localStorage.removeItem(STORAGE_KEY);
-    }
-
-    textareaRef.current?.focus();
-  }, [setMessages]);
-
-  useEffect(() => {
-    if (messages.length) {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(messages),
+    if (restored.current || history.isLoading) return;
+    restored.current = true;
+    localStorage.removeItem(STORAGE_KEY);
+    const rows = history.data ?? [];
+    if (rows.length) {
+      setMessages(
+        rows.map((m) => ({
+          id: m.id,
+          role: m.role as "user" | "assistant",
+          parts: [{ type: "text" as const, text: m.content }],
+        })),
       );
     }
-  }, [messages]);
+    textareaRef.current?.focus();
+  }, [history.isLoading, history.data, setMessages]);
+
+  // Enregistre chaque échange complet.
+  const persisted = useRef(new Set<string>());
+  useEffect(() => {
+    if (status !== "ready" || messages.length < 2) return;
+    const last = messages[messages.length - 1];
+    const prev = messages[messages.length - 2];
+    if (last.role !== "assistant" || prev.role !== "user") return;
+    if (persisted.current.has(last.id)) return;
+    const a = textOf(last);
+    const u = textOf(prev);
+    if (!a || !u) return;
+    persisted.current.add(last.id);
+    void persist({
+      data: { channel: "builder", messages: [{ role: "user", content: u }, { role: "assistant", content: a }] },
+    }).catch(() => toast.error("Échange non enregistré."));
+  }, [messages, status, persist]);
 
   function send(text: string) {
     const value = text.trim();
@@ -148,8 +172,9 @@ function BuilderChat() {
           variant="ghost"
           size="sm"
           onClick={() => {
+            void wipe({ data: { channel: "builder" } });
             setMessages([]);
-            localStorage.removeItem(STORAGE_KEY);
+            persisted.current.clear();
           }}
         >
           Nouvelle session
