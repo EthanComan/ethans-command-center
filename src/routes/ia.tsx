@@ -102,6 +102,7 @@ function BuilderChat() {
     queryFn: () => fetchMessages({ data: { channel: "builder" } }),
   });
 
+  const persisted = useRef(new Set<string>());
   // Restaure l'historique Builder depuis la base.
   const restored = useRef(false);
   useEffect(() => {
@@ -109,6 +110,7 @@ function BuilderChat() {
     restored.current = true;
     localStorage.removeItem(STORAGE_KEY);
     const rows = history.data ?? [];
+    rows.forEach((m) => persisted.current.add(m.id));
     if (rows.length) {
       setMessages(
         rows.map((m) => ({
@@ -122,7 +124,6 @@ function BuilderChat() {
   }, [history.isLoading, history.data, setMessages]);
 
   // Enregistre chaque échange complet.
-  const persisted = useRef(new Set<string>());
   useEffect(() => {
     if (status !== "ready" || messages.length < 2) return;
     const last = messages[messages.length - 1];

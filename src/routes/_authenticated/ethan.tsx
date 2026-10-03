@@ -96,10 +96,12 @@ function EthanChat() {
   });
 
   // Restaure la conversation continue une fois l'historique chargé.
+  const persisted = useRef(new Set<string>());
   const restored = useRef(false);
   useEffect(() => {
     if (restored.current || history.isLoading) return;
     restored.current = true;
+    initial.forEach((m) => persisted.current.add(m.id));
     if (initial.length) setMessages(initial);
     textareaRef.current?.focus();
   }, [history.isLoading, initial, setMessages]);
@@ -107,13 +109,13 @@ function EthanChat() {
   const busy = status === "submitted" || status === "streaming";
 
   // Persiste chaque échange complet.
-  const persisted = useRef(new Set<string>());
   useEffect(() => {
     if (status !== "ready" || messages.length < 2) return;
     const last = messages[messages.length - 1];
     const prev = messages[messages.length - 2];
     if (last.role !== "assistant" || prev.role !== "user") return;
     if (persisted.current.has(last.id)) return;
+    if (!textOf(last) || !textOf(prev)) return;
     persisted.current.add(last.id);
     save.mutate([
       { role: "user", content: textOf(prev) },
