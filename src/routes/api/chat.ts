@@ -32,7 +32,7 @@ export const Route = createFileRoute("/api/chat")({
 
         if (!key) {
           return new Response(
-            "Clé Gemini manquante",
+            "Clé Gemini manquante : renseigne GEMINI_API_KEY côté serveur.",
             { status: 500 },
           );
         }
@@ -63,6 +63,15 @@ export const Route = createFileRoute("/api/chat")({
           return result.toUIMessageStreamResponse({
             originalMessages:
               messages as UIMessage[],
+            onError: (err) => {
+              console.error("[chat]", err);
+              const msg = err instanceof Error ? err.message : String(err);
+              if (/API key|401|403|permission/i.test(msg))
+                return "Clé Gemini invalide ou refusée (GEMINI_API_KEY).";
+              if (/429|quota/i.test(msg)) return "Quota Gemini atteint, réessaie plus tard.";
+              if (/404|not found/i.test(msg)) return "Modèle Gemini introuvable (GEMINI_MODEL).";
+              return "Gemini n'a pas pu répondre.";
+            },
           });
         } catch (error) {
           const message =
