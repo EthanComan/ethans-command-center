@@ -1,0 +1,2 @@
+ALTER TABLE public.ethan_messages ADD COLUMN IF NOT EXISTS channel text NOT NULL DEFAULT 'directeur' CHECK (channel IN ('directeur','builder'));
+CREATE INDEX IF NOT EXISTS ethan_messages_user_channel_idx ON public.ethan_messages(user_id, channel, created_at);
