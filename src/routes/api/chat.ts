@@ -52,7 +52,7 @@ export const Route = createFileRoute("/api/chat")({
                 : "Aucun contexte fourni.");
 
           const result = streamText({
-            model: gateway("gemini-3.6-flash"),
+            model: gateway(process.env["GEMINI_MODEL"] || "gemini-2.5-flash"),
             system,
             messages:
               await convertToModelMessages(
