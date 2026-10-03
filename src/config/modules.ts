@@ -31,6 +31,7 @@ import {
   MessagesSquare,
   Radar,
   Compass,
+  Hammer,
   type LucideIcon,
 } from "lucide-react";
 
@@ -106,6 +107,7 @@ export const MODULE_CATEGORIES: ModuleCategory[] = [
     label: "Système",
     modules: [
       { id: "ethan", label: "ETHAN", to: "/ethan", icon: MessagesSquare, status: "live", description: "Conversation globale — parle de n'importe quel sujet" },
+      { id: "builder", label: "Builder", to: "/ia", icon: Hammer, status: "live", description: "Construire et faire évoluer le Command Center avec l'IA" },
       { id: "suivi", label: "Suivi", to: "/suivi", icon: Radar, status: "live", description: "Ce qu'ETHAN observe dans le temps et te signale" },
       { id: "execution", label: "Mode Exécution", to: "/execution", icon: Zap, status: "live", description: "Environnement zéro-distraction pour exécuter" },
       { id: "notifications", label: "Notifications", to: "/notifications", icon: Bell, status: "live", description: "Rappels natifs et alertes système" },
