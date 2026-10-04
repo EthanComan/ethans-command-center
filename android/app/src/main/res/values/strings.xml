@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ETHAN</string>
+    <string name="title_activity_main">ETHAN</string>
+    <string name="package_name">app.ethan.commandcenter</string>
+    <string name="custom_url_scheme">app.ethan.commandcenter</string>
+</resources>
