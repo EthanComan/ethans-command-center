@@ -15,7 +15,7 @@ export type PushContent = {
 /** Renvoie false si l'abonnement est mort (à supprimer) ou si l'envoi échoue. */
 export async function deliverPush(target: PushTarget, content: PushContent): Promise<boolean> {
   const vapid = {
-    subject: process.env["VAPID_SUBJECT"] ?? "mailto:ethan@lovable.app",
+    subject: process.env["VAPID_SUBJECT"] ?? "mailto:contact@ethan.app",
     publicKey: process.env["VAPID_PUBLIC_KEY"],
     privateKey: process.env["VAPID_PRIVATE_KEY"],
   };
