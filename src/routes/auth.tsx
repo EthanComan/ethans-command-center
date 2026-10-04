@@ -24,6 +24,13 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
+function isLovableHost() {
+  const h = window.location.hostname;
+  return ["lovable.app", "lovableproject.com", "lovable.dev"].some(
+    (z) => h === z || h.endsWith("." + z),
+  );
+}
+
 function AuthPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -52,6 +59,15 @@ function AuthPage() {
   }
 
   async function google() {
+    // Hors des domaines Lovable : OAuth Google direct via Supabase (projet autonome).
+    if (!isLovableHost()) {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin },
+      });
+      if (error) toast.error("Connexion Google impossible : active Google dans Supabase.");
+      return;
+    }
     const result = await lovable.auth.signInWithOAuth("google", {
       redirect_uri: window.location.origin,
     });
