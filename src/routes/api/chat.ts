@@ -1,4 +1,4 @@
-import { createGeminiProvider } from "@/lib/ai-gateway.server";
+import { createGatewayProvider, createGeminiProvider } from "@/lib/ai-gateway.server";
 import { ETHAN_SYSTEM_PROMPT } from "@/lib/ethan-context";
 import {
   ETHAN_BUILDER_PROJECT_MAP,
@@ -29,15 +29,16 @@ export const Route = createFileRoute("/api/chat")({
         }
 
         const key = process.env["GEMINI_API_KEY"];
-
-        if (!key) {
+        const fallback = process.env["LOVABLE_API_KEY"];
+        if (!key && !fallback) {
           return new Response(
             "Clé Gemini manquante : renseigne GEMINI_API_KEY côté serveur.",
             { status: 500 },
           );
         }
-
-        const gateway = createGeminiProvider(key);
+        const model = key
+          ? createGeminiProvider(key)(process.env["GEMINI_MODEL"] || "gemini-2.5-flash")
+          : createGatewayProvider(fallback!)("google/gemini-2.5-flash");
 
         try {
           const isBuilder = mode === "builder";
@@ -52,7 +53,7 @@ export const Route = createFileRoute("/api/chat")({
                 : "Aucun contexte fourni.");
 
           const result = streamText({
-            model: gateway(process.env["GEMINI_MODEL"] || "gemini-2.5-flash"),
+            model,
             system,
             messages:
               await convertToModelMessages(
