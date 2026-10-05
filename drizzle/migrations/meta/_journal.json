@@ -8,6 +8,13 @@
       "when": 1791059029960,
       "tag": "0000_chat_channels",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791188071159,
+      "tag": "0001_cron_private_config",
+      "breakpoints": true
     }
   ]
 }

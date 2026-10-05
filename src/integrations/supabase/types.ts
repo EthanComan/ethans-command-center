@@ -568,6 +568,24 @@ export type Database = {
         }
         Relationships: []
       }
+      ethan_private_config: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       ethan_push_subscriptions: {
         Row: {
           auth: string
@@ -768,7 +786,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      ethan_verify_cron_token: { Args: { _token: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
