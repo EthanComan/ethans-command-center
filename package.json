@@ -9,7 +9,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "dev:standalone": "vite dev --config vite.standalone.config.ts",
+    "build:standalone": "vite build --config vite.standalone.config.ts"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "^3.0.27",

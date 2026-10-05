@@ -7,15 +7,12 @@ import { createFileRoute } from "@tanstack/react-router";
 
 async function run(request: Request): Promise<Response> {
   const provided = request.headers.get("x-ethan-cron-secret") ?? "";
-  const accepted = [process.env["ETHAN_CRON_TOKEN"], process.env["ETHAN_CRON_SECRET"]].filter(
-    (v): v is string => Boolean(v)
-  );
-  if (!accepted.length || !accepted.includes(provided)) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  // Jeton stocké uniquement en base (table privée), jamais dans le code ni les migrations.
+  const { data: ok } = await supabaseAdmin.rpc("ethan_verify_cron_token", { _token: provided });
+  if (!provided || ok !== true) {
     return new Response("Unauthorized", { status: 401 });
   }
-
-
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { deliverPush } = await import("@/lib/web-push.server");
 
   const nowIso = new Date().toISOString();
