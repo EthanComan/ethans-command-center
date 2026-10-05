@@ -29,7 +29,8 @@ export const Route = createFileRoute("/api/chat")({
         }
 
         const key = process.env["GEMINI_API_KEY"];
-        const fallback = process.env["LOVABLE_API_KEY"];
+        // Repli passerelle Lovable uniquement si ETHAN_AI_FALLBACK=lovable (jamais par défaut).
+        const fallback = process.env["ETHAN_AI_FALLBACK"] === "lovable" ? process.env["LOVABLE_API_KEY"] : undefined;
         if (!key && !fallback) {
           return new Response(
             "Clé Gemini manquante : renseigne GEMINI_API_KEY côté serveur.",
