@@ -9,181 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VisionRouteImport } from './routes/vision'
-import { Route as SportRouteImport } from './routes/sport'
-import { Route as SanteRouteImport } from './routes/sante'
-import { Route as RenaitreRouteImport } from './routes/renaitre'
-import { Route as ProtocolesRouteImport } from './routes/protocoles'
-import { Route as ProspectionRouteImport } from './routes/prospection'
-import { Route as ProgressionRouteImport } from './routes/progression'
-import { Route as PlanningRouteImport } from './routes/planning'
-import { Route as PipelineRouteImport } from './routes/pipeline'
-import { Route as PerformanceRouteImport } from './routes/performance'
-import { Route as PatrimoineRouteImport } from './routes/patrimoine'
-import { Route as PartenairesRouteImport } from './routes/partenaires'
-import { Route as ParametresRouteImport } from './routes/parametres'
-import { Route as ObjectifsRouteImport } from './routes/objectifs'
-import { Route as NotificationsRouteImport } from './routes/notifications'
-import { Route as MentalRouteImport } from './routes/mental'
-import { Route as MemoireRouteImport } from './routes/memoire'
-import { Route as KpiRouteImport } from './routes/kpi'
-import { Route as JournalRouteImport } from './routes/journal'
-import { Route as InvestissementsRouteImport } from './routes/investissements'
-import { Route as IaRouteImport } from './routes/ia'
-import { Route as HabitudesRouteImport } from './routes/habitudes'
-import { Route as FinancesRouteImport } from './routes/finances'
-import { Route as ExecutionRouteImport } from './routes/execution'
-import { Route as CrmRouteImport } from './routes/crm'
-import { Route as BusinessRouteImport } from './routes/business'
-import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AdnRouteImport } from './routes/adn'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
-import { Route as AuthenticatedSuiviRouteImport } from './routes/_authenticated/suivi'
-import { Route as AuthenticatedIdentiteRouteImport } from './routes/_authenticated/identite'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AdnRouteImport } from './routes/adn'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BibliothequeRouteImport } from './routes/bibliotheque'
+import { Route as BusinessRouteImport } from './routes/business'
+import { Route as CrmRouteImport } from './routes/crm'
+import { Route as ExecutionRouteImport } from './routes/execution'
+import { Route as FinancesRouteImport } from './routes/finances'
+import { Route as HabitudesRouteImport } from './routes/habitudes'
+import { Route as IaRouteImport } from './routes/ia'
+import { Route as InvestissementsRouteImport } from './routes/investissements'
+import { Route as JournalRouteImport } from './routes/journal'
+import { Route as KpiRouteImport } from './routes/kpi'
+import { Route as MemoireRouteImport } from './routes/memoire'
+import { Route as MentalRouteImport } from './routes/mental'
+import { Route as NotificationsRouteImport } from './routes/notifications'
+import { Route as ObjectifsRouteImport } from './routes/objectifs'
+import { Route as ParametresRouteImport } from './routes/parametres'
+import { Route as PartenairesRouteImport } from './routes/partenaires'
+import { Route as PatrimoineRouteImport } from './routes/patrimoine'
+import { Route as PerformanceRouteImport } from './routes/performance'
+import { Route as PipelineRouteImport } from './routes/pipeline'
+import { Route as PlanningRouteImport } from './routes/planning'
+import { Route as ProgressionRouteImport } from './routes/progression'
+import { Route as ProspectionRouteImport } from './routes/prospection'
+import { Route as ProtocolesRouteImport } from './routes/protocoles'
+import { Route as RenaitreRouteImport } from './routes/renaitre'
+import { Route as SanteRouteImport } from './routes/sante'
+import { Route as SportRouteImport } from './routes/sport'
+import { Route as VisionRouteImport } from './routes/vision'
 import { Route as AuthenticatedEthanRouteImport } from './routes/_authenticated/ethan'
+import { Route as AuthenticatedIdentiteRouteImport } from './routes/_authenticated/identite'
+import { Route as AuthenticatedSuiviRouteImport } from './routes/_authenticated/suivi'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiPublicCronPushRouteImport } from './routes/api/public/cron/push'
 
-const VisionRoute = VisionRouteImport.update({
-  id: '/vision',
-  path: '/vision',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SportRoute = SportRouteImport.update({
-  id: '/sport',
-  path: '/sport',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SanteRoute = SanteRouteImport.update({
-  id: '/sante',
-  path: '/sante',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RenaitreRoute = RenaitreRouteImport.update({
-  id: '/renaitre',
-  path: '/renaitre',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProtocolesRoute = ProtocolesRouteImport.update({
-  id: '/protocoles',
-  path: '/protocoles',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProspectionRoute = ProspectionRouteImport.update({
-  id: '/prospection',
-  path: '/prospection',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProgressionRoute = ProgressionRouteImport.update({
-  id: '/progression',
-  path: '/progression',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlanningRoute = PlanningRouteImport.update({
-  id: '/planning',
-  path: '/planning',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PipelineRoute = PipelineRouteImport.update({
-  id: '/pipeline',
-  path: '/pipeline',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PerformanceRoute = PerformanceRouteImport.update({
-  id: '/performance',
-  path: '/performance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PatrimoineRoute = PatrimoineRouteImport.update({
-  id: '/patrimoine',
-  path: '/patrimoine',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartenairesRoute = PartenairesRouteImport.update({
-  id: '/partenaires',
-  path: '/partenaires',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ParametresRoute = ParametresRouteImport.update({
-  id: '/parametres',
-  path: '/parametres',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ObjectifsRoute = ObjectifsRouteImport.update({
-  id: '/objectifs',
-  path: '/objectifs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MentalRoute = MentalRouteImport.update({
-  id: '/mental',
-  path: '/mental',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MemoireRoute = MemoireRouteImport.update({
-  id: '/memoire',
-  path: '/memoire',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KpiRoute = KpiRouteImport.update({
-  id: '/kpi',
-  path: '/kpi',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JournalRoute = JournalRouteImport.update({
-  id: '/journal',
-  path: '/journal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestissementsRoute = InvestissementsRouteImport.update({
-  id: '/investissements',
-  path: '/investissements',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IaRoute = IaRouteImport.update({
-  id: '/ia',
-  path: '/ia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HabitudesRoute = HabitudesRouteImport.update({
-  id: '/habitudes',
-  path: '/habitudes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FinancesRoute = FinancesRouteImport.update({
-  id: '/finances',
-  path: '/finances',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExecutionRoute = ExecutionRouteImport.update({
-  id: '/execution',
-  path: '/execution',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CrmRoute = CrmRouteImport.update({
-  id: '/crm',
-  path: '/crm',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BusinessRoute = BusinessRouteImport.update({
-  id: '/business',
-  path: '/business',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BibliothequeRoute = BibliothequeRouteImport.update({
-  id: '/bibliotheque',
-  path: '/bibliotheque',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdnRoute = AdnRouteImport.update({
@@ -191,23 +60,149 @@ const AdnRoute = AdnRouteImport.update({
   path: '/adn',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BibliothequeRoute = BibliothequeRouteImport.update({
+  id: '/bibliotheque',
+  path: '/bibliotheque',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
+const BusinessRoute = BusinessRouteImport.update({
+  id: '/business',
+  path: '/business',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedSuiviRoute = AuthenticatedSuiviRouteImport.update({
-  id: '/suivi',
-  path: '/suivi',
+const CrmRoute = CrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExecutionRoute = ExecutionRouteImport.update({
+  id: '/execution',
+  path: '/execution',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinancesRoute = FinancesRouteImport.update({
+  id: '/finances',
+  path: '/finances',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabitudesRoute = HabitudesRouteImport.update({
+  id: '/habitudes',
+  path: '/habitudes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IaRoute = IaRouteImport.update({
+  id: '/ia',
+  path: '/ia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestissementsRoute = InvestissementsRouteImport.update({
+  id: '/investissements',
+  path: '/investissements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalRoute = JournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KpiRoute = KpiRouteImport.update({
+  id: '/kpi',
+  path: '/kpi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MemoireRoute = MemoireRouteImport.update({
+  id: '/memoire',
+  path: '/memoire',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MentalRoute = MentalRouteImport.update({
+  id: '/mental',
+  path: '/mental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObjectifsRoute = ObjectifsRouteImport.update({
+  id: '/objectifs',
+  path: '/objectifs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParametresRoute = ParametresRouteImport.update({
+  id: '/parametres',
+  path: '/parametres',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartenairesRoute = PartenairesRouteImport.update({
+  id: '/partenaires',
+  path: '/partenaires',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatrimoineRoute = PatrimoineRouteImport.update({
+  id: '/patrimoine',
+  path: '/patrimoine',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerformanceRoute = PerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PipelineRoute = PipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanningRoute = PlanningRouteImport.update({
+  id: '/planning',
+  path: '/planning',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressionRoute = ProgressionRouteImport.update({
+  id: '/progression',
+  path: '/progression',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProspectionRoute = ProspectionRouteImport.update({
+  id: '/prospection',
+  path: '/prospection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProtocolesRoute = ProtocolesRouteImport.update({
+  id: '/protocoles',
+  path: '/protocoles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RenaitreRoute = RenaitreRouteImport.update({
+  id: '/renaitre',
+  path: '/renaitre',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SanteRoute = SanteRouteImport.update({
+  id: '/sante',
+  path: '/sante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SportRoute = SportRouteImport.update({
+  id: '/sport',
+  path: '/sport',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VisionRoute = VisionRouteImport.update({
+  id: '/vision',
+  path: '/vision',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedEthanRoute = AuthenticatedEthanRouteImport.update({
+  id: '/ethan',
+  path: '/ethan',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedIdentiteRoute = AuthenticatedIdentiteRouteImport.update({
@@ -215,10 +210,15 @@ const AuthenticatedIdentiteRoute = AuthenticatedIdentiteRouteImport.update({
   path: '/identite',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedEthanRoute = AuthenticatedEthanRouteImport.update({
-  id: '/ethan',
-  path: '/ethan',
+const AuthenticatedSuiviRoute = AuthenticatedSuiviRouteImport.update({
+  id: '/suivi',
+  path: '/suivi',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicCronPushRoute = ApiPublicCronPushRouteImport.update({
   id: '/api/public/cron/push',
@@ -492,207 +492,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vision': {
-      id: '/vision'
-      path: '/vision'
-      fullPath: '/vision'
-      preLoaderRoute: typeof VisionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sport': {
-      id: '/sport'
-      path: '/sport'
-      fullPath: '/sport'
-      preLoaderRoute: typeof SportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sante': {
-      id: '/sante'
-      path: '/sante'
-      fullPath: '/sante'
-      preLoaderRoute: typeof SanteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/renaitre': {
-      id: '/renaitre'
-      path: '/renaitre'
-      fullPath: '/renaitre'
-      preLoaderRoute: typeof RenaitreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/protocoles': {
-      id: '/protocoles'
-      path: '/protocoles'
-      fullPath: '/protocoles'
-      preLoaderRoute: typeof ProtocolesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prospection': {
-      id: '/prospection'
-      path: '/prospection'
-      fullPath: '/prospection'
-      preLoaderRoute: typeof ProspectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/progression': {
-      id: '/progression'
-      path: '/progression'
-      fullPath: '/progression'
-      preLoaderRoute: typeof ProgressionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/planning': {
-      id: '/planning'
-      path: '/planning'
-      fullPath: '/planning'
-      preLoaderRoute: typeof PlanningRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pipeline': {
-      id: '/pipeline'
-      path: '/pipeline'
-      fullPath: '/pipeline'
-      preLoaderRoute: typeof PipelineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/performance': {
-      id: '/performance'
-      path: '/performance'
-      fullPath: '/performance'
-      preLoaderRoute: typeof PerformanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/patrimoine': {
-      id: '/patrimoine'
-      path: '/patrimoine'
-      fullPath: '/patrimoine'
-      preLoaderRoute: typeof PatrimoineRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partenaires': {
-      id: '/partenaires'
-      path: '/partenaires'
-      fullPath: '/partenaires'
-      preLoaderRoute: typeof PartenairesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/parametres': {
-      id: '/parametres'
-      path: '/parametres'
-      fullPath: '/parametres'
-      preLoaderRoute: typeof ParametresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/objectifs': {
-      id: '/objectifs'
-      path: '/objectifs'
-      fullPath: '/objectifs'
-      preLoaderRoute: typeof ObjectifsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mental': {
-      id: '/mental'
-      path: '/mental'
-      fullPath: '/mental'
-      preLoaderRoute: typeof MentalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/memoire': {
-      id: '/memoire'
-      path: '/memoire'
-      fullPath: '/memoire'
-      preLoaderRoute: typeof MemoireRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kpi': {
-      id: '/kpi'
-      path: '/kpi'
-      fullPath: '/kpi'
-      preLoaderRoute: typeof KpiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/journal': {
-      id: '/journal'
-      path: '/journal'
-      fullPath: '/journal'
-      preLoaderRoute: typeof JournalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/investissements': {
-      id: '/investissements'
-      path: '/investissements'
-      fullPath: '/investissements'
-      preLoaderRoute: typeof InvestissementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ia': {
-      id: '/ia'
-      path: '/ia'
-      fullPath: '/ia'
-      preLoaderRoute: typeof IaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/habitudes': {
-      id: '/habitudes'
-      path: '/habitudes'
-      fullPath: '/habitudes'
-      preLoaderRoute: typeof HabitudesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/finances': {
-      id: '/finances'
-      path: '/finances'
-      fullPath: '/finances'
-      preLoaderRoute: typeof FinancesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/execution': {
-      id: '/execution'
-      path: '/execution'
-      fullPath: '/execution'
-      preLoaderRoute: typeof ExecutionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/crm': {
-      id: '/crm'
-      path: '/crm'
-      fullPath: '/crm'
-      preLoaderRoute: typeof CrmRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/business': {
-      id: '/business'
-      path: '/business'
-      fullPath: '/business'
-      preLoaderRoute: typeof BusinessRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bibliotheque': {
-      id: '/bibliotheque'
-      path: '/bibliotheque'
-      fullPath: '/bibliotheque'
-      preLoaderRoute: typeof BibliothequeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/adn': {
-      id: '/adn'
-      path: '/adn'
-      fullPath: '/adn'
-      preLoaderRoute: typeof AdnRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -702,25 +506,214 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/adn': {
+      id: '/adn'
+      path: '/adn'
+      fullPath: '/adn'
+      preLoaderRoute: typeof AdnRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/suivi': {
-      id: '/_authenticated/suivi'
-      path: '/suivi'
-      fullPath: '/suivi'
-      preLoaderRoute: typeof AuthenticatedSuiviRouteImport
+    '/bibliotheque': {
+      id: '/bibliotheque'
+      path: '/bibliotheque'
+      fullPath: '/bibliotheque'
+      preLoaderRoute: typeof BibliothequeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/business': {
+      id: '/business'
+      path: '/business'
+      fullPath: '/business'
+      preLoaderRoute: typeof BusinessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm': {
+      id: '/crm'
+      path: '/crm'
+      fullPath: '/crm'
+      preLoaderRoute: typeof CrmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/execution': {
+      id: '/execution'
+      path: '/execution'
+      fullPath: '/execution'
+      preLoaderRoute: typeof ExecutionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finances': {
+      id: '/finances'
+      path: '/finances'
+      fullPath: '/finances'
+      preLoaderRoute: typeof FinancesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habitudes': {
+      id: '/habitudes'
+      path: '/habitudes'
+      fullPath: '/habitudes'
+      preLoaderRoute: typeof HabitudesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ia': {
+      id: '/ia'
+      path: '/ia'
+      fullPath: '/ia'
+      preLoaderRoute: typeof IaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/investissements': {
+      id: '/investissements'
+      path: '/investissements'
+      fullPath: '/investissements'
+      preLoaderRoute: typeof InvestissementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal': {
+      id: '/journal'
+      path: '/journal'
+      fullPath: '/journal'
+      preLoaderRoute: typeof JournalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kpi': {
+      id: '/kpi'
+      path: '/kpi'
+      fullPath: '/kpi'
+      preLoaderRoute: typeof KpiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/memoire': {
+      id: '/memoire'
+      path: '/memoire'
+      fullPath: '/memoire'
+      preLoaderRoute: typeof MemoireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mental': {
+      id: '/mental'
+      path: '/mental'
+      fullPath: '/mental'
+      preLoaderRoute: typeof MentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/objectifs': {
+      id: '/objectifs'
+      path: '/objectifs'
+      fullPath: '/objectifs'
+      preLoaderRoute: typeof ObjectifsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parametres': {
+      id: '/parametres'
+      path: '/parametres'
+      fullPath: '/parametres'
+      preLoaderRoute: typeof ParametresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partenaires': {
+      id: '/partenaires'
+      path: '/partenaires'
+      fullPath: '/partenaires'
+      preLoaderRoute: typeof PartenairesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patrimoine': {
+      id: '/patrimoine'
+      path: '/patrimoine'
+      fullPath: '/patrimoine'
+      preLoaderRoute: typeof PatrimoineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/performance': {
+      id: '/performance'
+      path: '/performance'
+      fullPath: '/performance'
+      preLoaderRoute: typeof PerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pipeline': {
+      id: '/pipeline'
+      path: '/pipeline'
+      fullPath: '/pipeline'
+      preLoaderRoute: typeof PipelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planning': {
+      id: '/planning'
+      path: '/planning'
+      fullPath: '/planning'
+      preLoaderRoute: typeof PlanningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progression': {
+      id: '/progression'
+      path: '/progression'
+      fullPath: '/progression'
+      preLoaderRoute: typeof ProgressionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prospection': {
+      id: '/prospection'
+      path: '/prospection'
+      fullPath: '/prospection'
+      preLoaderRoute: typeof ProspectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/protocoles': {
+      id: '/protocoles'
+      path: '/protocoles'
+      fullPath: '/protocoles'
+      preLoaderRoute: typeof ProtocolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/renaitre': {
+      id: '/renaitre'
+      path: '/renaitre'
+      fullPath: '/renaitre'
+      preLoaderRoute: typeof RenaitreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sante': {
+      id: '/sante'
+      path: '/sante'
+      fullPath: '/sante'
+      preLoaderRoute: typeof SanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sport': {
+      id: '/sport'
+      path: '/sport'
+      fullPath: '/sport'
+      preLoaderRoute: typeof SportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vision': {
+      id: '/vision'
+      path: '/vision'
+      fullPath: '/vision'
+      preLoaderRoute: typeof VisionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ethan': {
+      id: '/_authenticated/ethan'
+      path: '/ethan'
+      fullPath: '/ethan'
+      preLoaderRoute: typeof AuthenticatedEthanRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/identite': {
@@ -730,12 +723,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIdentiteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/ethan': {
-      id: '/_authenticated/ethan'
-      path: '/ethan'
-      fullPath: '/ethan'
-      preLoaderRoute: typeof AuthenticatedEthanRouteImport
+    '/_authenticated/suivi': {
+      id: '/_authenticated/suivi'
+      path: '/suivi'
+      fullPath: '/suivi'
+      preLoaderRoute: typeof AuthenticatedSuiviRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/cron/push': {
       id: '/api/public/cron/push'
