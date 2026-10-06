@@ -3,12 +3,14 @@
 Frontend (React / TanStack Start) → fonctions serveur → Supabase → Gemini → Web Push.
 Lovable n'est qu'un outil de développement éventuel : l'app tourne sans lui.
 
-## 1. Lancer en local
+## 1. Lancer en local (sans Lovable)
 ```bash
-bun install          # ou npm install
-cp .env.example .env # puis remplis les valeurs
-bun run dev          # http://localhost:8080
+npm install
+cp .env.example .env            # puis remplis les valeurs
+npm run dev:standalone          # http://localhost:8080
+npm run build:standalone        # build Vercel (.vercel/output)
 ```
+`vite.standalone.config.ts` n'utilise aucun paquet Lovable. `vite.config.ts` ne sert qu'à l'éditeur Lovable.
 
 ## 2. Variables d'environnement
 Voir `.env.example`. Règle : seules les variables `VITE_*` vont au navigateur.
@@ -21,7 +23,8 @@ Voir `.env.example`. Règle : seules les variables `VITE_*` vont au navigateur.
 | `GEMINI_API_KEY` | serveur | les deux IA (Directeur + Builder) |
 | `GEMINI_MODEL` | serveur | optionnel, défaut `gemini-2.5-flash` |
 | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | serveur | notifications push |
-| `ETHAN_CRON_TOKEN` | serveur | protège `/api/public/cron/push` |
+| `ETHAN_AI_FALLBACK` | serveur | optionnel : `lovable` = repli passerelle Lovable si pas de clé Gemini (jamais par défaut) |
+| `ETHAN_APP_URL` | build mobile | domaine chargé par l'app iOS/Android |
 
 Générer des clés VAPID : `npx web-push generate-vapid-keys`.
 
@@ -29,13 +32,20 @@ Générer des clés VAPID : `npx web-push generate-vapid-keys`.
 1. Crée un projet sur supabase.com, récupère URL + clé publishable + service role.
 2. Applique les migrations : `supabase db push` (dossiers `supabase/migrations` puis `drizzle/migrations`), ou colle les fichiers SQL dans l'éditeur SQL.
 3. Auth → Providers : active Email ; pour Google, crée un client OAuth Google Cloud et colle ID/secret dans Supabase. Ajoute ton domaine dans *Redirect URLs*.
-4. Cron des notifications : extensions `pg_cron` + `pg_net`, puis :
+4. Cron des notifications (aucun secret dans le code ni les migrations) : extensions `pg_cron` + `pg_net`, puis dans l'éditeur SQL :
 ```sql
+insert into public.ethan_private_config(key,value) values
+ ('cron_token', encode(extensions.gen_random_bytes(32),'hex')),
+ ('app_url','https://TON-DOMAINE')
+on conflict (key) do update set value = excluded.value;
 select cron.schedule('ethan-push-worker','* * * * *', $$
-  select net.http_post(url := 'https://TON-DOMAINE/api/public/cron/push',
-    headers := '{"Content-Type":"application/json","x-ethan-cron-secret":"TON_ETHAN_CRON_TOKEN"}'::jsonb,
-    timeout_milliseconds := 20000) $$);
+  select net.http_post(
+    url := (select value from public.ethan_private_config where key='app_url') || '/api/public/cron/push',
+    headers := jsonb_build_object('Content-Type','application/json','x-ethan-cron-secret',
+      (select value from public.ethan_private_config where key='cron_token')),
+    body := '{}'::jsonb, timeout_milliseconds := 20000) $$);
 ```
+Le serveur valide le jeton via la fonction `ethan_verify_cron_token` (table privée, accessible au seul rôle service). Changer de domaine = mettre à jour la ligne `app_url`.
 Toutes les tables ont la RLS activée, limitée à `auth.uid()`.
 
 ## 4. Gemini
@@ -43,7 +53,7 @@ Clé sur https://aistudio.google.com/apikey → `GEMINI_API_KEY`. Les appels pas
 
 ## 5. Déployer sur Vercel
 1. Pousse le code sur GitHub, importe-le dans Vercel (Framework : *Other*, build `bun run build`).
-2. Le build cible Cloudflare par défaut ; pour Vercel, définis `NITRO_PRESET=vercel` dans les variables Vercel.
+2. Build command : `npm run build:standalone` (preset Vercel par défaut, `NITRO_PRESET` pour une autre cible).
 3. Ajoute toutes les variables de la section 2 dans Vercel (Production).
 4. Mets à jour l'URL du cron (section 3) et les Redirect URLs Supabase avec ton domaine Vercel.
 
