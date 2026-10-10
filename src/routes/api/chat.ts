@@ -28,18 +28,19 @@ export const Route = createFileRoute("/api/chat")({
           return new Response("Messages requis", { status: 400 });
         }
 
-        const key = process.env["GEMINI_API_KEY"];
-        // Repli passerelle Lovable uniquement si ETHAN_AI_FALLBACK=lovable (jamais par défaut).
-        const fallback = process.env["ETHAN_AI_FALLBACK"] === "lovable" ? process.env["LOVABLE_API_KEY"] : undefined;
-        if (!key && !fallback) {
+        // Moteur par défaut : IA Lovable (clé auto-provisionnée, zéro configuration).
+        // Gemini direct uniquement si GEMINI_API_KEY est renseignée.
+        const geminiKey = process.env["GEMINI_API_KEY"];
+        const lovableKey = process.env["LOVABLE_API_KEY"];
+        if (!geminiKey && !lovableKey) {
           return new Response(
-            "Clé Gemini manquante : renseigne GEMINI_API_KEY côté serveur.",
+            "Aucun moteur IA configuré côté serveur.",
             { status: 500 },
           );
         }
-        const model = key
-          ? createGeminiProvider(key)(process.env["GEMINI_MODEL"] || "gemini-2.5-flash")
-          : createGatewayProvider(fallback!)("google/gemini-2.5-flash");
+        const model = geminiKey
+          ? createGeminiProvider(geminiKey)(process.env["GEMINI_MODEL"] || "gemini-2.5-flash")
+          : createGatewayProvider(lovableKey!)("google/gemini-2.5-flash");
 
         try {
           const isBuilder = mode === "builder";
