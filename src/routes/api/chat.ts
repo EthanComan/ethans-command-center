@@ -70,10 +70,10 @@ export const Route = createFileRoute("/api/chat")({
               console.error("[chat]", err);
               const msg = err instanceof Error ? err.message : String(err);
               if (/API key|401|403|permission/i.test(msg))
-                return "Clé Gemini invalide ou refusée (GEMINI_API_KEY).";
-              if (/429|quota/i.test(msg)) return "Quota Gemini atteint, réessaie plus tard.";
-              if (/404|not found/i.test(msg)) return "Modèle Gemini introuvable (GEMINI_MODEL).";
-              return "Gemini n'a pas pu répondre.";
+                return "Clé IA invalide ou refusée côté serveur.";
+              if (/429|quota/i.test(msg)) return "Quota IA atteint, réessaie plus tard.";
+              if (/404|not found/i.test(msg)) return "Modèle IA introuvable.";
+              return "L'IA n'a pas pu répondre.";
             },
           });
         } catch (error) {
