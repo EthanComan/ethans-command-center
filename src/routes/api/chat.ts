@@ -39,7 +39,7 @@ export const Route = createFileRoute("/api/chat")({
           );
         }
         const model = geminiKey
-          ? createGeminiProvider(geminiKey)(process.env["GEMINI_MODEL"] || "gemini-2.5-flash")
+          ? createGeminiProvider(geminiKey)(process.env["GEMINI_MODEL"] || "gemini-3.8-flash")
           : createGatewayProvider(lovableKey!)("google/gemini-2.5-flash");
 
         try {
