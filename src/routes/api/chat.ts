@@ -7,9 +7,11 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 import {
   convertToModelMessages,
+  stepCountIs,
   streamText,
   type UIMessage,
 } from "ai";
+import { createBuilderTools } from "@/lib/builder-tools.server";
 
 type Body = {
   messages?: unknown;
@@ -54,9 +56,21 @@ export const Route = createFileRoute("/api/chat")({
                 ? context
                 : "Aucun contexte fourni.");
 
+          const ghToken = process.env["GITHUB_TOKEN"];
+          const ghRepo = process.env["GITHUB_REPO"];
+          const canBuild = isBuilder && !!ghToken && !!ghRepo;
+
           const result = streamText({
             model,
-            system,
+            system: !isBuilder
+              ? system
+              : system +
+                (canBuild
+                  ? "\n\n# MODE AUTONOME\nTu as un accès direct au code via les outils list_files, read_file, write_files. Ethan ne code pas : tu EXÉCUTES toi-même chaque demande. Méthode : list_files → read_file des fichiers concernés → write_files avec le contenu complet → explique en 2-3 phrases simples ce qui a changé et où le voir. Ne donne jamais de code à copier. Respecte la stack (TanStack Start, routes dans src/routes, menu dans src/config/modules.ts). Pour une nouvelle table de base de données, crée un fichier dans supabase/migrations/ et dis à Ethan qu'elle doit être appliquée."
+                  : "\n\n# ACCÈS AU CODE NON CONFIGURÉ\nGITHUB_TOKEN et GITHUB_REPO sont absents côté serveur : dis à Ethan que tu ne peux pas encore modifier l'application toi-même tant qu'ils ne sont pas renseignés."),
+            ...(canBuild
+              ? { tools: createBuilderTools(ghToken!, ghRepo!, process.env["GITHUB_BRANCH"] || "main"), stopWhen: stepCountIs(50) }
+              : {}),
             messages:
               await convertToModelMessages(
                 messages as UIMessage[],
