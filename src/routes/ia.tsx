@@ -209,6 +209,17 @@ function BuilderChat() {
           {messages.map((m) => (
             <Message from={m.role} key={m.id}>
               <MessageContent>
+                {m.parts
+                  .filter((p) => p.type.startsWith("tool-"))
+                  .map((p, i) => (
+                    <p key={i} className="text-xs text-muted-foreground">
+                      {p.type === "tool-list_files"
+                        ? "Analyse de l'application…"
+                        : p.type === "tool-read_file"
+                          ? "Lecture d'un écran…"
+                          : "Modification appliquée — mise en ligne en cours."}
+                    </p>
+                  ))}
                 <MessageResponse>
                   {textOf(m)}
                 </MessageResponse>
