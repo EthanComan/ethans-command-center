@@ -1,17 +1,13 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 
 /**
  * Direct Gemini provider — server-side API key only.
- * ETHAN's prompt, context and application logic remain unchanged.
+ * Utilise l'API native Google (indispensable pour les appels d'outils :
+ * l'endpoint compatible OpenAI rejette les functionCall sans thought_signature).
  */
 export function createGeminiProvider(apiKey: string) {
-  return createOpenAICompatible({
-    name: "gemini",
-    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-    },
-  });
+  return createGoogleGenerativeAI({ apiKey });
 }
 
 /** Repli : Gemini via la passerelle Lovable (utilisée seulement si GEMINI_API_KEY absente). */
