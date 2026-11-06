@@ -1,7 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { type UIMessage } from "ai";
+import { createChatTransport } from "@/lib/chat-transport";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
@@ -51,6 +52,10 @@ export const Route = createFileRoute("/ia")({
         content:
           "Espace de construction et d'évolution du Command Center ETHAN.",
       },
+      { property: "og:title", content: "ETHAN Builder — Construire l'application" },
+      { property: "og:description", content: "Les demandes d'évolution de ton Command Center ETHAN." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 
@@ -71,7 +76,7 @@ function BuilderChat() {
   const [input, setInput] = useState("");
 
   const transport = useMemo(
-    () => new DefaultChatTransport({ api: "/api/chat" }),
+    createChatTransport,
     [],
   );
 
@@ -106,7 +111,7 @@ function BuilderChat() {
   // Restaure l'historique Builder depuis la base.
   const restored = useRef(false);
   useEffect(() => {
-    if (restored.current || history.isLoading) return;
+    if (restored.current || !history.isSuccess) return;
     restored.current = true;
     localStorage.removeItem(STORAGE_KEY);
     const rows = history.data ?? [];
@@ -121,7 +126,7 @@ function BuilderChat() {
       );
     }
     textareaRef.current?.focus();
-  }, [history.isLoading, history.data, setMessages]);
+  }, [history.isSuccess, history.data, setMessages]);
 
   // Enregistre chaque échange complet.
   useEffect(() => {
@@ -142,7 +147,7 @@ function BuilderChat() {
   function send(text: string) {
     const value = text.trim();
 
-    if (!value || busy) return;
+    if (!value || busy || !restored.current) return;
 
     setInput("");
 
@@ -213,11 +218,15 @@ function BuilderChat() {
                   .filter((p) => p.type.startsWith("tool-"))
                   .map((p, i) => (
                     <p key={i} className="text-xs text-muted-foreground">
-                      {p.type === "tool-list_files"
+                      {("state" in p && p.state === "output-error")
+                        ? "La modification a échoué."
+                        : p.type === "tool-list_files"
                         ? "Analyse de l'application…"
                         : p.type === "tool-read_file"
                           ? "Lecture d'un écran…"
-                          : "Modification appliquée — mise en ligne en cours."}
+                          : ("state" in p && p.state === "output-available")
+                            ? "Modification enregistrée sur GitHub — mise en ligne non vérifiée."
+                            : "Préparation de la modification…"}
                     </p>
                   ))}
                 <MessageResponse>
@@ -258,7 +267,7 @@ function BuilderChat() {
             <PromptInputFooter className="justify-end">
               <PromptInputSubmit
                 status={status}
-                disabled={!input.trim() || busy}
+                disabled={!input.trim() || busy || !history.isSuccess}
               />
             </PromptInputFooter>
           </PromptInput>

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport, type UIMessage } from "ai";
+import { type UIMessage } from "ai";
+import { createChatTransport } from "@/lib/chat-transport";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -82,7 +83,7 @@ function EthanChat() {
     [items.data],
   );
 
-  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/chat" }), []);
+  const transport = useMemo(createChatTransport, []);
 
   const { messages, sendMessage, status, setMessages } = useChat({
     id: "ethan-conversation",
@@ -99,12 +100,12 @@ function EthanChat() {
   const persisted = useRef(new Set<string>());
   const restored = useRef(false);
   useEffect(() => {
-    if (restored.current || history.isLoading) return;
+    if (restored.current || !history.isSuccess) return;
     restored.current = true;
     initial.forEach((m) => persisted.current.add(m.id));
     if (initial.length) setMessages(initial);
     textareaRef.current?.focus();
-  }, [history.isLoading, initial, setMessages]);
+  }, [history.isSuccess, initial, setMessages]);
 
   const busy = status === "submitted" || status === "streaming";
 
@@ -126,7 +127,7 @@ function EthanChat() {
 
   function send(text: string) {
     const value = text.trim();
-    if (!value || busy) return;
+    if (!value || busy || !restored.current) return;
     setInput("");
     void sendMessage(
       { text: value },
@@ -226,7 +227,7 @@ function EthanChat() {
               autoFocus
             />
             <PromptInputFooter className="justify-end">
-              <PromptInputSubmit status={status} disabled={!input.trim() || busy} />
+            <PromptInputSubmit status={status} disabled={!input.trim() || busy || !history.isSuccess} />
             </PromptInputFooter>
           </PromptInput>
         </div>
