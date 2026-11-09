@@ -1,6 +1,7 @@
 /** ETHAN — envoi Web Push (compatible runtime edge). */
 
 import { buildPushPayload } from "@block65/webcrypto-web-push";
+import { isExpiredPushStatus } from "./push-delivery-policy";
 
 export type PushTarget = { endpoint: string; p256dh: string; auth: string };
 
@@ -14,12 +15,16 @@ export type PushContent = {
 
 /** Renvoie false si l'abonnement est mort (à supprimer) ou si l'envoi échoue. */
 export async function deliverPush(target: PushTarget, content: PushContent): Promise<boolean> {
+  return (await deliverPushResult(target, content)).sent;
+}
+
+export async function deliverPushResult(target: PushTarget, content: PushContent): Promise<{ sent: boolean; expired: boolean }> {
   const vapid = {
     subject: process.env["VAPID_SUBJECT"] ?? "mailto:contact@ethan.app",
     publicKey: process.env["VAPID_PUBLIC_KEY"],
     privateKey: process.env["VAPID_PRIVATE_KEY"],
   };
-  if (!vapid.publicKey || !vapid.privateKey) return false;
+  if (!vapid.publicKey || !vapid.privateKey) return { sent: false, expired: false };
 
   try {
     const payload = await buildPushPayload(
@@ -42,9 +47,9 @@ export async function deliverPush(target: PushTarget, content: PushContent): Pro
     );
 
     const res = await fetch(target.endpoint, payload as unknown as RequestInit);
-    return res.ok;
+    return { sent: res.ok, expired: isExpiredPushStatus(res.status) };
   } catch {
-    return false;
+    return { sent: false, expired: false };
   }
 }
 
