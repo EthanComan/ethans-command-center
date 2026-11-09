@@ -1,16 +1,17 @@
-import { describe, expect, it } from "bun:test";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { chatErrorMessage } from "./chat-policy";
 import { authenticateChat } from "./chat-auth.server";
 
 describe("chat safety", () => {
   it("rejects a request without a session", async () => {
-    expect(await authenticateChat(new Request("http://localhost/api/chat"))).toBeNull();
+    assert.equal(await authenticateChat(new Request("http://localhost/api/chat")), null);
   });
   it("does not expose provider credentials in an error", () => {
     const secret = "private-test-credential";
-    expect(chatErrorMessage(new Error(`API key ${secret} invalid`))).not.toContain(secret);
+    assert.equal(chatErrorMessage(new Error(`API key ${secret} invalid`)).includes(secret), false);
   });
   it("explains a temporary provider outage", () => {
-    expect(chatErrorMessage(new Error("503 UNAVAILABLE"))).toContain("temporairement indisponible");
+    assert.equal(chatErrorMessage(new Error("503 UNAVAILABLE")).includes("temporairement indisponible"), true);
   });
 });

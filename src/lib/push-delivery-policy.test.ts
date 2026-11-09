@@ -1,18 +1,19 @@
-import { describe, expect, it } from "bun:test";
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
 import { isExpiredPushStatus, shouldCompletePush } from "./push-delivery-policy";
 
 describe("reminder delivery", () => {
   it("keeps a reminder pending if no device accepted it", () => {
-    expect(shouldCompletePush([])).toBe(false);
-    expect(shouldCompletePush([false, false])).toBe(false);
+    assert.equal(shouldCompletePush([]), false);
+    assert.equal(shouldCompletePush([false, false]), false);
   });
   it("completes a reminder only after an accepted delivery", () => {
-    expect(shouldCompletePush([false, true])).toBe(true);
+    assert.equal(shouldCompletePush([false, true]), true);
   });
   it("retains device registrations after temporary failures", () => {
-    expect(isExpiredPushStatus(503)).toBe(false);
-    expect(isExpiredPushStatus(429)).toBe(false);
-    expect(isExpiredPushStatus(410)).toBe(true);
-    expect(isExpiredPushStatus(404)).toBe(true);
+    assert.equal(isExpiredPushStatus(503), false);
+    assert.equal(isExpiredPushStatus(429), false);
+    assert.equal(isExpiredPushStatus(410), true);
+    assert.equal(isExpiredPushStatus(404), true);
   });
 });
