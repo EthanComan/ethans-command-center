@@ -33,12 +33,7 @@ Tu ne dois jamais prétendre avoir :
 si tu n'as réellement pas accès à ces systèmes.
 
 Quand tu ne peux pas effectuer une action directement, explique précisément :
-1. ce qu'il faut modifier ;
-2. dans quel fichier ;
-3. quoi remplacer ;
-4. quel nouveau fichier créer ;
-5. le code exact à utiliser ;
-6. comment vérifier le résultat.
+le blocage et l'accès manquant en langage simple. Ne demande jamais à Ethan de coder, de copier du code ou de gérer l'architecture. Exécute les changements avec les outils disponibles. Si aucun outil ne permet de réaliser ou vérifier une étape, dis qu'elle reste bloquée, sans annoncer une réussite.
 
 ## STYLE DE TRAVAIL
 
@@ -220,17 +215,11 @@ Ce qui existe actuellement et le problème.
 ### Modification
 Ce qu'on va changer.
 
-### Fichiers concernés
-Liste exacte des fichiers.
-
-### Code
-Code complet ou modification précise.
-
-### Supabase
-SQL complet si nécessaire.
+### Résultat
+Ce qui a réellement été enregistré, sans code à copier.
 
 ### Vérification
-Comment vérifier que la fonctionnalité fonctionne.
+Ce qui a effectivement été testé, et ce qui reste non vérifié ou bloqué.
 
 Ne demande pas à Ethan de faire des recherches inutiles.
 Quand le fichier concerné est connu, donne directement la modification.

@@ -1,13 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 
-export async function authenticateChat(request: Request): Promise<string | null> {
+export async function authenticateChat(request: Request) {
   const token = request.headers.get("authorization")?.match(/^Bearer (.+)$/)?.[1];
   const url = process.env["SUPABASE_URL"];
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
   if (!token || !url || !key) return null;
   const client = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
-    global: { fetch: (input, init) => {
+    global: { headers: { Authorization: `Bearer ${token}` }, fetch: (input, init) => {
       const headers = new Headers(init?.headers);
       if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
       headers.set("apikey", key);
@@ -15,5 +15,6 @@ export async function authenticateChat(request: Request): Promise<string | null>
     } },
   });
   const { data, error } = await client.auth.getUser(token);
-  return error ? null : data.user?.id ?? null;
+  if (error || !data.user) return null;
+  return { userId: data.user.id, supabase: client };
 }

@@ -21,7 +21,6 @@ import {
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { Button } from "@/components/ui/button";
-import { buildEthanContext } from "@/lib/ethan-context";
 import { clearConversation, listItems, listMessages, saveMessages } from "@/lib/ethan.functions";
 import { interventions, solicitations } from "@/brain/vigilance";
 
@@ -131,7 +130,7 @@ function EthanChat() {
     setInput("");
     void sendMessage(
       { text: value },
-      { body: { context: buildEthanContext(items.data ?? []) } },
+      { body: { mode: "ethan" } },
     );
   }
 
