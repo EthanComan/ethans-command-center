@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Corriger la connexion Google signalée par Ethan et la vérifier sur le site réellement utilisé hors éditeur.
+
 - [x] Valider les deux conversations avec Gemini direct, enregistrement et rechargement sous le compte utilisateur.
 - [ ] Valider le Builder : lecture réussie ; écriture refusée par GitHub (403, jeton sans Contents: write). Mise en ligne externe non vérifiée.
 - [ ] Vérifier les rappels application fermée : relance après échec testée ; aucun appareil enregistré, publication et autorisation sur appareil nécessaires.
