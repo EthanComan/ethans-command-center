@@ -37,6 +37,7 @@ import { Route as ProgressionRouteImport } from './routes/progression'
 import { Route as ProspectionRouteImport } from './routes/prospection'
 import { Route as ProtocolesRouteImport } from './routes/protocoles'
 import { Route as RenaitreRouteImport } from './routes/renaitre'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SanteRouteImport } from './routes/sante'
 import { Route as SportRouteImport } from './routes/sport'
 import { Route as VisionRouteImport } from './routes/vision'
@@ -185,6 +186,11 @@ const RenaitreRoute = RenaitreRouteImport.update({
   path: '/renaitre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SanteRoute = SanteRouteImport.update({
   id: '/sante',
   path: '/sante',
@@ -254,6 +260,7 @@ export interface FileRoutesByFullPath {
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
   '/renaitre': typeof RenaitreRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
@@ -291,6 +298,7 @@ export interface FileRoutesByTo {
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
   '/renaitre': typeof RenaitreRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
@@ -330,6 +338,7 @@ export interface FileRoutesById {
   '/prospection': typeof ProspectionRoute
   '/protocoles': typeof ProtocolesRoute
   '/renaitre': typeof RenaitreRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/sante': typeof SanteRoute
   '/sport': typeof SportRoute
   '/vision': typeof VisionRoute
@@ -369,6 +378,7 @@ export interface FileRouteTypes {
     | '/prospection'
     | '/protocoles'
     | '/renaitre'
+    | '/reset-password'
     | '/sante'
     | '/sport'
     | '/vision'
@@ -406,6 +416,7 @@ export interface FileRouteTypes {
     | '/prospection'
     | '/protocoles'
     | '/renaitre'
+    | '/reset-password'
     | '/sante'
     | '/sport'
     | '/vision'
@@ -444,6 +455,7 @@ export interface FileRouteTypes {
     | '/prospection'
     | '/protocoles'
     | '/renaitre'
+    | '/reset-password'
     | '/sante'
     | '/sport'
     | '/vision'
@@ -483,6 +495,7 @@ export interface RootRouteChildren {
   ProspectionRoute: typeof ProspectionRoute
   ProtocolesRoute: typeof ProtocolesRoute
   RenaitreRoute: typeof RenaitreRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SanteRoute: typeof SanteRoute
   SportRoute: typeof SportRoute
   VisionRoute: typeof VisionRoute
@@ -688,6 +701,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RenaitreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sante': {
       id: '/sante'
       path: '/sante'
@@ -791,6 +811,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProspectionRoute: ProspectionRoute,
   ProtocolesRoute: ProtocolesRoute,
   RenaitreRoute: RenaitreRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SanteRoute: SanteRoute,
   SportRoute: SportRoute,
   VisionRoute: VisionRoute,

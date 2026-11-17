@@ -4,6 +4,7 @@ import { Search, Command } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { getModuleByPath, MODULE_CATEGORIES } from "@/config/modules";
+import { AccountButton } from "@/components/account-button";
 
 function findCategoryLabel(path: string): string | null {
   for (const c of MODULE_CATEGORIES) {
@@ -43,6 +44,7 @@ export function AppTopbar() {
             <Command className="h-2.5 w-2.5" /> K
           </span>
         </button>
+        <AccountButton />
       </div>
     </header>
   );
